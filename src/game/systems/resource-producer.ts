@@ -1,12 +1,13 @@
 import { System } from '.';
 import { EventManager } from '../../core/event-manager';
-import { getBuildingsData } from '../../data/buildings';
-import { getLandsData } from '../../data/lands';
+import { getBuildingData } from '../../data/buildings';
+import { getLandData } from '../../data/lands';
 import { EntityManager } from '../core/entity-manager';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
 import { Events } from '../events';
+import { getEmpireRegions, getEmpireResource } from '../helpers/empire';
 
 export class ResourceProducer implements System {
   private _eventManager: EventManager<Events>;
@@ -28,12 +29,9 @@ export class ResourceProducer implements System {
 
   private generateEmpireResources(empire: Empire) {
     // * This can be cached
-    const regions = this._entityManager.getAll<Region>('REGION');
-    const ownedRegions = regions.filter(
-      (region) => region.empireId === empire.id
-    );
+    const empireRegions = getEmpireRegions(empire.id, this._entityManager);
 
-    for (const region of ownedRegions) {
+    for (const region of empireRegions) {
       this.generateRegionResources(region, empire);
     }
   }
@@ -56,40 +54,20 @@ export class ResourceProducer implements System {
 
   private generateLandResources(land: Land, empire: Empire) {
     // * This can be cached
-    const landsData = getLandsData();
-
-    const landData = landsData.find(
-      (landData) => landData.type === land.landType
-    );
-
-    if (!landData) throw Error('Land data not found');
+    const landData = getLandData(land.landType);
 
     for (const production of landData.production) {
-      const resource = empire.resources.find(
-        (resource) => resource.type === production.resource
-      );
-      if (!resource) throw Error('Resource not found');
-
+      const resource = getEmpireResource(empire, production.resource);
       resource.quantity += production.base;
     }
   }
 
   private generateBuildingResources(land: Land, empire: Empire) {
-    const buildingsData = getBuildingsData();
-
     for (const building of land.buildings) {
-      const buildingData = buildingsData.find(
-        (buildingData) => buildingData.name === building
-      );
-      if (!buildingData) throw Error('Building data not found');
+      const buildingData = getBuildingData(building);
 
       for (const production of buildingData.production) {
-        const resource = empire.resources.find(
-          (resource) => resource.type === production.resource
-        );
-
-        if (!resource) throw Error('Resource not found');
-
+        const resource = getEmpireResource(empire, production.resource);
         resource.quantity += production.base;
       }
     }

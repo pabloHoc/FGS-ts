@@ -17,10 +17,12 @@ const RegionItem = ({ id, name, onClick }: RegionItemProps) => (
 
 export const RegionsList = () => {
   const game = useContext(GameCtx);
-  const [regions, setRegions] = useState<Region[]>(game.entities.regions);
+  const [regions, setRegions] = useState<Region[]>(
+    game.entities.getAll<Region>('REGION')
+  );
 
   const handleTurnStarted = () => {
-    setRegions(game.entities.regions);
+    setRegions(game.entities.getAll<Region>('REGION'));
   };
 
   useListener('START_TURN', handleTurnStarted);

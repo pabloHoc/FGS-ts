@@ -20,18 +20,18 @@ export class World {
   // ? What's the difference between world and worldGenerator or worldMap?
 
   generateWorld() {
+    const playerEmpire = this.generateEmpires();
+
     for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
-      this.generateRegions(i);
+      this.generateRegions(i, i === 1 ? playerEmpire.id : undefined);
     }
-    this.generateEmpires();
   }
 
-  private generateRegions(number: number) {
-    const region = createRegion(`Region #${number}`);
+  private generateRegions(number: number, empireId?: EntityId) {
+    const region = createRegion(`Region #${number}`, empireId);
     this._entityManager.add(region);
 
-    const lands = this.generateLandsForRegion(region.id);
-    const landsIds = lands.map((land) => land.id);
+    this.generateLandsForRegion(region.id);
   }
 
   private generateLandsForRegion(regionId: EntityId) {
@@ -49,7 +49,6 @@ export class World {
   private generateEmpires() {
     const empire = createEmpire('PLAYER EMPIRE', true);
     this._entityManager.add(empire);
-
-    this._entityManager.getAll<Region>('REGION')[0].empireId = empire.id;
+    return empire;
   }
 }

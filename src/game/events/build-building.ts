@@ -6,13 +6,16 @@ export interface BuildBuilding extends GameEvent {
   type: 'BUILD_BUILDING';
   buildingName: BuildingType;
   landId: EntityId;
+  empireId: EntityId;
 }
 
 export const buildBuilding = (
   buildingName: BuildingType,
-  landId: EntityId
+  landId: EntityId,
+  empireId: EntityId
 ): BuildBuilding => ({
   type: 'BUILD_BUILDING',
   buildingName,
   landId,
+  empireId,
 });

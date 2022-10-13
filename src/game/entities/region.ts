@@ -13,12 +13,9 @@ export interface Region extends Entity {
 
 // ? Who owns lands creation?
 
-export const createRegion = (
-  name: string,
-  empireOwnerId?: EntityId
-): Region => ({
+export const createRegion = (name: string, empireId?: EntityId): Region => ({
   type: 'REGION',
   id: generateId(),
   name,
-  empireId: empireOwnerId,
+  empireId,
 });

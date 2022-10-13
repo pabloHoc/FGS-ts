@@ -1,8 +1,7 @@
 import { ResourceProduction, ResourceType } from './resources';
 
-const lands: LandData[] = [
-  {
-    type: 'GRASSLAND',
+const lands: LandData = {
+  GRASSLAND: {
     production: [
       {
         resource: 'FOOD',
@@ -10,8 +9,7 @@ const lands: LandData[] = [
       },
     ],
   },
-  {
-    type: 'MOUNTAIN',
+  MOUNTAIN: {
     production: [
       {
         resource: 'IRON',
@@ -19,8 +17,7 @@ const lands: LandData[] = [
       },
     ],
   },
-  {
-    type: 'FOREST',
+  FOREST: {
     production: [
       {
         resource: 'WOOD',
@@ -28,14 +25,36 @@ const lands: LandData[] = [
       },
     ],
   },
-];
+};
 
 // TODO: research how to convert this file to a json
 export type LandType = 'GRASSLAND' | 'FOREST' | 'MOUNTAIN';
 
-export interface LandData {
+export type LandData = Record<
+  LandType,
+  {
+    production: ResourceProduction[];
+  }
+>;
+
+type LandDataItem = {
   type: LandType;
   production: ResourceProduction[];
-}
+};
 
-export const getLandsData = () => lands;
+const landsArray = Object.keys(lands).reduce<LandDataItem[]>(
+  (previousValue: any[], currentValue: string) => {
+    return [
+      ...previousValue,
+      {
+        type: currentValue,
+        ...lands[currentValue as LandType],
+      },
+    ];
+  },
+  []
+);
+
+export const getLandsData = () => landsArray;
+
+export const getLandData = (landType: LandType) => lands[landType];

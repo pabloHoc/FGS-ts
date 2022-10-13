@@ -1,10 +1,10 @@
-import { useContext, useEffect, useReducer, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BuildingType } from '../../data/buildings';
 import { LandType } from '../../data/lands';
 import { EntityId } from '../../game/entities';
+import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
-import { BuildBuilding } from '../../game/events/build-building';
 import { selectLand } from '../../game/events/select-land';
 import { SelectRegion } from '../../game/events/select-region';
 import { GameCtx } from '../context/GameCtx';
@@ -37,27 +37,23 @@ export const LandsList = () => {
   const [regionOwner, setRegionOwner] = useState('');
 
   useEffect(() => {
-    const regionLands = game.entities.lands.filter(
-      (land) => land.regionId === regionSelected?.id
-    );
+    const regionLands = game.entities
+      .getAll<Land>('LAND')
+      .filter((land) => land.regionId === regionSelected?.id);
 
-    if (regionLands) {
-      setLands(regionLands);
-    }
+    setLands(regionLands);
   }, [regionSelected]);
 
   const handleRegionSelected = (event: SelectRegion) => {
-    const region = game.entities.regions.find(
-      (region) => region.id === event.regionId
-    );
-    if (!region) return;
+    const region = game.entities.get<Region>('REGION', event.regionId);
     setRegionSelected(region);
 
-    const empire = game.entities.empires.find(
-      (empire) => empire.id === region.empireId
-    );
-
-    setRegionOwner(empire ? empire.name : '');
+    if (region.empireId) {
+      const empire = game.entities.get<Empire>('EMPIRE', region.empireId);
+      setRegionOwner(empire.name);
+      return;
+    }
+    setRegionOwner('');
   };
 
   const handleBuildingBuilt = () => {

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { ResourceType } from '../../data/resources';
 import { Empire } from '../../game/entities/empire';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
@@ -8,9 +9,10 @@ export const EmpireDetails = () => {
   const [empire, setEmpire] = useState<Empire>();
 
   const updateEmpire = () => {
-    const playerEmpire = game.entities.empires.find(
-      (empire) => empire.isPlayer
-    );
+    // * This can be cached
+    const playerEmpire = game.entities
+      .getAll<Empire>('EMPIRE')
+      .find((empire) => empire.isPlayer);
     setEmpire(playerEmpire ? { ...playerEmpire } : undefined);
   };
 
@@ -24,9 +26,9 @@ export const EmpireDetails = () => {
     <div>
       <h3>EMPIRE {empire.name}</h3>
       <ul>
-        {empire.resources.map((resource) => (
-          <li key={resource.type}>
-            {resource.type}: {resource.quantity}
+        {Object.keys(empire.resources).map((resource) => (
+          <li key={resource}>
+            {resource}: {empire.resources[resource as ResourceType].quantity}
           </li>
         ))}
       </ul>

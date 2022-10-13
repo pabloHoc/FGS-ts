@@ -1,8 +1,7 @@
 import { ResourceProduction } from './resources';
 
-const buildings: BuildingData[] = [
-  {
-    name: 'MILL',
+const buildings: BuildingData = {
+  MILL: {
     production: [
       {
         resource: 'WOOD',
@@ -16,8 +15,7 @@ const buildings: BuildingData[] = [
       },
     ],
   },
-  {
-    name: 'MINE',
+  MINE: {
     production: [
       {
         resource: 'IRON',
@@ -31,8 +29,7 @@ const buildings: BuildingData[] = [
       },
     ],
   },
-  {
-    name: 'FARM',
+  FARM: {
     production: [
       {
         resource: 'FOOD',
@@ -46,14 +43,38 @@ const buildings: BuildingData[] = [
       },
     ],
   },
-];
+};
 
 export type BuildingType = 'MILL' | 'MINE' | 'FARM';
 
-export interface BuildingData {
+export type BuildingData = Record<
+  BuildingType,
+  {
+    production: ResourceProduction[];
+    cost: ResourceProduction[];
+  }
+>;
+
+type BuildingDataItem = {
   name: BuildingType;
   production: ResourceProduction[];
   cost: ResourceProduction[];
-}
+};
 
-export const getBuildingsData = () => buildings;
+const buildingsArray = Object.keys(buildings).reduce<BuildingDataItem[]>(
+  (previousValue: any[], currentValue: string) => {
+    return [
+      ...previousValue,
+      {
+        name: currentValue,
+        ...buildings[currentValue as BuildingType],
+      },
+    ];
+  },
+  []
+);
+
+export const getBuildingsData = () => buildingsArray;
+
+export const getBuildingData = (buildingName: BuildingType) =>
+  buildings[buildingName];

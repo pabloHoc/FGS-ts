@@ -1,4 +1,5 @@
 import { EventManager } from '../../core/event-manager';
+import { EntityId } from '../entities';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
@@ -51,12 +52,11 @@ export class Game {
     return this._turn;
   }
 
+  /**
+   * ! we are calling all entities each time we access it
+   */
   get entities() {
-    return {
-      lands: this._entityManager.getAll<Land>('LAND'),
-      regions: this._entityManager.getAll<Region>('REGION'),
-      empires: this._entityManager.getAll<Empire>('EMPIRE'),
-    };
+    return this._entityManager;
   }
 
   // Event Handlers
