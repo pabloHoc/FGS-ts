@@ -1,10 +1,11 @@
 import { Entity, EntityId } from '.';
+import { generateId } from '../helpers/id';
 
 interface MoveAction {
   name: 'MOVE';
   payload: {
-    from: EntityId;
-    to: EntityId;
+    fromRegion: EntityId;
+    toRegion: EntityId;
   };
   remainingTurns: number;
 }
@@ -14,14 +15,22 @@ type AgentAction = MoveAction;
 export interface Agent extends Entity {
   type: 'AGENT';
   name: string;
-  empireId: string;
+  empireId: EntityId;
   // Current location
-  regionId: string;
-  currentAction: AgentAction;
+  regionId: EntityId;
+  mp: number;
+  currentAction?: AgentAction;
 }
 
 export const createAgent = (
   name: string,
   empireId: EntityId,
   regionId: EntityId
-) => {};
+): Agent => ({
+  type: 'AGENT',
+  id: generateId(),
+  name,
+  empireId,
+  regionId,
+  mp: 10,
+});

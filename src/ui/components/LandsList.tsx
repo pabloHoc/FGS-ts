@@ -1,24 +1,34 @@
 import { useContext, useEffect, useState } from 'react';
-import { BuildingType } from '../../data/buildings';
-import { LandType } from '../../data/lands';
+import { BuildingDefinition } from '../../game/definitions/building';
+import { LandDefinition } from '../../game/definitions/land';
 import { EntityId } from '../../game/entities';
 import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
-import { selectLand } from '../../game/events/select-land';
+import { SelectLand, selectLand } from '../../game/events/select-land';
 import { SelectRegion } from '../../game/events/select-region';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
 
 interface LandItemProps {
   id: EntityId;
-  landType: LandType;
-  buildings: BuildingType[];
+  name: LandDefinition['name'];
+  buildings: BuildingDefinition['name'][];
   onClick: (id: EntityId) => void;
+  selected: boolean;
 }
 
-const LandItem = ({ id, onClick, landType, buildings }: LandItemProps) => (
-  <li onClick={() => onClick(id)}>
+const LandItem = ({
+  id,
+  onClick,
+  name: landType,
+  buildings,
+  selected,
+}: LandItemProps) => (
+  <li
+    onClick={() => onClick(id)}
+    style={{ color: selected ? '#FF0000' : '#000000' }}
+  >
     {landType}
     {!!buildings.length && (
       <ul>
@@ -33,52 +43,65 @@ const LandItem = ({ id, onClick, landType, buildings }: LandItemProps) => (
 export const LandsList = () => {
   const game = useContext(GameCtx);
   const [lands, setLands] = useState<Land[]>([]);
-  const [regionSelected, setRegionSelected] = useState<Region>();
-  const [regionOwner, setRegionOwner] = useState('');
+  const [selectedLandId, setSelectedLandId] = useState<EntityId>();
+  const [selectedRegion, setSelectedRegion] = useState<Region>();
+  const [empireName, setEmpireName] = useState('');
 
   useEffect(() => {
     const regionLands = game.entities
       .getAll<Land>('LAND')
-      .filter((land) => land.regionId === regionSelected?.id);
+      .filter((land) => land.regionId === selectedRegion?.id);
 
     setLands(regionLands);
-  }, [regionSelected]);
+  }, [selectedRegion]);
 
   const handleRegionSelected = (event: SelectRegion) => {
     const region = game.entities.get<Region>('REGION', event.regionId);
-    setRegionSelected(region);
+    setSelectedRegion(region);
 
     if (region.empireId) {
       const empire = game.entities.get<Empire>('EMPIRE', region.empireId);
-      setRegionOwner(empire.name);
+      setEmpireName(empire.name);
       return;
     }
-    setRegionOwner('');
+    setEmpireName('');
   };
 
   const handleBuildingBuilt = () => {
     setLands((lands) => [...lands]);
   };
 
+  const handleLandSelected = (event: SelectLand) => {
+    setSelectedLandId(event.landId);
+  };
+
+  useListener('SELECT_LAND', handleLandSelected);
   useListener('SELECT_REGION', handleRegionSelected);
   useListener('BUILD_BUILDING', handleBuildingBuilt);
 
-  const handleLandClick = (landId: EntityId) => {
+  const handleClickedLand = (landId: EntityId) => {
     game.events.dispatch(selectLand(landId));
   };
 
   return (
-    <ul>
-      {regionOwner && <p>EMPIRE: {regionOwner}</p>}
-      {lands.map((land) => (
-        <LandItem
-          id={land.id}
-          key={land.id}
-          onClick={handleLandClick}
-          landType={land.landType}
-          buildings={land.buildings}
-        />
-      ))}
-    </ul>
+    <div>
+      {selectedRegion && (
+        <h3>{`${selectedRegion.name} ${
+          empireName ? '(' + empireName + ')' : ''
+        }`}</h3>
+      )}
+      <ul>
+        {lands.map((land) => (
+          <LandItem
+            id={land.id}
+            key={land.id}
+            onClick={handleClickedLand}
+            name={land.name}
+            buildings={land.buildings}
+            selected={land.id === selectedLandId}
+          />
+        ))}
+      </ul>
+    </div>
   );
 };

@@ -1,0 +1,9 @@
+{
+  "type": "land",
+  "name": "mountain",
+  "resources": {
+    "production": {
+      "iron": 1
+    }
+  }
+}

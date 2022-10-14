@@ -1,21 +1,22 @@
 import { Entity, EntityId } from '.';
-import { BuildingType } from '../../data/buildings';
-import { LandData, LandType } from '../../data/lands';
+import { BuildingDefinition } from '../definitions/building';
+import { LandDefinition } from '../definitions/land';
 import { generateId } from '../helpers/id';
 
 export interface Land extends Entity {
   type: 'LAND';
-  landType: LandType;
-  buildings: BuildingType[];
+  name: LandDefinition['name'];
+  buildings: BuildingDefinition['name'][];
   regionId: EntityId;
 }
 
-// ? Should lands have a pointer to their parent region?
-
-export const createLand = (landType: LandType, regionId: EntityId): Land => ({
+export const createLand = (
+  name: LandDefinition['name'],
+  regionId: EntityId
+): Land => ({
   type: 'LAND',
   id: generateId(),
-  landType,
+  name,
   buildings: [],
   regionId,
 });

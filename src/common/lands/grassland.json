@@ -1,0 +1,9 @@
+{
+  "type": "land",
+  "name": "grassland",
+  "resources": {
+    "production": {
+      "food": 1
+    }
+  }
+}

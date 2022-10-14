@@ -1,16 +1,16 @@
 import { GameEvent } from '../../core/event-manager';
-import { BuildingType } from '../../data/buildings';
+import { BuildingDefinition } from '../definitions/building';
 import { EntityId } from '../entities';
 
 export interface BuildBuilding extends GameEvent {
   type: 'BUILD_BUILDING';
-  buildingName: BuildingType;
+  buildingName: BuildingDefinition['name'];
   landId: EntityId;
   empireId: EntityId;
 }
 
 export const buildBuilding = (
-  buildingName: BuildingType,
+  buildingName: BuildingDefinition['name'],
   landId: EntityId,
   empireId: EntityId
 ): BuildBuilding => ({

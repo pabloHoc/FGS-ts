@@ -1,0 +1,5 @@
+{
+  "type": "resource",
+  "name": "food",
+  "initialQuantity": 0
+}

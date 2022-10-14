@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import { ResourceType } from '../../data/resources';
 import { Empire } from '../../game/entities/empire';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
@@ -28,7 +27,7 @@ export const EmpireDetails = () => {
       <ul>
         {Object.keys(empire.resources).map((resource) => (
           <li key={resource}>
-            {resource}: {empire.resources[resource as ResourceType].quantity}
+            {resource}: {empire.resources[resource]}
           </li>
         ))}
       </ul>

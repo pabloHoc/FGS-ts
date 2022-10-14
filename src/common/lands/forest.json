@@ -1,0 +1,9 @@
+{
+  "type": "land",
+  "name": "forest",
+  "resources": {
+    "production": {
+      "wood": 1
+    }
+  }
+}

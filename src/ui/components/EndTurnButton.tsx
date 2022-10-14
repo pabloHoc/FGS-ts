@@ -19,6 +19,7 @@ export const EndTurnButton = () => {
 
   return (
     <div>
+      <h3>TURN</h3>
       <p>Turn #{turn}</p>
       <button onClick={handleClick}>End Turn</button>
     </div>

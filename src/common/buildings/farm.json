@@ -1,0 +1,13 @@
+{
+  "type": "building",
+  "name": "farm",
+  "baseBuildtime": 2,
+  "resources": {
+    "cost": {
+      "food": 5
+    },
+    "production": {
+      "food": 1
+    }
+  }
+}

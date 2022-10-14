@@ -1,4 +1,5 @@
 import { Brand } from '../helpers/types';
+import { Agent } from './agent';
 import { Empire } from './empire';
 import { Land } from './land';
 import { Region } from './region';
@@ -13,4 +14,4 @@ export interface Entity {
   id: EntityId;
 }
 
-export type Entities = Land | Region | Empire;
+export type Entities = Empire | Region | Land | Agent;

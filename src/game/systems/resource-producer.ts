@@ -1,24 +1,28 @@
 import { System } from '.';
 import { EventManager } from '../../core/event-manager';
-import { getBuildingData } from '../../data/buildings';
-import { getLandData } from '../../data/lands';
+import { DefinitionManager } from '../core/definition-manager';
 import { EntityManager } from '../core/entity-manager';
+import { BuildingDefinition } from '../definitions/building';
+import { LandDefinition } from '../definitions/land';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
 import { Events } from '../events';
-import { getEmpireRegions, getEmpireResource } from '../helpers/empire';
+import { getEmpireRegions } from '../helpers/region';
 
 export class ResourceProducer implements System {
   private _eventManager: EventManager<Events>;
   private _entityManager: EntityManager;
+  private _definitionManager: DefinitionManager;
 
   constructor(
     eventManager: EventManager<Events>,
-    entityManager: EntityManager
+    entityManager: EntityManager,
+    definitionManager: DefinitionManager
   ) {
     this._eventManager = eventManager;
     this._entityManager = entityManager;
+    this._definitionManager = definitionManager;
   }
 
   update() {
@@ -54,21 +58,27 @@ export class ResourceProducer implements System {
 
   private generateLandResources(land: Land, empire: Empire) {
     // * This can be cached
-    const landData = getLandData(land.landType);
+    const landDefinition = this._definitionManager.get<LandDefinition>(
+      'land',
+      land.name
+    );
 
-    for (const production of landData.production) {
-      const resource = getEmpireResource(empire, production.resource);
-      resource.quantity += production.base;
+    for (const [resource, quantity = 0] of Object.entries(
+      landDefinition.resources.production
+    )) {
+      empire.resources[resource] += quantity;
     }
   }
 
   private generateBuildingResources(land: Land, empire: Empire) {
     for (const building of land.buildings) {
-      const buildingData = getBuildingData(building);
+      const buildingDefinition =
+        this._definitionManager.get<BuildingDefinition>('building', building);
 
-      for (const production of buildingData.production) {
-        const resource = getEmpireResource(empire, production.resource);
-        resource.quantity += production.base;
+      for (const [resource, quantity = 0] of Object.entries(
+        buildingDefinition.resources.production
+      )) {
+        empire.resources[resource] += quantity;
       }
     }
   }

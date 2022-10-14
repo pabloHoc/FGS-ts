@@ -1,0 +1,13 @@
+{
+  "type": "building",
+  "name": "mill",
+  "baseBuildtime": 2,
+  "resources": {
+    "cost": {
+      "wood": 5
+    },
+    "production": {
+      "wood": 1
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "building",
+  "name": "mine",
+  "baseBuildtime": 2,
+  "resources": {
+    "cost": {
+      "iron": 5
+    },
+    "production": {
+      "iron": 1
+    }
+  }
+}
