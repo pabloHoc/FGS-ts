@@ -7,8 +7,12 @@ import { SelectRegion } from './select-region';
 import { StartTurn } from './start-turn';
 import { UpdateResources } from './update-resources';
 
-// Events triggered by the UI
-type UIEvents =
+export interface Command {
+  action: string;
+}
+
+// Commands executed from the UI
+type UICommands =
   | EndTurn
   | SelectRegion
   | SelectLand
@@ -16,7 +20,7 @@ type UIEvents =
   | BuildBuilding
   | MoveAgent;
 
-// Events triggered by the game backend
-type GameEvents = StartTurn | UpdateResources;
+// ECommands executed from the game backend
+type GameCommands = StartTurn | UpdateResources;
 
-export type Events = UIEvents | GameEvents;
+export type Commands = MoveAgent; //| MoveAgent | BuildBuilding;

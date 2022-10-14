@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Agent } from '../../game/entities/agent';
-import { SelectAgent } from '../../game/events/select-agent';
+import { SelectAgent } from '../../game/commands/select-agent';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
 

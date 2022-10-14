@@ -1,9 +1,9 @@
 import { MouseEvent, MouseEventHandler, useContext, useState } from 'react';
 import { EntityId } from '../../game/entities';
 import { Region } from '../../game/entities/region';
-import { moveAgent } from '../../game/events/move-agent';
-import { SelectAgent } from '../../game/events/select-agent';
-import { selectRegion } from '../../game/events/select-region';
+import { moveAgent } from '../../game/commands/move-agent';
+import { SelectAgent } from '../../game/commands/select-agent';
+import { selectRegion } from '../../game/commands/select-region';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
 

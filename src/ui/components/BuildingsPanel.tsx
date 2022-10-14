@@ -3,8 +3,8 @@ import { BuildingDefinition } from '../../game/definitions/building';
 import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
-import { buildBuilding } from '../../game/events/build-building';
-import { SelectLand } from '../../game/events/select-land';
+import { buildBuilding } from '../../game/commands/build-building';
+import { SelectLand } from '../../game/commands/select-land';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
 

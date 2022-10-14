@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { endTurn } from '../../game/events/end-turn';
+import { endTurn } from '../../game/commands/end-turn';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
 

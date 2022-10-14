@@ -1,26 +1,23 @@
 import { System } from '.';
-import { EventManager } from '../../core/event-manager';
+import { Dispatcher } from '../core/dispatcher';
 import { DefinitionManager } from '../core/definition-manager';
 import { EntityManager } from '../core/entity-manager';
 import { Agent } from '../entities/agent';
-import { Events } from '../events';
-import { MoveAgent } from '../events/move-agent';
+import { Commands } from '../commands';
 
 export class AgentMover implements System {
-  private _eventManager: EventManager<Events>;
+  private _eventManager: Dispatcher<Commands>;
   private _entityManager: EntityManager;
   private _definitionManager: DefinitionManager;
 
   constructor(
-    eventManager: EventManager<Events>,
+    eventManager: Dispatcher<Commands>,
     entityManager: EntityManager,
     definitionManager: DefinitionManager
   ) {
     this._eventManager = eventManager;
     this._entityManager = entityManager;
     this._definitionManager = definitionManager;
-
-    this._eventManager.listen('MOVE_AGENT', this.handleAgentMoved);
   }
 
   update() {
@@ -40,16 +37,4 @@ export class AgentMover implements System {
       }
     }
   }
-
-  private handleAgentMoved = (event: MoveAgent) => {
-    const agent = this._entityManager.get<Agent>('AGENT', event.agentId);
-    agent.currentAction = {
-      name: 'MOVE',
-      payload: {
-        fromRegion: agent.regionId,
-        toRegion: event.toRegionId,
-      },
-      remainingTurns: 2,
-    };
-  };
 }

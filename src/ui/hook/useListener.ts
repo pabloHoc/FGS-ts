@@ -1,11 +1,11 @@
 import { useContext, useEffect } from 'react';
-import { NarrowAction } from '../../core/event-manager';
-import { Events } from '../../game/events';
+import { NarrowAction } from '../../game/core/dispatcher';
+import { Commands } from '../../game/commands';
 import { GameCtx } from '../context/GameCtx';
 
-export const useListener = <K extends Events['type']>(
+export const useListener = <K extends Commands['type']>(
   eventType: K,
-  listener: (event: NarrowAction<Events, K>) => void
+  listener: (event: NarrowAction<Commands, K>) => void
 ) => {
   const game = useContext(GameCtx);
 

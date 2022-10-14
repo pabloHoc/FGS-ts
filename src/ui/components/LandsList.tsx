@@ -5,8 +5,8 @@ import { EntityId } from '../../game/entities';
 import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
-import { SelectLand, selectLand } from '../../game/events/select-land';
-import { SelectRegion } from '../../game/events/select-region';
+import { SelectLand, selectLand } from '../../game/commands/select-land';
+import { SelectRegion } from '../../game/commands/select-region';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
 

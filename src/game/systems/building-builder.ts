@@ -1,21 +1,21 @@
 import { System } from '.';
-import { EventManager } from '../../core/event-manager';
+import { Dispatcher } from '../core/dispatcher';
 import { EntityManager } from '../core/entity-manager';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
-import { Events } from '../events';
-import { BuildBuilding } from '../events/build-building';
-import { updateResources } from '../events/update-resources';
+import { Commands } from '../commands';
+import { BuildBuilding } from '../commands/build-building';
+import { updateResources } from '../commands/update-resources';
 import { DefinitionManager } from '../core/definition-manager';
 import { BuildingDefinition } from '../definitions/building';
 
 export class BuildingBuilder implements System {
-  private _eventManager: EventManager<Events>;
+  private _eventManager: Dispatcher<Commands>;
   private _entityManager: EntityManager;
   private _definitionManager: DefinitionManager;
 
   constructor(
-    eventManager: EventManager<Events>,
+    eventManager: Dispatcher<Commands>,
     entityManager: EntityManager,
     definitionManager: DefinitionManager
   ) {

@@ -1,5 +1,5 @@
 import { System } from '.';
-import { EventManager } from '../../core/event-manager';
+import { Dispatcher } from '../core/dispatcher';
 import { DefinitionManager } from '../core/definition-manager';
 import { EntityManager } from '../core/entity-manager';
 import { BuildingDefinition } from '../definitions/building';
@@ -7,16 +7,16 @@ import { LandDefinition } from '../definitions/land';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
-import { Events } from '../events';
+import { Commands } from '../commands';
 import { getEmpireRegions } from '../helpers/region';
 
 export class ResourceProducer implements System {
-  private _eventManager: EventManager<Events>;
+  private _eventManager: Dispatcher<Commands>;
   private _entityManager: EntityManager;
   private _definitionManager: DefinitionManager;
 
   constructor(
-    eventManager: EventManager<Events>,
+    eventManager: Dispatcher<Commands>,
     entityManager: EntityManager,
     definitionManager: DefinitionManager
   ) {

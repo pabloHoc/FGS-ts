@@ -3,7 +3,7 @@ import { EntityManager } from '../../game/core/entity-manager';
 import { EntityId } from '../../game/entities';
 import { Agent } from '../../game/entities/agent';
 import { Region } from '../../game/entities/region';
-import { selectAgent } from '../../game/events/select-agent';
+import { selectAgent } from '../../game/commands/select-agent';
 import { getEmpireAgents } from '../../game/helpers/agent';
 import { getPlayerEmpire } from '../../game/helpers/empire';
 import { GameCtx } from '../context/GameCtx';
