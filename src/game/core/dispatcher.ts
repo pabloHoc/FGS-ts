@@ -9,22 +9,23 @@ export type NarrowAction<T, N> = T extends { action: N } ? T : never;
 export type Handler<T extends Command> = (
   command: T,
   gameContext: GameContext,
-  definitionManager: DefinitionManager
+  definitionManager: DefinitionManager,
+  dispatcher: Dispatcher
 ) => void;
 
-export type Handlers<T extends Commands> = {
-  [k in T['action']]: Handler<NarrowAction<T, k>>;
+export type Handlers = {
+  [k in Commands['action']]: Handler<NarrowAction<Commands, k>>;
 };
 
 // TODO: Change name
-export class Dispatcher<T extends Commands> {
+export class Dispatcher {
   private gameContext: GameContext;
   private definitionManager: DefinitionManager;
-  private handlers: Handlers<T>;
+  private handlers: Handlers;
   private callback: Function | undefined;
 
   constructor(
-    handlers: Handlers<T>,
+    handlers: Handlers,
     gameContext: GameContext,
     definitionManager: DefinitionManager
   ) {
@@ -33,10 +34,10 @@ export class Dispatcher<T extends Commands> {
     this.definitionManager = definitionManager;
   }
 
-  execute(command: NarrowAction<T, T['action']>) {
+  execute<T extends Commands>(command: NarrowAction<T, T['action']>) {
     const handler = this.handlers[command['action'] as T['action']];
     if (handler) {
-      handler(command, this.gameContext, this.definitionManager);
+      handler(command, this.gameContext, this.definitionManager, this);
       if (this.callback) this.callback();
     }
   }

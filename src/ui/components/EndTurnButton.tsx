@@ -1,16 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { endTurn } from '../../game/commands/end-turn';
 import { GameCtx } from '../context/GameCtx';
+import { UIStateCtx } from '../context/UIStateCtx';
 
 export const EndTurnButton = () => {
   const game = useContext(GameCtx);
-  const [turn, setTurn] = useState(game.context.turn);
-
-  // TODO: check if this is necesary
-  // or we can use it directly
-  useEffect(() => {
-    setTurn(game.context.turn);
-  }, []);
+  useContext(UIStateCtx);
 
   const handleClick = () => {
     game.commands.execute(endTurn());
@@ -19,7 +14,7 @@ export const EndTurnButton = () => {
   return (
     <div>
       <h3>TURN</h3>
-      <p>Turn #{turn}</p>
+      <p>Turn #{game.context.turn}</p>
       <button onClick={handleClick}>End Turn</button>
     </div>
   );

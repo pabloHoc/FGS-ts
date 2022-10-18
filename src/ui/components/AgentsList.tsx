@@ -7,7 +7,6 @@ import { getEmpireAgents } from '../../game/helpers/agent';
 import { getPlayerEmpire } from '../../game/helpers/empire';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
-import { useListener } from '../hook/useListener';
 
 const AgentItem = ({
   agent,
@@ -45,8 +44,6 @@ export const AgentsList = () => {
   };
 
   useEffect(updateAgents, [uiState]);
-  useListener('START_TURN', updateAgents);
-  useListener('MOVE_AGENT', updateAgents);
 
   const handleAgentClicked = (agentId: EntityId) => {
     setUIState({ ...uiState, selectedAgentId: agentId });

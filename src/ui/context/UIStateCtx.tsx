@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useState } from 'react';
+import { createContext, ReactElement, useEffect, useState } from 'react';
 import { EntityId } from '../../game/entities';
 
 export interface UIState {
@@ -20,7 +20,7 @@ export const UIStateCtx = createContext<ContextProps>({
 export const UIStateCtxProvider = ({
   children,
 }: {
-  children: ReactElement[];
+  children: ReactElement | ReactElement[];
 }) => {
   const [uiState, setUIState] = useState<UIState>({});
 

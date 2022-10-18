@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from 'react';
 import { Empire } from '../../game/entities/empire';
 import { GameCtx } from '../context/GameCtx';
-import { useListener } from '../hook/useListener';
+import { UIStateCtx } from '../context/UIStateCtx';
 
 export const EmpireDetails = () => {
   const game = useContext(GameCtx);
+  const { uiState } = useContext(UIStateCtx);
   const [empire, setEmpire] = useState<Empire>();
 
   const updateEmpire = () => {
@@ -15,9 +16,7 @@ export const EmpireDetails = () => {
     setEmpire(playerEmpire ? { ...playerEmpire } : undefined);
   };
 
-  useEffect(updateEmpire, []);
-  useListener('START_TURN', updateEmpire);
-  useListener('UPDATE_RESOURCES', updateEmpire);
+  useEffect(updateEmpire, [uiState]);
 
   if (!empire) return null;
 

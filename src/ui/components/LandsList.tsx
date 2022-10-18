@@ -6,7 +6,6 @@ import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
 import { GameCtx } from '../context/GameCtx';
-import { useListener } from '../hook/useListener';
 import { UIStateCtx } from '../context/UIStateCtx';
 
 interface LandItemProps {
@@ -74,12 +73,6 @@ export const LandsList = () => {
 
     setLands(regionLands);
   }, [uiState]);
-
-  const handleBuildingBuilt = () => {
-    setLands((lands) => [...lands]);
-  };
-
-  useListener('BUILD_BUILDING', handleBuildingBuilt);
 
   const handleClickedLand = (landId: EntityId) => {
     setUIState({ ...uiState, selectedLandId: landId });

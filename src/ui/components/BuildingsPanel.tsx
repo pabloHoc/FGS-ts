@@ -5,7 +5,6 @@ import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
 import { buildBuilding } from '../../game/commands/build-building';
 import { GameCtx } from '../context/GameCtx';
-import { useListener } from '../hook/useListener';
 import { UIStateCtx } from '../context/UIStateCtx';
 
 export const BuildingsPanel = () => {
@@ -28,9 +27,7 @@ export const BuildingsPanel = () => {
     if (!empire.isPlayer) return clearSelection();
 
     setEmpire(empire);
-  }, []);
-
-  useListener('SELECT_REGION', clearSelection);
+  });
 
   const handleBuildBuilding = (buildingName: BuildingDefinition['name']) => {
     if (!uiState.selectedLandId || !empire) return;

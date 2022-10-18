@@ -19,12 +19,12 @@ export class World {
 
   private _gameContext: GameContext;
   private _definitionManager: DefinitionManager;
-  private _dispatcher: Dispatcher<Commands>;
+  private _dispatcher: Dispatcher;
 
   constructor(
     gameContext: GameContext,
     definitionManager: DefinitionManager,
-    dispatcher: Dispatcher<Commands>
+    dispatcher: Dispatcher
   ) {
     this._gameContext = gameContext;
     this._definitionManager = definitionManager;

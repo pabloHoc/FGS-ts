@@ -1,19 +1,18 @@
-import { Command } from '..';
 import { DefinitionManager } from '../../core/definition-manager';
-import { NarrowAction } from '../../core/dispatcher';
+import { Dispatcher, Handler } from '../../core/dispatcher';
 import { GameContext } from '../../core/game-context';
 import { EndTurn } from '../end-turn';
 import { moveAgents } from '../move-agents';
 import { produceResources } from '../produce-resources';
 import { startTurn } from '../start-turn';
 
-export const endTurn = (
+export const endTurn: Handler<EndTurn> = (
   command: EndTurn,
   gameContext: GameContext,
   definitionManager: DefinitionManager,
-  executeCommand: (command: NarrowAction<Command, Command['action']>) => void
+  dispatcher: Dispatcher
 ) => {
-  executeCommand(moveAgents());
-  executeCommand(produceResources());
-  executeCommand(startTurn());
+  dispatcher.execute(moveAgents());
+  dispatcher.execute(produceResources());
+  dispatcher.execute(startTurn());
 };

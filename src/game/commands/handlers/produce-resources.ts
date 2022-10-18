@@ -57,7 +57,10 @@ const generateLandResources = (
   for (const [resource, quantity = 0] of Object.entries(
     landDefinition.resources.production
   )) {
-    empire.resources[resource] += quantity;
+    empire.resources = {
+      ...empire.resources,
+      [resource]: empire.resources[resource] + quantity,
+    };
   }
 };
 

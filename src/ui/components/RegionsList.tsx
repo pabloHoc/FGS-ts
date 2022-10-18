@@ -27,7 +27,7 @@ const RegionItem = ({
     if (event.button === 0) {
       onClick(id);
     }
-    if (event.button === 0) {
+    if (event.button === 2) {
       onRightClick(id);
     }
   };

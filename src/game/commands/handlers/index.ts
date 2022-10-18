@@ -11,7 +11,7 @@ import { moveAgents } from './move-agents';
 import { produceResources } from './produce-resources';
 import { endTurn } from './end-turn';
 
-export const HANDLERS: Handlers<Commands> = {
+export const HANDLERS: Handlers = {
   START_TURN: startTurn,
   END_TURN: endTurn,
   CREATE_EMPIRE: createEmpire,

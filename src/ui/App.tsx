@@ -13,16 +13,16 @@ import { UIStateCtxProvider } from './context/UIStateCtx';
  */
 const App = () => {
   return (
-    <GameCtxProvider>
-      <UIStateCtxProvider>
+    <UIStateCtxProvider>
+      <GameCtxProvider>
         <EmpireDetails />
         <AgentsList />
         <RegionsList />
         <LandsList />
         <BuildingsPanel />
         <EndTurnButton />
-      </UIStateCtxProvider>
-    </GameCtxProvider>
+      </GameCtxProvider>
+    </UIStateCtxProvider>
   );
 };
 
