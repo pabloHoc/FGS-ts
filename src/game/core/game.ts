@@ -1,49 +1,50 @@
-import { Dispatcher } from './dispatcher';
 import { Commands } from '../commands';
+import { createEmpire } from '../commands/create-empire';
+import { moveAgent } from '../commands/move-agent';
 import { startTurn } from '../commands/start-turn';
+import { HANDLERS } from '../commands/handlers';
 import { System } from '../systems';
 import { AgentMover } from '../systems/agent-mover';
-import { BuildingBuilder } from '../systems/building-builder';
 import { ResourceProducer } from '../systems/resource-producer';
 import { DefinitionManager } from './definition-manager';
-import { EntityManager } from './entity-manager';
+import { Dispatcher } from './dispatcher';
+import { GameContext } from './game-context';
 import { World } from './world';
-import { HANDLERS } from '../handlers';
 
 export class Game {
-  private _dispatcher = new Dispatcher<Commands>(HANDLERS);
-  private _entityManager = new EntityManager();
+  private _gameContext = new GameContext();
   private _definitionManager = new DefinitionManager();
-  private _turn = 0;
-  private _world = new World(this._entityManager, this._definitionManager);
   private _systems: System[] = [];
+  private _dispatcher = new Dispatcher<Commands>(
+    HANDLERS,
+    this._gameContext,
+    this._definitionManager
+  );
+  private _world = new World(
+    this._gameContext,
+    this._definitionManager,
+    this._dispatcher
+  );
 
   constructor() {
-    this._dispatcher.listen('END_TURN', this.handleEndTurn);
     this._world.generateWorld();
-
     this.addSystems();
-
-    this._dispatcher.dispatch(startTurn());
+    this._dispatcher.execute(createEmpire('asd', false));
   }
 
   // ? Should we have a system manager?
-
+  // We could have this logic in commands, and execute commands
+  // each turn (easy to debug, can trigger systems via console)
   addSystems() {
     this._systems.push(
       new ResourceProducer(
         this._dispatcher,
-        this._entityManager,
-        this._definitionManager
-      ),
-      new BuildingBuilder(
-        this._dispatcher,
-        this._entityManager,
+        this._gameContext,
         this._definitionManager
       ),
       new AgentMover(
         this._dispatcher,
-        this._entityManager,
+        this._gameContext,
         this._definitionManager
       )
     );
@@ -55,18 +56,18 @@ export class Game {
     }
   }
 
+  onCommandExecuted(callback: Function) {
+    this._dispatcher.onCommandExecuted(callback);
+  }
+
   // Getters
 
-  get events() {
+  get commands() {
     return this._dispatcher;
   }
 
-  get turn() {
-    return this._turn;
-  }
-
-  get entities() {
-    return this._entityManager;
+  get context() {
+    return this._gameContext;
   }
 
   get definitions() {
@@ -76,8 +77,7 @@ export class Game {
   // Event Handlers
 
   handleEndTurn = () => {
-    this._turn++;
     this.updateSystems();
-    this._dispatcher.dispatch(startTurn());
+    this._dispatcher.execute(startTurn());
   };
 }

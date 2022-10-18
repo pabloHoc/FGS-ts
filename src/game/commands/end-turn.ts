@@ -1,9 +1,8 @@
 import { Command } from '.';
 
 /**
- * Event to be used at the end of the turn,
- * to start processing and computing everything for
- * the nex turn
+ * Event to be used at the start of the turn,
+ * when the previous turn finished being processed
  */
 export interface EndTurn extends Command {
   action: 'END_TURN';

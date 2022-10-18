@@ -1,19 +1,22 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Agent } from '../../game/entities/agent';
-import { SelectAgent } from '../../game/commands/select-agent';
 import { GameCtx } from '../context/GameCtx';
-import { useListener } from '../hook/useListener';
+import { UIStateCtx } from '../context/UIStateCtx';
 
 export const AgentActionsPanel = () => {
   const game = useContext(GameCtx);
+  const { uiState } = useContext(UIStateCtx);
   const [selectedAgent, setSelectedAgent] = useState<Agent>();
 
-  const handleAgentSelected = (event: SelectAgent) => {
-    const agent = game.entities.get<Agent>('AGENT', event.agentId);
-    setSelectedAgent(agent);
-  };
+  useEffect(() => {
+    if (!uiState.selectedAgentId) return;
 
-  useListener('SELECT_AGENT', handleAgentSelected);
+    const agent = game.context.getEntity<Agent>(
+      'AGENT',
+      uiState.selectedAgentId
+    );
+    setSelectedAgent(agent);
+  }, [uiState]);
 
   if (!selectedAgent) return null;
 };

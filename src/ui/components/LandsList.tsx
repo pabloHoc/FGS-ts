@@ -5,10 +5,9 @@ import { EntityId } from '../../game/entities';
 import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
-import { SelectLand, selectLand } from '../../game/commands/select-land';
-import { SelectRegion } from '../../game/commands/select-region';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
+import { UIStateCtx } from '../context/UIStateCtx';
 
 interface LandItemProps {
   id: EntityId;
@@ -42,45 +41,48 @@ const LandItem = ({
 
 export const LandsList = () => {
   const game = useContext(GameCtx);
+  const { uiState, setUIState } = useContext(UIStateCtx);
   const [lands, setLands] = useState<Land[]>([]);
-  const [selectedLandId, setSelectedLandId] = useState<EntityId>();
   const [selectedRegion, setSelectedRegion] = useState<Region>();
   const [empireName, setEmpireName] = useState('');
 
   useEffect(() => {
-    const regionLands = game.entities
-      .getAll<Land>('LAND')
-      .filter((land) => land.regionId === selectedRegion?.id);
-
-    setLands(regionLands);
-  }, [selectedRegion]);
-
-  const handleRegionSelected = (event: SelectRegion) => {
-    const region = game.entities.get<Region>('REGION', event.regionId);
-    setSelectedRegion(region);
-
-    if (region.empireId) {
-      const empire = game.entities.get<Empire>('EMPIRE', region.empireId);
-      setEmpireName(empire.name);
+    if (!uiState.selectedRegionId) {
+      setLands([]);
+      setEmpireName('');
       return;
     }
-    setEmpireName('');
-  };
+    // Fetch region
+    const region = game.context.getEntity<Region>(
+      'REGION',
+      uiState.selectedRegionId
+    );
+    setSelectedRegion(region);
+
+    // Fetch empire
+    if (region.empireId) {
+      const empire = game.context.getEntity<Empire>('EMPIRE', region.empireId);
+      setEmpireName(empire.name);
+    } else {
+      setEmpireName('');
+    }
+
+    // Fetch lands
+    const regionLands = game.context
+      .getAllEntities<Land>('LAND')
+      .filter((land) => land.regionId === uiState.selectedRegionId);
+
+    setLands(regionLands);
+  }, [uiState]);
 
   const handleBuildingBuilt = () => {
     setLands((lands) => [...lands]);
   };
 
-  const handleLandSelected = (event: SelectLand) => {
-    setSelectedLandId(event.landId);
-  };
-
-  useListener('SELECT_LAND', handleLandSelected);
-  useListener('SELECT_REGION', handleRegionSelected);
   useListener('BUILD_BUILDING', handleBuildingBuilt);
 
   const handleClickedLand = (landId: EntityId) => {
-    game.events.dispatch(selectLand(landId));
+    setUIState({ ...uiState, selectedLandId: landId });
   };
 
   return (
@@ -98,7 +100,7 @@ export const LandsList = () => {
             onClick={handleClickedLand}
             name={land.name}
             buildings={land.buildings}
-            selected={land.id === selectedLandId}
+            selected={land.id === uiState.selectedLandId}
           />
         ))}
       </ul>

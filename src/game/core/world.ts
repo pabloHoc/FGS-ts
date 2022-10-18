@@ -1,83 +1,86 @@
+import { Commands } from '../commands';
+import { createAgent } from '../commands/create-agent';
+import { createEmpire } from '../commands/create-empire';
+import { createLand } from '../commands/create-land';
+import { createRegion } from '../commands/create-region';
 import { LandDefinition } from '../definitions/land';
 import { EntityId } from '../entities';
-import { createAgent } from '../entities/agent';
-import { createEmpire, Empire } from '../entities/empire';
-import { createLand } from '../entities/land';
-import { createRegion, Region } from '../entities/region';
+import { Empire } from '../entities/empire';
+import { Region } from '../entities/region';
 import { getRandom } from '../helpers/random';
 import { DefinitionManager } from './definition-manager';
-import { EntityManager } from './entity-manager';
+import { Dispatcher } from './dispatcher';
+import { GameContext } from './game-context';
 
 export class World {
   // TODO: this should be a config
   private REGIONS_NUMBER = 10;
   private LANDS_PER_REGION = 5;
 
-  private _entityManager: EntityManager;
+  private _gameContext: GameContext;
   private _definitionManager: DefinitionManager;
+  private _dispatcher: Dispatcher<Commands>;
 
   constructor(
-    entityManager: EntityManager,
-    definitionManager: DefinitionManager
+    gameContext: GameContext,
+    definitionManager: DefinitionManager,
+    dispatcher: Dispatcher<Commands>
   ) {
-    this._entityManager = entityManager;
+    this._gameContext = gameContext;
     this._definitionManager = definitionManager;
+    this._dispatcher = dispatcher;
   }
 
   // ? What's the difference between world and worldGenerator or worldMap?
   // ! This needs to be moved to a system
-  // ! Put this under effects (createAgentEffect)
-  // ! Create a command line for effects
 
   generateWorld() {
-    const playerEmpire = this.generateEmpires();
-
-    for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
-      this.generateRegions(i, i === 1 ? playerEmpire.id : undefined);
-    }
-
+    this.generateEmpires();
+    this.generateRegions();
+    this.generateLands();
     this.generateAgents();
   }
 
-  private generateRegions(number: number, empireId?: EntityId) {
-    const region = createRegion(`Region #${number}`, empireId);
-    this._entityManager.add(region);
+  private generateRegions() {
+    const empires = this._gameContext.getAllEntities<Empire>('EMPIRE');
 
-    this.generateLandsForRegion(region.id);
+    for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
+      this._dispatcher.execute(
+        createRegion(`Region #${i}`, i === 1 ? empires[0].id : undefined)
+      );
+    }
   }
 
-  private generateLandsForRegion(regionId: EntityId) {
-    const lands = [];
-    for (let i = 0; i < this.LANDS_PER_REGION; i++) {
-      const landIndex = getRandom(
-        0,
-        this._definitionManager.getAll<LandDefinition>('land').length - 1
-      );
-      const landName =
-        this._definitionManager.getAll<LandDefinition>('land')[landIndex].name;
-      const land = createLand(landName, regionId);
-      lands.push(land);
-      this._entityManager.add(land);
+  private generateLands() {
+    const regions = this._gameContext.getAllEntities<Region>('REGION');
+
+    for (const region of regions) {
+      for (let i = 0; i < this.LANDS_PER_REGION; i++) {
+        const landIndex = getRandom(
+          0,
+          this._definitionManager.getAll<LandDefinition>('land').length - 1
+        );
+        const landName =
+          this._definitionManager.getAll<LandDefinition>('land')[landIndex]
+            .name;
+        this._dispatcher.execute(createLand(landName, region.id));
+      }
     }
-    return lands;
   }
 
   private generateEmpires() {
-    const empire = createEmpire('PLAYER EMPIRE', true);
-    this._entityManager.add(empire);
-    return empire;
+    this._dispatcher.execute(createEmpire('PLAYER EMPIRE', true));
   }
 
   private generateAgents() {
-    const empires = this._entityManager.getAll<Empire>('EMPIRE');
-    const regions = this._entityManager.getAll<Region>('REGION');
+    const empires = this._gameContext.getAllEntities<Empire>('EMPIRE');
+    const regions = this._gameContext.getAllEntities<Region>('REGION');
 
     for (const empire of empires) {
       const region = regions.find((region) => region.empireId === empire.id);
 
       if (region) {
-        const agent = createAgent('Lorant', empire.id, region.id);
-        this._entityManager.add(agent);
+        this._dispatcher.execute(createAgent('Lorant', empire.id, region.id));
       }
     }
   }

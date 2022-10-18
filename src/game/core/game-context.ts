@@ -1,18 +1,18 @@
-import { Entities, Entity, EntityId } from '../entities';
+import { Entities, EntityId } from '../entities';
 import { Agent } from '../entities/agent';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
 
 // ? Change to context?
-export class EntityManager {
-  // TODO: check data structure, map?, dictionary?
+export class GameContext {
   private _regions: Map<EntityId, Region> = new Map();
   private _lands: Map<EntityId, Land> = new Map();
   private _empires: Map<EntityId, Empire> = new Map();
   private _agents: Map<EntityId, Agent> = new Map();
+  private _turn = 0;
 
-  add<T extends Entities>(entity: T) {
+  addEntity<T extends Entities>(entity: T) {
     switch (entity.type) {
       case 'EMPIRE':
         this._empires.set(entity.id, entity);
@@ -30,7 +30,7 @@ export class EntityManager {
     }
   }
 
-  get<T extends Entities>(entityType: T['type'], entityId: EntityId): T {
+  getEntity<T extends Entities>(entityType: T['type'], entityId: EntityId): T {
     switch (entityType) {
       case 'EMPIRE':
         return this._empires.get(entityId) as T;
@@ -47,7 +47,7 @@ export class EntityManager {
 
   // TODO: fix this hack
 
-  getAll<T extends Entities>(entityType: T['type']): T[] {
+  getAllEntities<T extends Entities>(entityType: T['type']): T[] {
     switch (entityType) {
       case 'EMPIRE':
         return Array.from(this._empires.values()) as T[];
@@ -60,5 +60,15 @@ export class EntityManager {
       default:
         return [];
     }
+  }
+
+  // Turn Manager?
+
+  get turn() {
+    return this._turn;
+  }
+
+  increaseTurn() {
+    this._turn++;
   }
 }

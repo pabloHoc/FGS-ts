@@ -1,11 +1,9 @@
-import { MouseEvent, MouseEventHandler, useContext, useState } from 'react';
+import { MouseEvent, useContext, useEffect, useState } from 'react';
+import { moveAgent } from '../../game/commands/move-agent';
 import { EntityId } from '../../game/entities';
 import { Region } from '../../game/entities/region';
-import { moveAgent } from '../../game/commands/move-agent';
-import { SelectAgent } from '../../game/commands/select-agent';
-import { selectRegion } from '../../game/commands/select-region';
 import { GameCtx } from '../context/GameCtx';
-import { useListener } from '../hook/useListener';
+import { UIStateCtx } from '../context/UIStateCtx';
 
 interface RegionItemProps {
   id: EntityId;
@@ -25,6 +23,7 @@ const RegionItem = ({
   const handleClick = (event: MouseEvent<HTMLLIElement>) => {
     event.preventDefault();
 
+    // HOW IS THIS WORKING?
     if (event.button === 0) {
       onClick(id);
     }
@@ -47,30 +46,23 @@ const RegionItem = ({
 export const RegionsList = () => {
   const game = useContext(GameCtx);
   const [regions, setRegions] = useState<Region[]>(
-    game.entities.getAll<Region>('REGION')
+    game.context.getAllEntities<Region>('REGION')
   );
-  const [selectedRegionId, setSelectedRegionId] = useState<EntityId>();
-  const [selectedAgentId, setSelectedAgentId] = useState<EntityId>();
+  const { uiState, setUIState } = useContext(UIStateCtx);
 
-  const handleTurnStarted = () => {
-    setRegions(game.entities.getAll<Region>('REGION'));
-  };
-
-  const handleAgentSelected = (event: SelectAgent) => {
-    setSelectedAgentId(event.agentId);
-  };
-
-  useListener('START_TURN', handleTurnStarted);
-  useListener('SELECT_AGENT', handleAgentSelected);
+  useEffect(() => {
+    // Do we have to update this every time? Are regions going
+    // to be created dinamycally?
+    setRegions(game.context.getAllEntities<Region>('REGION'));
+  }, [uiState]);
 
   const handleClickedRegion = (regionId: EntityId) => {
-    game.events.dispatch(selectRegion(regionId));
-    setSelectedRegionId(regionId);
+    setUIState({ ...uiState, selectedRegionId: regionId });
   };
 
   const handleRightClickedRegion = (regionId: EntityId) => {
-    if (!selectedAgentId) return;
-    game.events.dispatch(moveAgent(selectedAgentId, regionId));
+    if (!uiState.selectedAgentId) return;
+    game.commands.execute(moveAgent(uiState.selectedAgentId, regionId));
   };
 
   return (
@@ -84,7 +76,7 @@ export const RegionsList = () => {
             name={region.name}
             onClick={handleClickedRegion}
             onRightClick={handleRightClickedRegion}
-            selected={region.id === selectedRegionId}
+            selected={region.id === uiState.selectedRegionId}
           />
         ))}
       </ul>

@@ -1,33 +1,47 @@
 // Narrows a Union type base on N
 
 import { Command, Commands } from '../commands';
-import { EntityManager } from './entity-manager';
+import { DefinitionManager } from './definition-manager';
+import { GameContext } from './game-context';
 
-// e.g. NarrowAction<MyActions, 'Example'> would produce ExampleAction
 export type NarrowAction<T, N> = T extends { action: N } ? T : never;
 
-export type Handler<T extends Commands = Commands> = (
+export type Handler<T extends Command> = (
   command: T,
-  entityManager: EntityManager
+  gameContext: GameContext,
+  definitionManager: DefinitionManager
 ) => void;
 
 export type Handlers<T extends Commands> = {
-  [k in T['action']]: Handler<NarrowAction<Commands, k>>;
+  [k in T['action']]: Handler<NarrowAction<T, k>>;
 };
 
+// TODO: Change name
 export class Dispatcher<T extends Commands> {
+  private gameContext: GameContext;
+  private definitionManager: DefinitionManager;
   private handlers: Handlers<T>;
-  private entityManager: EntityManager;
+  private callback: Function | undefined;
 
-  constructor(handlers: Handlers<T>, entityManager: EntityManager) {
+  constructor(
+    handlers: Handlers<T>,
+    gameContext: GameContext,
+    definitionManager: DefinitionManager
+  ) {
     this.handlers = handlers;
-    this.entityManager = entityManager;
+    this.gameContext = gameContext;
+    this.definitionManager = definitionManager;
   }
 
-  execute(command: T) {
-    this.handlers[command['action'] as T['action']](
-      command,
-      this.entityManager
-    );
+  execute(command: NarrowAction<T, T['action']>) {
+    const handler = this.handlers[command['action'] as T['action']];
+    if (handler) {
+      handler(command, this.gameContext, this.definitionManager);
+      if (this.callback) this.callback();
+    }
+  }
+
+  onCommandExecuted(callback: Function) {
+    this.callback = callback;
   }
 }

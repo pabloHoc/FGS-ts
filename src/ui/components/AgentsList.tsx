@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { EntityManager } from '../../game/core/entity-manager';
+import { GameContext } from '../../game/core/game-context';
 import { EntityId } from '../../game/entities';
 import { Agent } from '../../game/entities/agent';
 import { Region } from '../../game/entities/region';
-import { selectAgent } from '../../game/commands/select-agent';
 import { getEmpireAgents } from '../../game/helpers/agent';
 import { getPlayerEmpire } from '../../game/helpers/empire';
 import { GameCtx } from '../context/GameCtx';
+import { UIStateCtx } from '../context/UIStateCtx';
 import { useListener } from '../hook/useListener';
 
 const AgentItem = ({
@@ -15,10 +15,10 @@ const AgentItem = ({
   onClick,
 }: {
   agent: Agent;
-  entities: EntityManager;
+  entities: GameContext;
   onClick: (agentId: EntityId) => void;
 }) => {
-  const region = entities.get<Region>('REGION', agent.regionId);
+  const region = entities.getEntity<Region>('REGION', agent.regionId);
 
   return (
     <li onClick={() => onClick(agent.id)}>
@@ -32,23 +32,24 @@ const AgentItem = ({
 
 export const AgentsList = () => {
   const game = useContext(GameCtx);
+  const { uiState, setUIState } = useContext(UIStateCtx);
   const [agents, setAgents] = useState<Agent[]>([]);
 
-  const playerEmpire = getPlayerEmpire(game.entities);
+  const playerEmpire = getPlayerEmpire(game.context);
 
   if (!playerEmpire) return null;
 
   const updateAgents = () => {
-    const agents = getEmpireAgents(playerEmpire.id, game.entities);
+    const agents = getEmpireAgents(playerEmpire.id, game.context);
     setAgents(agents);
   };
 
-  useEffect(updateAgents, []);
+  useEffect(updateAgents, [uiState]);
   useListener('START_TURN', updateAgents);
   useListener('MOVE_AGENT', updateAgents);
 
   const handleAgentClicked = (agentId: EntityId) => {
-    game.events.dispatch(selectAgent(agentId));
+    setUIState({ ...uiState, selectedAgentId: agentId });
   };
 
   return (
@@ -59,7 +60,7 @@ export const AgentsList = () => {
           <AgentItem
             key={agent.name}
             agent={agent}
-            entities={game.entities}
+            entities={game.context}
             onClick={handleAgentClicked}
           />
         ))}

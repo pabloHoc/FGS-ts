@@ -9,8 +9,8 @@ export const EmpireDetails = () => {
 
   const updateEmpire = () => {
     // * This can be cached
-    const playerEmpire = game.entities
-      .getAll<Empire>('EMPIRE')
+    const playerEmpire = game.context
+      .getAllEntities<Empire>('EMPIRE')
       .find((empire) => empire.isPlayer);
     setEmpire(playerEmpire ? { ...playerEmpire } : undefined);
   };

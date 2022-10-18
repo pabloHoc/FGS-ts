@@ -10,8 +10,8 @@ export const useListener = <K extends Commands['type']>(
   const game = useContext(GameCtx);
 
   useEffect(() => {
-    game.events.listen(eventType, listener);
+    game.commands.listen(eventType, listener);
 
-    return () => game.events.stopListening(eventType, listener);
+    return () => game.commands.stopListening(eventType, listener);
   }, []);
 };

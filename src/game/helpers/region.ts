@@ -1,11 +1,11 @@
-import { EntityManager } from '../core/entity-manager';
+import { GameContext } from '../core/game-context';
 import { EntityId } from '../entities';
 import { Region } from '../entities/region';
 
 export const getEmpireRegions = (
   empireId: EntityId,
-  entityManager: EntityManager
+  gameContext: GameContext
 ) =>
-  entityManager
-    .getAll<Region>('REGION')
+  gameContext
+    .getAllEntities<Region>('REGION')
     .filter((region) => region.empireId === empireId);

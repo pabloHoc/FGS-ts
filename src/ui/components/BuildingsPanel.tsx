@@ -1,61 +1,46 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { BuildingDefinition } from '../../game/definitions/building';
 import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
 import { buildBuilding } from '../../game/commands/build-building';
-import { SelectLand } from '../../game/commands/select-land';
 import { GameCtx } from '../context/GameCtx';
 import { useListener } from '../hook/useListener';
+import { UIStateCtx } from '../context/UIStateCtx';
 
 export const BuildingsPanel = () => {
   const game = useContext(GameCtx);
-  const [selectedLand, setSelectedLand] = useState<Land>();
+  const { uiState } = useContext(UIStateCtx);
   const [empire, setEmpire] = useState<Empire>();
 
   const clearSelection = () => {
-    setSelectedLand(undefined);
     setEmpire(undefined);
   };
 
-  const handleSelectedLand = (event: SelectLand) => {
-    const land = game.entities.get<Land>('LAND', event.landId);
-    const region = game.entities.get<Region>('REGION', land.regionId);
-    if (!region.empireId) {
-      clearSelection();
-      return;
-    }
+  useEffect(() => {
+    if (!uiState.selectedLandId) return;
 
-    const empire = game.entities.get<Empire>('EMPIRE', region.empireId);
-    if (!empire.isPlayer) {
-      clearSelection();
-      return;
-    }
+    const land = game.context.getEntity<Land>('LAND', uiState.selectedLandId);
+    const region = game.context.getEntity<Region>('REGION', land.regionId);
+    if (!region.empireId) return clearSelection();
 
-    setSelectedLand(land);
+    const empire = game.context.getEntity<Empire>('EMPIRE', region.empireId);
+    if (!empire.isPlayer) return clearSelection();
+
     setEmpire(empire);
-  };
-
-  const updateBuildings = () => {
-    setSelectedLand((land) => {
-      if (land) return { ...land };
-    });
-  };
+  }, []);
 
   useListener('SELECT_REGION', clearSelection);
-  useListener('SELECT_LAND', handleSelectedLand);
-  useListener('START_TURN', updateBuildings);
-  useListener('UPDATE_RESOURCES', updateBuildings);
 
   const handleBuildBuilding = (buildingName: BuildingDefinition['name']) => {
-    if (!selectedLand || !empire) return;
+    if (!uiState.selectedLandId || !empire) return;
 
-    game.events.dispatch(
-      buildBuilding(buildingName, selectedLand.id, empire.id)
+    game.commands.execute(
+      buildBuilding(buildingName, uiState.selectedLandId, empire.id)
     );
   };
 
-  if (!selectedLand || !empire) return null;
+  if (!uiState.selectedLandId || !empire) return null;
 
   return (
     <div>
