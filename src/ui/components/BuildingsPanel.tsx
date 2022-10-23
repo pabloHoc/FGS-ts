@@ -3,9 +3,9 @@ import { BuildingDefinition } from '../../game/definitions/building';
 import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
-import { buildBuilding } from '../../game/commands/build-building';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
+import { addBuildingToQueue } from '../../game/commands/add-building-to-queue';
 
 export const BuildingsPanel = () => {
   const game = useContext(GameCtx);
@@ -27,13 +27,13 @@ export const BuildingsPanel = () => {
     if (!empire.isPlayer) return clearSelection();
 
     setEmpire(empire);
-  });
+  }, [uiState]);
 
   const handleBuildBuilding = (buildingName: BuildingDefinition['name']) => {
     if (!uiState.selectedLandId || !empire) return;
 
     game.commands.execute(
-      buildBuilding(buildingName, uiState.selectedLandId, empire.id)
+      addBuildingToQueue(buildingName, uiState.selectedLandId, empire.id)
     );
   };
 

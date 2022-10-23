@@ -1,5 +1,6 @@
-import { Entities, EntityId } from '../entities';
+import { Entities, Entity, EntityId } from '../entities';
 import { Agent } from '../entities/agent';
+import { BuildingQueueItem } from '../entities/building-queue-item';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
@@ -10,56 +11,46 @@ export class GameContext {
   private _lands: Map<EntityId, Land> = new Map();
   private _empires: Map<EntityId, Empire> = new Map();
   private _agents: Map<EntityId, Agent> = new Map();
+  private _buildingQueueItems: Map<EntityId, BuildingQueueItem> = new Map();
   private _turn = 0;
 
-  addEntity<T extends Entities>(entity: T) {
-    switch (entity.type) {
+  private getEntitiesByType<T extends Entities>(
+    entity: T | T['type']
+  ): Map<EntityId, T> {
+    const entityType = typeof entity === 'string' ? entity : entity.type;
+
+    switch (entityType) {
       case 'EMPIRE':
-        this._empires.set(entity.id, entity);
-        break;
+        return this._empires as Map<EntityId, T>;
       case 'REGION':
-        this._regions.set(entity.id, entity);
-        break;
+        return this._regions as Map<EntityId, T>;
       case 'LAND':
-        this._lands.set(entity.id, entity);
-        break;
+        return this._lands as Map<EntityId, T>;
       case 'AGENT':
-        this._agents.set(entity.id, entity);
-        break;
+        return this._agents as Map<EntityId, T>;
+      case 'BUILDING_QUEUE_ITEM':
+        return this._buildingQueueItems as Map<EntityId, T>;
       default:
+        throw Error('INVALID ENTITY TYPE');
     }
   }
 
+  addEntity<T extends Entities>(entity: T) {
+    this.getEntitiesByType<T>(entity).set(entity.id, entity);
+  }
+
   getEntity<T extends Entities>(entityType: T['type'], entityId: EntityId): T {
-    switch (entityType) {
-      case 'EMPIRE':
-        return this._empires.get(entityId) as T;
-      case 'REGION':
-        return this._regions.get(entityId) as T;
-      case 'LAND':
-        return this._lands.get(entityId) as T;
-      case 'AGENT':
-        return this._agents.get(entityId) as T;
-      default:
-        throw Error('Entity not found');
-    }
+    return this.getEntitiesByType<T>(entityType).get(entityId) as T;
   }
 
   // TODO: fix this hack
 
   getAllEntities<T extends Entities>(entityType: T['type']): T[] {
-    switch (entityType) {
-      case 'EMPIRE':
-        return Array.from(this._empires.values()) as T[];
-      case 'REGION':
-        return Array.from(this._regions.values()) as T[];
-      case 'LAND':
-        return Array.from(this._lands.values()) as T[];
-      case 'AGENT':
-        return Array.from(this._agents.values()) as T[];
-      default:
-        return [];
-    }
+    return Array.from(this.getEntitiesByType<T>(entityType).values()) as T[];
+  }
+
+  deleteEntity<T extends Entities>(entity: T) {
+    this.getEntitiesByType<T>(entity).delete(entity.id);
   }
 
   // Turn Manager?

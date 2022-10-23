@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import { BuildingDefinition } from '../../game/definitions/building';
 import { LandDefinition } from '../../game/definitions/land';
-import { EntityId } from '../../game/entities';
+import { Entity, EntityId } from '../../game/entities';
+import { BuildingQueueItem } from '../../game/entities/building-queue-item';
 import { Empire } from '../../game/entities/empire';
 import { Land } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
+import { getSortedBuildingQueueForLand } from '../../game/helpers/building';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
 
@@ -12,6 +14,7 @@ interface LandItemProps {
   id: EntityId;
   name: LandDefinition['name'];
   buildings: BuildingDefinition['name'][];
+  buildingQueue: BuildingQueueItem[];
   onClick: (id: EntityId) => void;
   selected: boolean;
 }
@@ -21,6 +24,7 @@ const LandItem = ({
   onClick,
   name: landType,
   buildings,
+  buildingQueue,
   selected,
 }: LandItemProps) => (
   <li
@@ -29,11 +33,26 @@ const LandItem = ({
   >
     {landType}
     {!!buildings.length && (
-      <ul>
-        {buildings.map((building, i) => (
-          <li key={i}>{building}</li>
-        ))}
-      </ul>
+      <div>
+        <b>BUILDINGS</b>
+        <ul>
+          {buildings.map((building, i) => (
+            <li key={i}>{building}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+    {!!buildingQueue.length && (
+      <div>
+        <b>BUILDING QUEUE</b>
+        <ul>
+          {buildingQueue.map((item, i) => (
+            <li
+              key={i}
+            >{`${item.order}) ${item.buildingName} (${item.remainingTurns})`}</li>
+          ))}
+        </ul>
+      </div>
     )}
   </li>
 );
@@ -78,6 +97,9 @@ export const LandsList = () => {
     setUIState({ ...uiState, selectedLandId: landId });
   };
 
+  const getBuildingQueue = (landId: EntityId) =>
+    getSortedBuildingQueueForLand(landId, game.context);
+
   return (
     <div>
       {selectedRegion && (
@@ -93,6 +115,7 @@ export const LandsList = () => {
             onClick={handleClickedLand}
             name={land.name}
             buildings={land.buildings}
+            buildingQueue={getBuildingQueue(land.id)}
             selected={land.id === uiState.selectedLandId}
           />
         ))}

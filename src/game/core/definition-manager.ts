@@ -1,6 +1,6 @@
-import resourcesDefinitions from '../../common/resources/index';
-import buildingsDefinitions from '../../common/buildings/index';
-import landsDefinitions from '../../common/lands/index';
+import resourcesDefinitions from '../../data/resources/index';
+import buildingsDefinitions from '../../data/buildings/index';
+import landsDefinitions from '../../data/lands/index';
 import { BuildingDefinition } from '../definitions/building';
 import { ResourceDefinition } from '../definitions/resource';
 import { objectKeys } from '../helpers/object';

@@ -14,8 +14,6 @@ export interface Empire extends Entity {
 }
 
 export const createEmpire = (name: string, isPlayer: boolean): Empire => {
-  // this in an command/effect, we need the context here
-
   return {
     type: 'EMPIRE',
     id: generateId(),

@@ -5,6 +5,7 @@ import { EndTurn } from '../end-turn';
 import { moveAgents } from '../move-agents';
 import { produceResources } from '../produce-resources';
 import { startTurn } from '../start-turn';
+import { processBuildingQueues } from '../process-building-queues';
 
 export const endTurn: Handler<EndTurn> = (
   command: EndTurn,
@@ -13,6 +14,7 @@ export const endTurn: Handler<EndTurn> = (
   dispatcher: Dispatcher
 ) => {
   dispatcher.execute(moveAgents());
+  dispatcher.execute(processBuildingQueues());
   dispatcher.execute(produceResources());
   dispatcher.execute(startTurn());
 };

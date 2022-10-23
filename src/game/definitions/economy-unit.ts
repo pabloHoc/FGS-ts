@@ -1,4 +1,4 @@
-import resourceDefinitions from '../../common/resources/index';
+import resourceDefinitions from '../../data/resources/index';
 
 export type ResourceType =
   typeof resourceDefinitions[keyof typeof resourceDefinitions]['name'];
