@@ -19,3 +19,6 @@ export const createRegion = (name: string, empireId?: EntityId): Region => ({
   name,
   empireId,
 });
+
+export const isRegion = (entity: Entity): entity is Region =>
+  entity.type === 'REGION';

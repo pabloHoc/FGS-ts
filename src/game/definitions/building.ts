@@ -13,7 +13,6 @@ interface IBuildingDefinition extends Definition {
   };
 }
 
-// Isn't this a model? a controller???
 export class BuildingDefinition implements IBuildingDefinition {
   readonly type = 'building';
   readonly name: string;

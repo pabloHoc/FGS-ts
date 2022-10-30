@@ -4,7 +4,7 @@ import { EntityId } from '../entities';
 
 export interface AddBuildingToQueue extends Command {
   action: 'ADD_BUILDING_TO_QUEUE';
-  buildingName: BuildingDefinition['name'];
+  name: BuildingDefinition['name'];
   landId: EntityId;
   empireId: EntityId;
 }
@@ -15,7 +15,7 @@ export const addBuildingToQueue = (
   empireId: EntityId
 ): AddBuildingToQueue => ({
   action: 'ADD_BUILDING_TO_QUEUE',
-  buildingName,
+  name: buildingName,
   landId,
   empireId,
 });

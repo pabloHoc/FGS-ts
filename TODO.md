@@ -10,3 +10,6 @@ handle them separately
 [] Effects (Increment / Decrement)
 [] Conditions (potential / allow)
 [] District and capital buildings
+[] One buildin queue per region
+[] Undo / Redo
+[] Command Pattern Refactor?

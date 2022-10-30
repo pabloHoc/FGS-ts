@@ -1,5 +1,6 @@
 import { AddBuildingToQueue } from './add-building-to-queue';
 import { BuildBuilding } from './build-building';
+import { ConquestRegion } from './conquest-region';
 import { CreateAgent } from './create-agent';
 import { CreateEmpire } from './create-empire';
 import { CreateLand } from './create-land';
@@ -26,8 +27,10 @@ export type Commands =
   | EndTurn
   | BuildBuilding
   | AddBuildingToQueue
-  | MoveAgent
   // Called each turn
   | MoveAgents
   | ProcessBuildingQueues
-  | ProduceResources;
+  | ProduceResources
+  // Agent actions
+  | MoveAgent
+  | ConquestRegion;

@@ -1,17 +1,24 @@
 import resourcesDefinitions from '../../data/resources/index';
 import buildingsDefinitions from '../../data/buildings/index';
 import landsDefinitions from '../../data/lands/index';
+import agentActionsDefinitions from '../../data/agent-actions/index';
 import { BuildingDefinition } from '../definitions/building';
 import { ResourceDefinition } from '../definitions/resource';
 import { objectKeys } from '../helpers/object';
 import { LandDefinition } from '../definitions/land';
+import { AgentActionDefinition } from '../definitions/agent-action';
 
-type Definition = BuildingDefinition | ResourceDefinition | LandDefinition;
+type Definition =
+  | BuildingDefinition
+  | ResourceDefinition
+  | LandDefinition
+  | AgentActionDefinition;
 
 export class DefinitionManager {
   buildings: Map<string, BuildingDefinition> = new Map();
   resources: Map<string, ResourceDefinition> = new Map();
   lands: Map<string, LandDefinition> = new Map();
+  agentActions: Map<string, AgentActionDefinition> = new Map();
 
   constructor() {
     this.loadDefinitions();
@@ -21,6 +28,7 @@ export class DefinitionManager {
     this.loadBuildingsDefinitions();
     this.loadResourcesDefinitions();
     this.loadLandsDefinitions();
+    this.loadAgentActionsDefinitions();
   }
 
   private loadBuildingsDefinitions() {
@@ -44,6 +52,16 @@ export class DefinitionManager {
     }
   }
 
+  private loadAgentActionsDefinitions() {
+    for (const key of objectKeys(agentActionsDefinitions)) {
+      const definition = agentActionsDefinitions[key];
+      this.agentActions.set(
+        definition.name,
+        new AgentActionDefinition(definition)
+      );
+    }
+  }
+
   get<T extends Definition>(type: T['type'], definitionName: T['name']): T {
     switch (type) {
       case 'building':
@@ -52,6 +70,8 @@ export class DefinitionManager {
         return this.lands.get(definitionName) as T;
       case 'resource':
         return this.resources.get(definitionName) as T;
+      case 'agent-action':
+        return this.agentActions.get(definitionName) as T;
       default:
         throw Error('Definition not found');
     }
@@ -65,6 +85,8 @@ export class DefinitionManager {
         return Array.from(this.lands.values()) as T[];
       case 'resource':
         return Array.from(this.resources.values()) as T[];
+      case 'agent-action':
+        return Array.from(this.agentActions.values()) as T[];
       default:
         throw Error('Definition not found');
     }

@@ -1,0 +1,15 @@
+{
+  "type": "agent-action",
+  "name": "conquest-region",
+  "conditions": {
+    "region": {
+      "has_empire": false
+    }
+  },
+  "effects": {
+    "region": {
+      "conquest": true
+    }
+  },
+  "_comment": "original scope is agent"
+}

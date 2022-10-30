@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { AgentActionDefinition } from '../../game/definitions/agent-action';
 import { Agent } from '../../game/entities/agent';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
@@ -19,4 +20,16 @@ export const AgentActionsPanel = () => {
   }, [uiState]);
 
   if (!selectedAgent) return null;
+
+  return (
+    <>
+      {game.definitions
+        .getAll<AgentActionDefinition>('agent-action')
+        .map((agentAction) =>
+          agentAction.allow(selectedAgent, game.context) ? (
+            <button key={agentAction.name}>{agentAction.name}</button>
+          ) : null
+        )}
+    </>
+  );
 };

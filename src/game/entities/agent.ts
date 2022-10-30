@@ -34,3 +34,6 @@ export const createAgent = (
   regionId,
   mp: 10,
 });
+
+export const isAgent = (entity: Entity): entity is Agent =>
+  entity.type === 'AGENT';

@@ -27,10 +27,10 @@ export const addBuildingToQueue = (
     : 0;
   const buildingDefinition = definitionManager.get<BuildingDefinition>(
     'building',
-    command.buildingName
+    command.name
   );
   const newBuildingQueueItem = createBuildingQueueItem(
-    command.buildingName,
+    command.name,
     nextBuildingQueueOrder,
     buildingDefinition.baseBuildtime,
     command.empireId,
