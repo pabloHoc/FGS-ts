@@ -50,7 +50,7 @@ const generateLandResources = (
 ) => {
   // * This can be cached
   const landDefinition = definitionManager.get<LandDefinition>(
-    'land',
+    'LAND',
     land.name
   );
 
@@ -72,7 +72,7 @@ const generateBuildingResources = (
 ) => {
   for (const building of land.buildings) {
     const buildingDefinition = definitionManager.get<BuildingDefinition>(
-      'building',
+      'BUILDING',
       building
     );
 

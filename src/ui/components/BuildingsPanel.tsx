@@ -43,7 +43,7 @@ export const BuildingsPanel = () => {
     <div>
       <h3>BUILDINGS</h3>
       {game.definitions
-        .getAll<BuildingDefinition>('building')
+        .getAll<BuildingDefinition>('BUILDING')
         .map((building) => (
           <button
             key={building.name}

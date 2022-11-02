@@ -6,7 +6,7 @@ interface IResourceDefinition extends Definition {
 
 // Economy Unit???
 export class ResourceDefinition implements IResourceDefinition {
-  readonly type = 'resource';
+  readonly type = 'RESOURCE';
   readonly name: string;
 
   constructor(definition: IResourceDefinition) {

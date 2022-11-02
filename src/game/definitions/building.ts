@@ -14,7 +14,7 @@ interface IBuildingDefinition extends Definition {
 }
 
 export class BuildingDefinition implements IBuildingDefinition {
-  readonly type = 'building';
+  readonly type = 'BUILDING';
   readonly name: string;
   readonly baseBuildtime: number;
   readonly resources: {

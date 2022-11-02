@@ -26,7 +26,7 @@ export const addBuildingToQueue = (
     ? lastBuildingInQueue.order + 1
     : 0;
   const buildingDefinition = definitionManager.get<BuildingDefinition>(
-    'building',
+    'BUILDING',
     command.name
   );
   const newBuildingQueueItem = createBuildingQueueItem(

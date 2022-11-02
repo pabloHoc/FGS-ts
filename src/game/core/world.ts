@@ -58,10 +58,10 @@ export class World {
       for (let i = 0; i < this.LANDS_PER_REGION; i++) {
         const landIndex = getRandom(
           0,
-          this._definitionManager.getAll<LandDefinition>('land').length - 1
+          this._definitionManager.getAll<LandDefinition>('LAND').length - 1
         );
         const landName =
-          this._definitionManager.getAll<LandDefinition>('land')[landIndex]
+          this._definitionManager.getAll<LandDefinition>('LAND')[landIndex]
             .name;
         this._dispatcher.execute(createLand(landName, region.id));
       }

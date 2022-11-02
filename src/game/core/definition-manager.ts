@@ -7,6 +7,7 @@ import { ResourceDefinition } from '../definitions/resource';
 import { objectKeys } from '../helpers/object';
 import { LandDefinition } from '../definitions/land';
 import { AgentActionDefinition } from '../definitions/agent-action';
+import { TypeMapper } from '../helpers/types';
 
 type Definition =
   | BuildingDefinition
@@ -14,81 +15,63 @@ type Definition =
   | LandDefinition
   | AgentActionDefinition;
 
+// We could merge these in one object maybe
+const definitionsMap = {
+  building: buildingsDefinitions,
+  resource: resourcesDefinitions,
+  land: landsDefinitions,
+  'agent-action': agentActionsDefinitions,
+};
+
+const definitionsConstructors = {
+  building: BuildingDefinition,
+  resource: ResourceDefinition,
+  land: LandDefinition,
+  'agent-action': AgentActionDefinition,
+};
+
+type DefinitionType = keyof typeof definitionsMap;
+
 export class DefinitionManager {
-  buildings: Map<string, BuildingDefinition> = new Map();
-  resources: Map<string, ResourceDefinition> = new Map();
-  lands: Map<string, LandDefinition> = new Map();
-  agentActions: Map<string, AgentActionDefinition> = new Map();
+  private _definitions = {
+    building: new Map<string, BuildingDefinition>(),
+    resource: new Map<string, ResourceDefinition>(),
+    land: new Map<string, LandDefinition>(),
+    'agent-action': new Map<string, AgentActionDefinition>(),
+  };
 
   constructor() {
     this.loadDefinitions();
   }
 
   private loadDefinitions() {
-    this.loadBuildingsDefinitions();
-    this.loadResourcesDefinitions();
-    this.loadLandsDefinitions();
-    this.loadAgentActionsDefinitions();
-  }
+    for (const t in definitionsMap) {
+      const type = t as DefinitionType;
+      const definitions = definitionsMap[type];
 
-  private loadBuildingsDefinitions() {
-    for (const key of objectKeys(buildingsDefinitions)) {
-      const definition = buildingsDefinitions[key];
-      this.buildings.set(definition.name, new BuildingDefinition(definition));
+      for (const n in definitions) {
+        const name = n as keyof typeof definitions;
+        this.getDefinitionsByType(
+          type.toUpperCase() as Uppercase<DefinitionType>
+        ).set(
+          name,
+          new definitionsConstructors[type](definitions[name]) as never
+        );
+      }
     }
   }
 
-  private loadResourcesDefinitions() {
-    for (const key of objectKeys(resourcesDefinitions)) {
-      const definition = resourcesDefinitions[key];
-      this.resources.set(definition.name, new ResourceDefinition(definition));
-    }
-  }
-
-  private loadLandsDefinitions() {
-    for (const key of objectKeys(landsDefinitions)) {
-      const definition = landsDefinitions[key];
-      this.lands.set(definition.name, new LandDefinition(definition));
-    }
-  }
-
-  private loadAgentActionsDefinitions() {
-    for (const key of objectKeys(agentActionsDefinitions)) {
-      const definition = agentActionsDefinitions[key];
-      this.agentActions.set(
-        definition.name,
-        new AgentActionDefinition(definition)
-      );
-    }
+  private getDefinitionsByType<
+    K extends keyof TypeMapper<DefinitionManager['_definitions']>
+  >(type: Uppercase<K>) {
+    return this._definitions[type.toLowerCase() as K];
   }
 
   get<T extends Definition>(type: T['type'], definitionName: T['name']): T {
-    switch (type) {
-      case 'building':
-        return this.buildings.get(definitionName) as T;
-      case 'land':
-        return this.lands.get(definitionName) as T;
-      case 'resource':
-        return this.resources.get(definitionName) as T;
-      case 'agent-action':
-        return this.agentActions.get(definitionName) as T;
-      default:
-        throw Error('Definition not found');
-    }
+    return this.getDefinitionsByType(type).get(definitionName) as T;
   }
 
   getAll<T extends Definition>(type: Definition['type']): T[] {
-    switch (type) {
-      case 'building':
-        return Array.from(this.buildings.values()) as T[];
-      case 'land':
-        return Array.from(this.lands.values()) as T[];
-      case 'resource':
-        return Array.from(this.resources.values()) as T[];
-      case 'agent-action':
-        return Array.from(this.agentActions.values()) as T[];
-      default:
-        throw Error('Definition not found');
-    }
+    return Array.from(this.getDefinitionsByType(type).values() as never) as T[];
   }
 }

@@ -9,7 +9,7 @@ interface ILandDefinition extends Definition {
 }
 
 export class LandDefinition implements ILandDefinition {
-  readonly type = 'land';
+  readonly type = 'LAND';
   readonly name: string;
   readonly resources: {
     readonly production: EconomyUnit;
