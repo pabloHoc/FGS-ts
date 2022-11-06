@@ -6,7 +6,6 @@ import { moveAgent } from './move-agent';
 import { createRegion } from './create-region';
 import { createAgent } from './create-agent';
 import { buildBuilding } from './build-building';
-import { moveAgents } from './move-agents';
 import { produceResources } from './produce-resources';
 import { endTurn } from './end-turn';
 import { addBuildingToQueue } from './add-building-to-queue';
@@ -25,7 +24,6 @@ export const HANDLERS: Handlers = {
   BUILD_BUILDING: buildBuilding,
   ADD_BUILDING_TO_QUEUE: addBuildingToQueue,
   PROCESS_BUILDING_QUEUES: processBuildingQueues,
-  MOVE_AGENTS: moveAgents,
   PRODUCE_RESOURCES: produceResources,
   SET_OWNER: setOwner,
   PROCESS_AGENT_ACTIONS: processAgentActions,

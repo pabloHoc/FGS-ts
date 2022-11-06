@@ -2,6 +2,7 @@ import { Entity, EntityId } from '.';
 import { AgentActionDefinition } from '../definitions/agent-action';
 import { generateId } from '../helpers/id';
 
+// ? is it really a queue?
 export interface ActionQueueItem extends Entity {
   type: 'ACTION_QUEUE_ITEM';
   id: EntityId;

@@ -14,17 +14,21 @@ export const processAgentActions = (
   const agents = gameContext.getAllEntities<Agent>('AGENT');
 
   for (const agent of agents) {
-    if (agent.currentAction && !isMoveAction(agent.currentAction)) {
+    if (agent.currentAction) {
       agent.currentAction.remainingTurns--;
-
       if (agent.currentAction.remainingTurns === 0) {
-        const agentActionDefinition =
-          definitionManager.get<AgentActionDefinition>(
-            'AGENT-ACTION',
-            agent.currentAction.name
-          );
-        agentActionDefinition.execute(agent, gameContext, dispatcher);
-        agent.currentAction = undefined;
+        if (isMoveAction(agent.currentAction)) {
+          // This can be turn into a setLocation command
+          agent.regionId = agent.currentAction.toRegion;
+        } else {
+          const agentActionDefinition =
+            definitionManager.get<AgentActionDefinition>(
+              'AGENT-ACTION',
+              agent.currentAction.name
+            );
+          agentActionDefinition.execute(agent, gameContext, dispatcher);
+        }
+        delete agent.currentAction;
       }
     }
   }

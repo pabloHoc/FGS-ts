@@ -1,13 +1,11 @@
 import { AddBuildingToQueue } from './add-building-to-queue';
 import { BuildBuilding } from './build-building';
-import { ConquestRegion } from './conquest-region';
 import { CreateAgent } from './create-agent';
 import { CreateEmpire } from './create-empire';
 import { CreateLand } from './create-land';
 import { CreateRegion } from './create-region';
 import { EndTurn } from './end-turn';
 import { MoveAgent } from './move-agent';
-import { MoveAgents } from './move-agents';
 import { ProcessAgentActions } from './process-agent-actions';
 import { ProcessBuildingQueues } from './process-building-queues';
 import { ProduceResources } from './produce-resources';
@@ -31,7 +29,6 @@ export type Commands =
   | AddBuildingToQueue
   | SetOwner
   // Called each turn
-  | MoveAgents
   | ProcessAgentActions
   | ProcessBuildingQueues
   | ProduceResources
