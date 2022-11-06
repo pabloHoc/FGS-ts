@@ -1,3 +1,3 @@
-import conquestRegion from './conquest-region.json';
+import conquest_region from './conquest-region.json';
 
-export default { conquestRegion };
+export default { conquest_region };

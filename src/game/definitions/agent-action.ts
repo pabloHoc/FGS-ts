@@ -7,6 +7,7 @@ import { Agent } from '../entities/agent';
 
 interface IAgentActionDefinition extends Definition {
   name: string;
+  baseExecutionTime: number;
   conditions: Conditions;
   actions: Actions;
 }
@@ -16,9 +17,11 @@ export class AgentActionDefinition implements IAgentActionDefinition {
   readonly name: string;
   readonly conditions: Conditions;
   readonly actions: Actions;
+  readonly baseExecutionTime: number;
 
   constructor(definition: IAgentActionDefinition) {
     this.name = definition.name;
+    this.baseExecutionTime = definition.baseExecutionTime;
     this.conditions = definition.conditions;
     this.actions = definition.actions;
   }

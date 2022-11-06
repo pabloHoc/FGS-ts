@@ -6,10 +6,8 @@ export const moveAgent = (command: MoveAgent, gameContext: GameContext) => {
   const agent = gameContext.getEntity<Agent>('AGENT', command.agentId);
   agent.currentAction = {
     name: 'MOVE',
-    payload: {
-      fromRegion: agent.regionId,
-      toRegion: command.toRegionId,
-    },
+    fromRegion: agent.regionId,
+    toRegion: command.toRegionId,
     remainingTurns: 2,
   };
 };

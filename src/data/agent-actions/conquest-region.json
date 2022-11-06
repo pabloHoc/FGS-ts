@@ -1,7 +1,7 @@
 {
   "type": "agent-action",
-  "name": "conquest-region",
-  "turns": 2,
+  "name": "conquest_region",
+  "baseExecutionTime": 2,
   "conditions": {
     "region": {
       "has_empire": false

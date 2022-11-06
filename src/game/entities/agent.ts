@@ -1,16 +1,18 @@
 import { Entity, EntityId } from '.';
+import { Action } from '../commands/command-map';
 import { generateId } from '../helpers/id';
+import { ActionQueueItem } from './action-queue-item';
 
 interface MoveAction {
   name: 'MOVE';
-  payload: {
-    fromRegion: EntityId;
-    toRegion: EntityId;
-  };
+  fromRegion: EntityId;
+  toRegion: EntityId;
   remainingTurns: number;
 }
 
-type AgentAction = MoveAction;
+export const isMoveAction = (
+  action: MoveAction | ActionQueueItem
+): action is MoveAction => action.name === 'MOVE';
 
 export interface Agent extends Entity {
   type: 'AGENT';
@@ -19,7 +21,7 @@ export interface Agent extends Entity {
   // Current location
   regionId: EntityId;
   mp: number;
-  currentAction?: AgentAction;
+  currentAction?: MoveAction | ActionQueueItem;
 }
 
 export const createAgent = (

@@ -12,6 +12,7 @@ import { endTurn } from './end-turn';
 import { addBuildingToQueue } from './add-building-to-queue';
 import { processBuildingQueues } from './process-building-queues';
 import { setOwner } from './set-owner';
+import { processAgentActions } from './process-agent-actions';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
@@ -27,4 +28,5 @@ export const HANDLERS: Handlers = {
   MOVE_AGENTS: moveAgents,
   PRODUCE_RESOURCES: produceResources,
   SET_OWNER: setOwner,
+  PROCESS_AGENT_ACTIONS: processAgentActions,
 };
