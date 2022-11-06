@@ -32,7 +32,7 @@ export class World {
   }
 
   // ? What's the difference between world and worldGenerator or worldMap?
-  // ! This needs to be moved to a system
+  // ! This needs to be moved to a GENERATE_WORLD command
 
   generateWorld() {
     this.generateEmpires();

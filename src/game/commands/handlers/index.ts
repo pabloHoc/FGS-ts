@@ -11,7 +11,7 @@ import { produceResources } from './produce-resources';
 import { endTurn } from './end-turn';
 import { addBuildingToQueue } from './add-building-to-queue';
 import { processBuildingQueues } from './process-building-queues';
-import { conquestRegion } from './conquest-region';
+import { setOwner } from './set-owner';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
@@ -26,5 +26,5 @@ export const HANDLERS: Handlers = {
   PROCESS_BUILDING_QUEUES: processBuildingQueues,
   MOVE_AGENTS: moveAgents,
   PRODUCE_RESOURCES: produceResources,
-  CONQUEST_REGION: conquestRegion,
+  SET_OWNER: setOwner,
 };

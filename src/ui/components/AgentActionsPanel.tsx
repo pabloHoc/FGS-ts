@@ -27,7 +27,14 @@ export const AgentActionsPanel = () => {
         .getAll<AgentActionDefinition>('AGENT-ACTION')
         .map((agentAction) =>
           agentAction.allow(selectedAgent, game.context) ? (
-            <button key={agentAction.name}>{agentAction.name}</button>
+            <button
+              key={agentAction.name}
+              onClick={() => {
+                agentAction.execute(selectedAgent, game.context, game.commands);
+              }}
+            >
+              {agentAction.name}
+            </button>
           ) : null
         )}
     </>

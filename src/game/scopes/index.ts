@@ -4,7 +4,16 @@ import { isAgent } from '../entities/agent';
 import { isRegion } from '../entities/region';
 import { getEmpireFromAgent, getRegionFromAgent } from './agent';
 
-export const scopeTypes = ['agent', 'region', 'empire', 'land'] as const;
+export const scopeTypes = [
+  'agent',
+  'region',
+  'empire',
+  'land',
+  'this',
+  'root',
+  'owner',
+  'prev',
+] as const;
 export type ScopeType = typeof scopeTypes[number];
 
 export const isScope = (key: ScopeType) => scopeTypes.includes(key);
@@ -16,6 +25,8 @@ const scopesMap = {
   },
 };
 
+// Add owner scope
+
 // TODO: IMPROVE THIS
 
 export const getScopeFrom = <T extends Entity>(
@@ -23,7 +34,6 @@ export const getScopeFrom = <T extends Entity>(
   from: T,
   gameContext: GameContext
 ) => {
-  console.log(scope, from);
   if (scope === 'region') {
     if (isAgent(from)) {
       return getRegionFromAgent(from, gameContext);

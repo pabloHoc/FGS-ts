@@ -1,4 +1,4 @@
-import { Entities, Entity, EntityId } from '../entities';
+import { Entities, Entity, EntityId, EntityType } from '../entities';
 import { Agent } from '../entities/agent';
 import { BuildingQueueItem } from '../entities/building-queue-item';
 import { Empire } from '../entities/empire';
@@ -10,7 +10,9 @@ export class GameContext {
   private _turn = 0;
 
   // We could use typescript template strings to change property names
-  private _context = {
+  private _context: {
+    [k in EntityType]: Map<EntityId, Extract<Entities, { type: Uppercase<k> }>>;
+  } = {
     region: new Map<EntityId, Region>(),
     land: new Map<EntityId, Land>(),
     empire: new Map<EntityId, Empire>(),

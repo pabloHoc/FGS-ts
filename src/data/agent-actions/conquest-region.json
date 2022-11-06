@@ -1,14 +1,15 @@
 {
   "type": "agent-action",
   "name": "conquest-region",
+  "turns": 2,
   "conditions": {
     "region": {
       "has_empire": false
     }
   },
-  "effects": {
+  "actions": {
     "region": {
-      "conquest": true
+      "set_owner": "ROOT"
     }
   },
   "_comment": "original scope is agent"

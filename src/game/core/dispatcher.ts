@@ -35,6 +35,7 @@ export class Dispatcher {
   }
 
   execute<T extends Commands>(command: NarrowAction<T, T['action']>) {
+    console.log(command);
     const handler = this.handlers[command['action'] as T['action']];
     if (handler) {
       handler(command, this.gameContext, this.definitionManager, this);

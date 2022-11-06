@@ -10,6 +10,7 @@ import { MoveAgent } from './move-agent';
 import { MoveAgents } from './move-agents';
 import { ProcessBuildingQueues } from './process-building-queues';
 import { ProduceResources } from './produce-resources';
+import { SetOwner } from './set-owner';
 import { StartTurn } from './start-turn';
 
 export interface Command {
@@ -27,10 +28,10 @@ export type Commands =
   | EndTurn
   | BuildBuilding
   | AddBuildingToQueue
+  | SetOwner
   // Called each turn
   | MoveAgents
   | ProcessBuildingQueues
   | ProduceResources
   // Agent actions
-  | MoveAgent
-  | ConquestRegion;
+  | MoveAgent;
