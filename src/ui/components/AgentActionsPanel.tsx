@@ -32,13 +32,16 @@ export const AgentActionsPanel = () => {
       {game.definitions
         .getAll<AgentActionDefinition>('AGENT-ACTION')
         .map((agentAction) =>
-          agentAction.allow(selectedAgent, game.context) ? (
+          agentAction.show() ? (
             <button
               key={`${agentAction.name.replaceAll('_', ' ')} (${
                 agentAction.baseExecutionTime
               })`}
               onClick={() => handleClick(agentAction)}
-              disabled={agentAction.name === selectedAgent.currentAction?.name}
+              disabled={
+                agentAction.name === selectedAgent.currentAction?.name ||
+                !agentAction.allow(selectedAgent, game.context)
+              }
             >
               {agentAction.name}
             </button>

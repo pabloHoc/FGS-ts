@@ -2,14 +2,9 @@ import { Dispatcher } from '../core/dispatcher';
 import { GameContext } from '../core/game-context';
 import { Entities, Entity } from '../entities';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
-import { getCommand } from './command-map';
-
-const isCommand = (key: ActionKey) => actionKeys.includes(key);
+import { ActionKey, COMMANDS, getCommand } from './command-map';
 
 // ? Can we type nested scopes? Do we want to?
-
-const actionKeys = ['set_owner', 'set_location'] as const; // where this should be?
-export type ActionKey = typeof actionKeys[number];
 
 type ActionObj = {
   [key in ActionKey]?: boolean | number | string | ScopeType;
@@ -29,8 +24,14 @@ const isScopeContext = (key: string): key is ScopeContextKey => {
   return ['root', 'this', 'prev'].includes(key.toLowerCase());
 };
 
+const isCommand = (key: ActionKey) => Object.keys(COMMANDS).includes(key);
+
 const isPayload = (key: string) => key.startsWith('@');
 
+const isModifiers = (key: string) => key === 'modifiers';
+
+const isModifier = (key: string) =>
+  ['add', 'mult'].includes(key.split('_')[key.split('_').length - 1]);
 // ! See type JSON
 
 export const executeCommands = <T extends Entities>(
@@ -66,6 +67,25 @@ export const executeCommands = <T extends Entities>(
       }
 
       dispatcher.execute(command(scopeContext.this, commandValue) as any);
+    } else if (isModifiers(key)) {
+      executeCommands(
+        actions[key],
+        scope,
+        scopeContext,
+        gameContext,
+        dispatcher,
+        payload
+      );
+    } else if (isModifier(key)) {
+      const modifierParts = (key as string).split('_');
+      const scopeKey = modifierParts[0] as never;
+      const newScope = getScopeFrom(scopeKey, scope, gameContext);
+
+      const modifierType = modifierParts[modifierParts.length - 1];
+
+      if (modifierType === 'add') {
+        (newScope[modifierParts[1] as never] as number) += actions[key];
+      }
     } else if (isScope(key)) {
       const newScope = getScopeFrom(key, scope, gameContext);
       scopeContext.prev = scope;

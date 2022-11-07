@@ -1,0 +1,16 @@
+{
+  "type": "agent-action",
+  "name": "cast_productivity_spell",
+  "baseExecutionTime": 2,
+  "mpCost": 10,
+  "conditions": {
+    "region": {
+      "has_empire": true
+    }
+  },
+  "actions": {
+    "modifiers": {
+      "agent_mp_add": -2
+    }
+  }
+}

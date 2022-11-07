@@ -11,6 +11,7 @@ interface IAgentActionDefinition extends Definition {
   conditions: Conditions;
   actions: Actions;
   showInUI?: boolean;
+  mpCost?: number;
 }
 
 export class AgentActionDefinition implements IAgentActionDefinition {
@@ -20,6 +21,7 @@ export class AgentActionDefinition implements IAgentActionDefinition {
   readonly actions: Actions;
   readonly baseExecutionTime: number;
   readonly showInUI?: boolean | undefined;
+  readonly mpCost?: number;
 
   constructor(definition: IAgentActionDefinition) {
     this.name = definition.name;
@@ -27,12 +29,17 @@ export class AgentActionDefinition implements IAgentActionDefinition {
     this.conditions = definition.conditions;
     this.actions = definition.actions;
     this.showInUI = definition.showInUI;
+    this.mpCost = definition.mpCost;
+  }
+
+  show() {
+    return this.showInUI !== false;
   }
 
   allow(agent: Agent, gameContext: GameContext) {
     return (
-      this.showInUI !== false &&
-      validateConditions(this.conditions, agent, gameContext)
+      validateConditions(this.conditions, agent, gameContext) &&
+      (this.mpCost ? this.mpCost <= agent.mp : true)
     );
   }
 

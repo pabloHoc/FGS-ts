@@ -1,5 +1,5 @@
 import { Entity, EntityId } from '.';
-import { Action } from '../commands/command-map';
+import { ActionKey } from '../commands/command-map';
 import { generateId } from '../helpers/id';
 import { ActionQueueItem } from './action-queue-item';
 

@@ -75,6 +75,7 @@ export const LandsList = () => {
       'REGION',
       uiState.selected_region_id
     );
+    console.log(uiState.selected_region_id);
     setSelectedRegion(region);
 
     // Fetch empire
@@ -94,7 +95,7 @@ export const LandsList = () => {
   }, [uiState]);
 
   const handleClickedLand = (landId: EntityId) => {
-    setUIState({ ...uiState, selected_region_id: landId });
+    setUIState({ ...uiState, selected_land_id: landId });
   };
 
   const getBuildingQueue = (landId: EntityId) =>
