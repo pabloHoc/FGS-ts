@@ -46,7 +46,7 @@ export const AgentsList = () => {
   useEffect(updateAgents, [uiState]);
 
   const handleAgentClicked = (agentId: EntityId) => {
-    setUIState({ ...uiState, selectedAgentId: agentId });
+    setUIState({ ...uiState, selected_agent_id: agentId });
   };
 
   return (

@@ -1,0 +1,9 @@
+{
+  "type": "agent-action",
+  "name": "move_agent",
+  "baseExecutionTime": 2,
+  "actions": {
+    "set_location": "@region_id"
+  },
+  "showInUI": false
+}

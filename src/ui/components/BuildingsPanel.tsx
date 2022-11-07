@@ -17,9 +17,9 @@ export const BuildingsPanel = () => {
   };
 
   useEffect(() => {
-    if (!uiState.selectedLandId) return;
+    if (!uiState.selected_land_id) return;
 
-    const land = game.context.getEntity<Land>('LAND', uiState.selectedLandId);
+    const land = game.context.getEntity<Land>('LAND', uiState.selected_land_id);
     const region = game.context.getEntity<Region>('REGION', land.regionId);
     if (!region.empireId) return clearSelection();
 
@@ -30,14 +30,14 @@ export const BuildingsPanel = () => {
   }, [uiState]);
 
   const handleBuildBuilding = (buildingName: BuildingDefinition['name']) => {
-    if (!uiState.selectedLandId || !empire) return;
+    if (!uiState.selected_land_id || !empire) return;
 
     game.commands.execute(
-      addBuildingToQueue(buildingName, uiState.selectedLandId, empire.id)
+      addBuildingToQueue(buildingName, uiState.selected_land_id, empire.id)
     );
   };
 
-  if (!uiState.selectedLandId || !empire) return null;
+  if (!uiState.selected_land_id || !empire) return null;
 
   return (
     <div>

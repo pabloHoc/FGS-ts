@@ -26,7 +26,12 @@ export const processAgentActions = (
               'AGENT-ACTION',
               agent.currentAction.name
             );
-          agentActionDefinition.execute(agent, gameContext, dispatcher);
+          agentActionDefinition.execute(
+            agent,
+            gameContext,
+            dispatcher,
+            agent.currentAction.payload
+          );
         }
         delete agent.currentAction;
       }

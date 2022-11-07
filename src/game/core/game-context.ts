@@ -25,6 +25,8 @@ export class GameContext {
     action_queue_item: new Map<EntityId, ActionQueueItem>(),
   };
 
+  private _variables = new Map<string, string>();
+
   private getEntitiesByType<
     K extends keyof TypeMapper<GameContext['_context']>
   >(type: Uppercase<K>) {
@@ -47,6 +49,14 @@ export class GameContext {
 
   deleteEntity<T extends Entities>(entity: T) {
     this.getEntitiesByType(entity.type).delete(entity.id);
+  }
+
+  setVariable(variable: string, value: string) {
+    this._variables.set(variable, value);
+  }
+
+  getVariable(variable: string) {
+    return this._variables.get(variable);
   }
 
   // Turn Manager?

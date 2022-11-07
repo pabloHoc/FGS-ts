@@ -51,9 +51,6 @@ export class DefinitionManager {
 
       for (const n in definitions) {
         const name = n as keyof typeof definitions;
-
-        console.log('DEFINITION NAME', name, definitions, type);
-
         this.getDefinitionsByType(
           type.toUpperCase() as Uppercase<DefinitionType>
         ).set(

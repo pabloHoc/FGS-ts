@@ -65,7 +65,7 @@ export const LandsList = () => {
   const [empireName, setEmpireName] = useState('');
 
   useEffect(() => {
-    if (!uiState.selectedRegionId) {
+    if (!uiState.selected_region_id) {
       setLands([]);
       setEmpireName('');
       return;
@@ -73,7 +73,7 @@ export const LandsList = () => {
     // Fetch region
     const region = game.context.getEntity<Region>(
       'REGION',
-      uiState.selectedRegionId
+      uiState.selected_region_id
     );
     setSelectedRegion(region);
 
@@ -88,13 +88,13 @@ export const LandsList = () => {
     // Fetch lands
     const regionLands = game.context
       .getAllEntities<Land>('LAND')
-      .filter((land) => land.regionId === uiState.selectedRegionId);
+      .filter((land) => land.regionId === uiState.selected_region_id);
 
     setLands(regionLands);
   }, [uiState]);
 
   const handleClickedLand = (landId: EntityId) => {
-    setUIState({ ...uiState, selectedLandId: landId });
+    setUIState({ ...uiState, selected_region_id: landId });
   };
 
   const getBuildingQueue = (landId: EntityId) =>
@@ -116,7 +116,7 @@ export const LandsList = () => {
             name={land.name}
             buildings={land.buildings}
             buildingQueue={getBuildingQueue(land.id)}
-            selected={land.id === uiState.selectedLandId}
+            selected={land.id === uiState.selected_land_id}
           />
         ))}
       </ul>

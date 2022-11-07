@@ -11,11 +11,11 @@ export const AgentActionsPanel = () => {
   const [selectedAgent, setSelectedAgent] = useState<Agent>();
 
   useEffect(() => {
-    if (!uiState.selectedAgentId) return;
+    if (!uiState.selected_agent_id) return;
 
     const agent = game.context.getEntity<Agent>(
       'AGENT',
-      uiState.selectedAgentId
+      uiState.selected_agent_id
     );
     setSelectedAgent(agent);
   }, [uiState]);

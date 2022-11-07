@@ -7,7 +7,7 @@ export interface SetOwner extends Command {
   ownerId: EntityId;
 }
 
-export const setOwner = (targetId: EntityId, ownerId: EntityId) => ({
+export const setOwner = (targetId: EntityId, ownerId: EntityId): SetOwner => ({
   action: 'SET_OWNER',
   targetId,
   ownerId,
@@ -15,6 +15,5 @@ export const setOwner = (targetId: EntityId, ownerId: EntityId) => ({
 
 // values is ScopeEntity, e.g.: ROOT
 export const setOwnerWithScope = (scope: Entity, values: any) => {
-  console.log('setOwnerWithScope', scope, values);
   return setOwner(scope.id, values.empireId);
 };
