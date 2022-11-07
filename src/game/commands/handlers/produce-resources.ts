@@ -8,7 +8,7 @@ import { Region } from '../../entities/region';
 import { getEmpireRegions } from '../../helpers/region';
 import { ProduceResources } from '../produce-resources';
 
-const generateEmpireResources = (
+const computeEmpireProduction = (
   empire: Empire,
   gameContext: GameContext,
   definitionManager: DefinitionManager
@@ -17,7 +17,7 @@ const generateEmpireResources = (
   const empireRegions = getEmpireRegions(empire.id, gameContext);
 
   for (const region of empireRegions) {
-    generateRegionResources(region, empire, gameContext, definitionManager);
+    computeRegionProduction(region, empire, gameContext, definitionManager);
   }
 };
 
@@ -26,7 +26,7 @@ const generateEmpireResources = (
  * into account local and global bonuses, so probably this is not the best
  * architecture
  */
-const generateRegionResources = (
+const computeRegionProduction = (
   region: Region,
   empire: Empire,
   gameContext: GameContext,
@@ -37,12 +37,19 @@ const generateRegionResources = (
   const regionLands = lands.filter((land) => land.regionId === region.id);
 
   for (const land of regionLands) {
-    generateLandResources(land, empire, gameContext, definitionManager);
-    generateBuildingResources(land, empire, gameContext, definitionManager);
+    computeLandProduction(land, empire, gameContext, definitionManager);
+    for (const building of land.buildings) {
+      computeBuildingProdution(
+        building,
+        empire,
+        gameContext,
+        definitionManager
+      );
+    }
   }
 };
 
-const generateLandResources = (
+const computeLandProduction = (
   land: Land,
   empire: Empire,
   gameContext: GameContext,
@@ -57,30 +64,40 @@ const generateLandResources = (
   for (const [resource, quantity = 0] of Object.entries(
     landDefinition.resources.production
   )) {
-    empire.resources = {
-      ...empire.resources,
-      [resource]: empire.resources[resource] + quantity,
+    empire.production = {
+      ...empire.production,
+      [resource]: empire.production[resource] + quantity,
     };
   }
 };
 
-const generateBuildingResources = (
-  land: Land,
+const computeBuildingProdution = (
+  building: string,
   empire: Empire,
   gameContext: GameContext,
   definitionManager: DefinitionManager
 ) => {
-  for (const building of land.buildings) {
-    const buildingDefinition = definitionManager.get<BuildingDefinition>(
-      'BUILDING',
-      building
-    );
+  const buildingDefinition = definitionManager.get<BuildingDefinition>(
+    'BUILDING',
+    building
+  );
 
-    for (const [resource, quantity = 0] of Object.entries(
-      buildingDefinition.resources.production
-    )) {
-      empire.resources[resource] += quantity;
-    }
+  for (const [resource, quantity = 0] of Object.entries(
+    buildingDefinition.resources.production
+  )) {
+    empire.production[resource] += quantity;
+  }
+};
+
+const clearEmpireProduction = (empire: Empire) => {
+  for (const [resource] of Object.entries(empire.production)) {
+    empire.production[resource] = 0;
+  }
+};
+
+const produceEmpireResources = (empire: Empire) => {
+  for (const [resource, quantity] of Object.entries(empire.production)) {
+    empire.resources[resource] += quantity;
   }
 };
 
@@ -90,6 +107,8 @@ export const produceResources = (
   definitionManager: DefinitionManager
 ) => {
   for (const empire of gameContext.getAllEntities<Empire>('EMPIRE')) {
-    generateEmpireResources(empire, gameContext, definitionManager);
+    clearEmpireProduction(empire);
+    computeEmpireProduction(empire, gameContext, definitionManager);
+    produceEmpireResources(empire);
   }
 };

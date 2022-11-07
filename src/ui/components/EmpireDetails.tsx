@@ -26,7 +26,8 @@ export const EmpireDetails = () => {
       <ul>
         {Object.keys(empire.resources).map((resource) => (
           <li key={resource}>
-            {resource}: {empire.resources[resource]}
+            {resource}: {empire.resources[resource]} (+
+            {empire.production[resource]})
           </li>
         ))}
       </ul>

@@ -11,6 +11,7 @@ export interface Empire extends Entity {
    * entity, like ResourceGroup? so it can be attached to other entities
    */
   resources: EconomyBlock;
+  production: EconomyBlock;
 }
 
 export const createEmpire = (name: string, isPlayer: boolean): Empire => {
@@ -20,6 +21,11 @@ export const createEmpire = (name: string, isPlayer: boolean): Empire => {
     name,
     isPlayer,
     resources: {
+      wood: 0,
+      iron: 0,
+      food: 0,
+    },
+    production: {
       wood: 0,
       iron: 0,
       food: 0,
