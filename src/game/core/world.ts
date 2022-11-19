@@ -9,7 +9,7 @@ import { Empire } from '../entities/empire';
 import { Region } from '../entities/region';
 import { getRandom } from '../helpers/random';
 import { DefinitionManager } from './definition-manager';
-import { Dispatcher } from './dispatcher';
+import { CommandExecutor } from './command-executor';
 import { GameContext } from './game-context';
 
 export class World {
@@ -19,16 +19,16 @@ export class World {
 
   private _gameContext: GameContext;
   private _definitionManager: DefinitionManager;
-  private _dispatcher: Dispatcher;
+  private _commandExecutor: CommandExecutor;
 
   constructor(
     gameContext: GameContext,
     definitionManager: DefinitionManager,
-    dispatcher: Dispatcher
+    commandExecutor: CommandExecutor
   ) {
     this._gameContext = gameContext;
     this._definitionManager = definitionManager;
-    this._dispatcher = dispatcher;
+    this._commandExecutor = commandExecutor;
   }
 
   // ? What's the difference between world and worldGenerator or worldMap?
@@ -45,7 +45,7 @@ export class World {
     const empires = this._gameContext.getAllEntities<Empire>('EMPIRE');
 
     for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
-      this._dispatcher.execute(
+      this._commandExecutor.execute(
         createRegion(`Region #${i}`, i === 1 ? empires[0].id : undefined)
       );
     }
@@ -63,13 +63,13 @@ export class World {
         const landName =
           this._definitionManager.getAll<LandDefinition>('LAND')[landIndex]
             .name;
-        this._dispatcher.execute(createLand(landName, region.id));
+        this._commandExecutor.execute(createLand(landName, region.id));
       }
     }
   }
 
   private generateEmpires() {
-    this._dispatcher.execute(createEmpire('PLAYER EMPIRE', true));
+    this._commandExecutor.execute(createEmpire('PLAYER EMPIRE', true));
   }
 
   private generateAgents() {
@@ -80,7 +80,9 @@ export class World {
       const region = regions.find((region) => region.empireId === empire.id);
 
       if (region) {
-        this._dispatcher.execute(createAgent('Lorant', empire.id, region.id));
+        this._commandExecutor.execute(
+          createAgent('Lorant', empire.id, region.id)
+        );
       }
     }
   }

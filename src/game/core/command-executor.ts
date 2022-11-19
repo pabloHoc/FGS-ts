@@ -10,7 +10,7 @@ export type Handler<T extends Command> = (
   command: T,
   gameContext: GameContext,
   definitionManager: DefinitionManager,
-  dispatcher: Dispatcher
+  commandExecutor: CommandExecutor
 ) => void;
 
 export type Handlers = {
@@ -18,7 +18,7 @@ export type Handlers = {
 };
 
 // TODO: Change name
-export class Dispatcher {
+export class CommandExecutor {
   private gameContext: GameContext;
   private definitionManager: DefinitionManager;
   private handlers: Handlers;

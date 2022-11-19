@@ -1,5 +1,5 @@
 import { DefinitionManager } from '../../core/definition-manager';
-import { Dispatcher, Handler } from '../../core/dispatcher';
+import { CommandExecutor, Handler } from '../../core/command-executor';
 import { GameContext } from '../../core/game-context';
 import { EndTurn } from '../end-turn';
 import { produceResources } from '../produce-resources';
@@ -11,10 +11,10 @@ export const endTurn: Handler<EndTurn> = (
   command: EndTurn,
   gameContext: GameContext,
   definitionManager: DefinitionManager,
-  dispatcher: Dispatcher
+  commandExecutor: CommandExecutor
 ) => {
-  dispatcher.execute(processAgentActions());
-  dispatcher.execute(processBuildingQueues());
-  dispatcher.execute(produceResources());
-  dispatcher.execute(startTurn());
+  commandExecutor.execute(processAgentActions());
+  commandExecutor.execute(processBuildingQueues());
+  commandExecutor.execute(produceResources());
+  commandExecutor.execute(startTurn());
 };

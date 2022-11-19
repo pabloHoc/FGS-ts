@@ -1,4 +1,4 @@
-import { Handlers } from '../../core/dispatcher';
+import { Handlers } from '../../core/command-executor';
 import { createEmpire } from './create-empire';
 import { createLand } from './create-land';
 import { startTurn } from './start-turn';

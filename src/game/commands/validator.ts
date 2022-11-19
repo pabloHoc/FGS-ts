@@ -1,4 +1,4 @@
-import { Dispatcher } from '../core/dispatcher';
+import { CommandExecutor } from '../core/command-executor';
 import { GameContext } from '../core/game-context';
 import { Entities, Entity } from '../entities';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
@@ -39,7 +39,7 @@ export const executeCommands = <T extends Entities>(
   scope: T,
   scopeContext: ScopeContext,
   gameContext: GameContext,
-  dispatcher: Dispatcher,
+  commandExecutor: CommandExecutor,
   payload?: object
 ) => {
   scopeContext.this = scope;
@@ -66,14 +66,14 @@ export const executeCommands = <T extends Entities>(
         }
       }
 
-      dispatcher.execute(command(scopeContext.this, commandValue) as any);
+      commandExecutor.execute(command(scopeContext.this, commandValue) as any);
     } else if (isModifiers(key)) {
       executeCommands(
         actions[key],
         scope,
         scopeContext,
         gameContext,
-        dispatcher,
+        commandExecutor,
         payload
       );
     } else if (isModifier(key)) {
@@ -94,7 +94,7 @@ export const executeCommands = <T extends Entities>(
         newScope,
         scopeContext,
         gameContext,
-        dispatcher,
+        commandExecutor,
         payload
       );
     }

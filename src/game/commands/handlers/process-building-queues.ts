@@ -1,5 +1,5 @@
 import { DefinitionManager } from '../../core/definition-manager';
-import { Dispatcher } from '../../core/dispatcher';
+import { CommandExecutor } from '../../core/command-executor';
 import { GameContext } from '../../core/game-context';
 import { BuildingQueueItem } from '../../entities/building-queue-item';
 import { Land } from '../../entities/land';
@@ -11,7 +11,7 @@ export const processBuildingQueues = (
   command: ProcessBuildingQueues,
   gameContext: GameContext,
   definitionManager: DefinitionManager,
-  dispatcher: Dispatcher
+  commandExecutor: CommandExecutor
 ) => {
   const lands = gameContext.getAllEntities<Land>('LAND');
 
@@ -27,7 +27,7 @@ export const processBuildingQueues = (
       for (const queueItem of buildingQueue) {
         queueItem.order--;
       }
-      dispatcher.execute(
+      commandExecutor.execute(
         buildBuilding(
           nextBuilding.buildingName,
           nextBuilding.landId,

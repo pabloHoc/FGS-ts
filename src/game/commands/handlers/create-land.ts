@@ -1,5 +1,4 @@
 import { CreateLand } from '../create-land';
-import { Handler } from '../../core/dispatcher';
 import { GameContext } from '../../core/game-context';
 import { createLand as createLandEntity } from '../../entities/land';
 

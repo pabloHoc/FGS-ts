@@ -1,5 +1,5 @@
 import { DefinitionManager } from '../../core/definition-manager';
-import { Dispatcher } from '../../core/dispatcher';
+import { CommandExecutor } from '../../core/command-executor';
 import { GameContext } from '../../core/game-context';
 import { AgentActionDefinition } from '../../definitions/agent-action';
 import { Agent, isMoveAction } from '../../entities/agent';
@@ -9,7 +9,7 @@ export const processAgentActions = (
   command: ProcessAgentActions,
   gameContext: GameContext,
   definitionManager: DefinitionManager,
-  dispatcher: Dispatcher
+  commandExecutor: CommandExecutor
 ) => {
   const agents = gameContext.getAllEntities<Agent>('AGENT');
 
@@ -29,7 +29,7 @@ export const processAgentActions = (
           agentActionDefinition.execute(
             agent,
             gameContext,
-            dispatcher,
+            commandExecutor,
             agent.currentAction.payload
           );
         }

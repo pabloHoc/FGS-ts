@@ -1,7 +1,7 @@
 import { Definition } from '.';
 import { Actions, executeCommands } from '../commands/validator';
 import { Conditions, validateConditions } from '../conditions/validator';
-import { Dispatcher } from '../core/dispatcher';
+import { CommandExecutor } from '../core/command-executor';
 import { GameContext } from '../core/game-context';
 import { Agent } from '../entities/agent';
 
@@ -47,7 +47,7 @@ export class AgentActionDefinition implements IAgentActionDefinition {
   execute(
     agent: Agent,
     gameContext: GameContext,
-    dispatcher: Dispatcher,
+    commandExecutor: CommandExecutor,
     payload?: object
   ) {
     executeCommands(
@@ -55,7 +55,7 @@ export class AgentActionDefinition implements IAgentActionDefinition {
       agent,
       { root: agent, this: agent, prev: undefined },
       gameContext,
-      dispatcher,
+      commandExecutor,
       payload
     );
   }
