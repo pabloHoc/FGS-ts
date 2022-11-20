@@ -1,3 +1,4 @@
+import { Modifier } from './modifier';
 import { Brand } from '../helpers/types';
 import { ActionQueueItem } from './action-queue-item';
 import { Agent } from './agent';
@@ -23,6 +24,7 @@ export type Entities =
   | Agent
   // ! These are not entities, we need a new category
   | BuildingQueueItem
-  | ActionQueueItem;
+  | ActionQueueItem
+  | Modifier;
 
 export type EntityType = Entities['type'];

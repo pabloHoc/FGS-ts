@@ -1,6 +1,6 @@
 import { Entity, EntityId } from '.';
 import { ActionKey } from '../commands/command-map';
-import { Modifier } from '../definitions/modifier';
+import { Modifier } from './modifier';
 import { generateId } from '../helpers/id';
 import { ActionQueueItem } from './action-queue-item';
 

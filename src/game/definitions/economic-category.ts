@@ -1,6 +1,8 @@
 import { Definition } from '.';
-import { EconomicType } from '../helpers/modifiers';
-import { Modifier } from './modifier';
+import { Modifier } from '../entities/modifier';
+
+export const economicTypes = ['cost', 'upkeep', 'production'] as const;
+export type EconomicType = typeof economicTypes[number];
 
 interface IEconomicCategoryDefinition extends Definition {
   name: string;
@@ -49,7 +51,7 @@ export class EconomicCategoryDefinition implements IEconomicCategoryDefinition {
 
     const totals = modifiers.reduce(
       (acc, modifier) => {
-        acc[modifier.type] += modifier.value;
+        acc[modifier.modifierType] += modifier.value;
         return acc;
       },
       {

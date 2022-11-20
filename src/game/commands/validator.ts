@@ -1,6 +1,6 @@
 import { CommandExecutor } from '../core/command-executor';
 import { GameContext } from '../core/game-context';
-import { ModifierType } from '../definitions/modifier';
+import { createModifier, ModifierType } from '../entities/modifier';
 import { Entities, Entity } from '../entities';
 import { Agent } from '../entities/agent';
 import { Empire } from '../entities/empire';
@@ -100,11 +100,7 @@ export const executeCommands = <T extends Empire | Region | Land | Agent>(
       const type = modifierParts[modifierParts.length - 1] as ModifierType;
       const value = actions[key];
 
-      scope.modifiers.push({
-        name,
-        type,
-        value,
-      });
+      gameContext.addEntity(createModifier(name, type, value, scope.id));
     }
   }
 };

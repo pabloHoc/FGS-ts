@@ -1,7 +1,7 @@
 import { Entity, EntityId } from '.';
 import { BuildingDefinition } from '../definitions/building';
 import { LandDefinition } from '../definitions/land';
-import { Modifier } from '../definitions/modifier';
+import { Modifier } from './modifier';
 import { generateId } from '../helpers/id';
 
 export interface Land extends Entity {

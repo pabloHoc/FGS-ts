@@ -6,19 +6,9 @@ import { LandDefinition } from '../../definitions/land';
 import { Empire } from '../../entities/empire';
 import { Land } from '../../entities/land';
 import { Region } from '../../entities/region';
+import { getModifiersForEntity } from '../../helpers/modifier';
 import { getEmpireRegions } from '../../helpers/region';
 import { ProduceResources } from '../produce-resources';
-
-const computeEmpireModifiers = (empire: Empire) => {
-  for (const modifier of empire.modifiers) {
-    // isProductionModifier
-    // this is wrong, we should check economic categories
-    if (modifier.name.includes('production')) {
-      const resource = modifier.name.split('_').slice(-2, -1)[0];
-      empire.production[resource] *= modifier.value;
-    }
-  }
-};
 
 const computeEmpireProduction = (
   empire: Empire,
@@ -31,8 +21,6 @@ const computeEmpireProduction = (
   for (const region of empireRegions) {
     computeRegionProduction(region, empire, gameContext, definitionManager);
   }
-
-  // computeEmpireModifiers(empire);
 };
 
 /**
@@ -111,8 +99,8 @@ const computeBuildingProdution = (
       'production',
       productionValue,
       resource,
-      region.modifiers,
-      empire.modifiers
+      getModifiersForEntity(region.id, gameContext),
+      getModifiersForEntity(empire.id, gameContext)
     );
     empire.production[resource] += totalBuildingProduction;
   }

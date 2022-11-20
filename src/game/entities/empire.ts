@@ -1,6 +1,6 @@
 import { Entity } from '.';
 import { ResourceBlock } from '../definitions/economy-unit';
-import { Modifier } from '../definitions/modifier';
+import { Modifier } from './modifier';
 import { generateId } from '../helpers/id';
 
 export interface Empire extends Entity {
@@ -13,7 +13,6 @@ export interface Empire extends Entity {
    */
   resources: ResourceBlock;
   production: ResourceBlock;
-  modifiers: Modifier[];
 }
 
 export const createEmpire = (name: string, isPlayer: boolean): Empire => {
@@ -32,6 +31,5 @@ export const createEmpire = (name: string, isPlayer: boolean): Empire => {
       iron: 0,
       food: 0,
     },
-    modifiers: [],
   };
 };

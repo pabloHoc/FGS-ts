@@ -1,13 +1,13 @@
-import { Modifier } from '../definitions/modifier';
+import { GameContext } from '../core/game-context';
+import { EconomicType, economicTypes } from '../definitions/economic-category';
+import { EntityId } from '../entities';
+import { Modifier } from '../entities/modifier';
 
 interface ModifierSummary {
   add: number;
   mult: number;
   reduction: number;
 }
-
-export const economicTypes = ['cost', 'upkeep', 'production'] as const;
-export type EconomicType = typeof economicTypes[number];
 
 type EconomicTypes = Record<EconomicType, ModifierSummary>;
 
@@ -34,7 +34,15 @@ export const getEconomyModifierSummary = (
         };
       }
 
-      summary[resource][economicType][modifier.type] += modifier.value;
+      summary[resource][economicType][modifier.modifierType] += modifier.value;
 
       return summary;
     }, {});
+
+export const getModifiersForEntity = (
+  entityId: EntityId,
+  gameContext: GameContext
+) =>
+  gameContext
+    .getAllEntities<Modifier>('MODIFIER')
+    .filter((m) => m.entityId === entityId);

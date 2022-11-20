@@ -1,3 +1,4 @@
+import { Modifier } from '../entities/modifier';
 import { Entities, Entity, EntityId, EntityType } from '../entities';
 import { ActionQueueItem } from '../entities/action-queue-item';
 import { Agent } from '../entities/agent';
@@ -23,6 +24,7 @@ export class GameContext {
     agent: new Map<EntityId, Agent>(),
     building_queue_item: new Map<EntityId, BuildingQueueItem>(),
     action_queue_item: new Map<EntityId, ActionQueueItem>(),
+    modifier: new Map<EntityId, Modifier>(),
   };
 
   private _variables = new Map<string, string>();
