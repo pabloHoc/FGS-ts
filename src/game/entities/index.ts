@@ -21,6 +21,7 @@ export type Entities =
   | Region
   | Land
   | Agent
+  // ! These are not entities, we need a new category
   | BuildingQueueItem
   | ActionQueueItem;
 

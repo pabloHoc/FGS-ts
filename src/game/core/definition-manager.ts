@@ -1,26 +1,30 @@
-import resourcesDefinitions from '../../data/resources/index';
-import buildingsDefinitions from '../../data/buildings/index';
-import landsDefinitions from '../../data/lands/index';
-import agentActionsDefinitions from '../../data/agent-actions/index';
+import resourcesDefinitions from '../../data/resources';
+import buildingsDefinitions from '../../data/buildings';
+import landsDefinitions from '../../data/lands';
+import agentActionsDefinitions from '../../data/agent-actions';
+import economicCategoriesDefinitions from '../../data/economic-categories';
 import { BuildingDefinition } from '../definitions/building';
 import { ResourceDefinition } from '../definitions/resource';
-import { objectKeys } from '../helpers/object';
 import { LandDefinition } from '../definitions/land';
 import { AgentActionDefinition } from '../definitions/agent-action';
+import { EconomicCategoryDefinition } from '../definitions/economic-category';
 import { TypeMapper } from '../helpers/types';
 
 type Definition =
   | BuildingDefinition
   | ResourceDefinition
   | LandDefinition
-  | AgentActionDefinition;
+  | AgentActionDefinition
+  | EconomicCategoryDefinition;
 
 // We could merge these in one object maybe
+// Type this objects!
 const definitionsMap = {
   building: buildingsDefinitions,
   resource: resourcesDefinitions,
   land: landsDefinitions,
   'agent-action': agentActionsDefinitions,
+  'economic-category': economicCategoriesDefinitions,
 };
 
 const definitionsConstructors = {
@@ -28,6 +32,7 @@ const definitionsConstructors = {
   resource: ResourceDefinition,
   land: LandDefinition,
   'agent-action': AgentActionDefinition,
+  'economic-category': EconomicCategoryDefinition,
 };
 
 type DefinitionType = keyof typeof definitionsMap;
@@ -38,6 +43,7 @@ export class DefinitionManager {
     resource: new Map<string, ResourceDefinition>(),
     land: new Map<string, LandDefinition>(),
     'agent-action': new Map<string, AgentActionDefinition>(),
+    'economic-category': new Map<string, EconomicCategoryDefinition>(),
   };
 
   constructor() {

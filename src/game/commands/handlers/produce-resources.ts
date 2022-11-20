@@ -1,12 +1,24 @@
 import { DefinitionManager } from '../../core/definition-manager';
 import { GameContext } from '../../core/game-context';
 import { BuildingDefinition } from '../../definitions/building';
+import { EconomicCategoryDefinition } from '../../definitions/economic-category';
 import { LandDefinition } from '../../definitions/land';
 import { Empire } from '../../entities/empire';
 import { Land } from '../../entities/land';
 import { Region } from '../../entities/region';
 import { getEmpireRegions } from '../../helpers/region';
 import { ProduceResources } from '../produce-resources';
+
+const computeEmpireModifiers = (empire: Empire) => {
+  for (const modifier of empire.modifiers) {
+    // isProductionModifier
+    // this is wrong, we should check economic categories
+    if (modifier.name.includes('production')) {
+      const resource = modifier.name.split('_').slice(-2, -1)[0];
+      empire.production[resource] *= modifier.value;
+    }
+  }
+};
 
 const computeEmpireProduction = (
   empire: Empire,
@@ -19,6 +31,8 @@ const computeEmpireProduction = (
   for (const region of empireRegions) {
     computeRegionProduction(region, empire, gameContext, definitionManager);
   }
+
+  // computeEmpireModifiers(empire);
 };
 
 /**
@@ -41,6 +55,7 @@ const computeRegionProduction = (
     for (const building of land.buildings) {
       computeBuildingProdution(
         building,
+        region,
         empire,
         gameContext,
         definitionManager
@@ -73,6 +88,7 @@ const computeLandProduction = (
 
 const computeBuildingProdution = (
   building: string,
+  region: Region,
   empire: Empire,
   gameContext: GameContext,
   definitionManager: DefinitionManager
@@ -82,10 +98,23 @@ const computeBuildingProdution = (
     building
   );
 
-  for (const [resource, quantity = 0] of Object.entries(
+  const economicCategoryDefinition =
+    definitionManager.get<EconomicCategoryDefinition>(
+      'ECONOMIC-CATEGORY',
+      buildingDefinition.resources.category
+    );
+
+  for (const [resource, productionValue = 0] of Object.entries(
     buildingDefinition.resources.production
   )) {
-    empire.production[resource] += quantity;
+    const totalBuildingProduction = economicCategoryDefinition.compute(
+      'production',
+      productionValue,
+      resource,
+      region.modifiers,
+      empire.modifiers
+    );
+    empire.production[resource] += totalBuildingProduction;
   }
 };
 
@@ -107,6 +136,9 @@ export const produceResources = (
   definitionManager: DefinitionManager
 ) => {
   for (const empire of gameContext.getAllEntities<Empire>('EMPIRE')) {
+    // Production shoul be calculated in a different command
+    // so we can determine production the first turn without
+    // producing resources
     clearEmpireProduction(empire);
     computeEmpireProduction(empire, gameContext, definitionManager);
     produceEmpireResources(empire);

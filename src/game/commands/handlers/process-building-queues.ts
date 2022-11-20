@@ -18,23 +18,23 @@ export const processBuildingQueues = (
   for (const land of lands) {
     const buildingQueue = getSortedBuildingQueueForLand(land.id, gameContext);
 
-    if (!buildingQueue.length) return;
+    if (buildingQueue.length) {
+      const nextBuilding = buildingQueue[0];
+      nextBuilding.remainingTurns--;
 
-    const nextBuilding = buildingQueue[0];
-    nextBuilding.remainingTurns--;
-
-    if (nextBuilding.remainingTurns === 0) {
-      for (const queueItem of buildingQueue) {
-        queueItem.order--;
+      if (nextBuilding.remainingTurns === 0) {
+        for (const queueItem of buildingQueue) {
+          queueItem.order--;
+        }
+        commandExecutor.execute(
+          buildBuilding(
+            nextBuilding.buildingName,
+            nextBuilding.landId,
+            nextBuilding.empireId
+          )
+        );
+        gameContext.deleteEntity<BuildingQueueItem>(nextBuilding);
       }
-      commandExecutor.execute(
-        buildBuilding(
-          nextBuilding.buildingName,
-          nextBuilding.landId,
-          nextBuilding.empireId
-        )
-      );
-      gameContext.deleteEntity<BuildingQueueItem>(nextBuilding);
     }
   }
 };

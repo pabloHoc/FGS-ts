@@ -3,11 +3,12 @@
   "name": "mill",
   "baseBuildtime": 2,
   "resources": {
+    "category": "buildings",
     "cost": {
       "wood": 5
     },
     "production": {
-      "wood": 1
+      "wood": 2
     }
   }
 }

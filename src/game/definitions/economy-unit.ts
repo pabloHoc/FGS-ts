@@ -4,6 +4,11 @@ export type ResourceType =
   typeof resourceDefinitions[keyof typeof resourceDefinitions]['name'];
 
 // This could be: resource, stat, do we want them to be different?
-export type EconomyUnit = Partial<{ [K in ResourceType]: number }>;
+export type EconomyUnit = {
+  category: string;
+  cost: ResourceBlock;
+  upkeep: ResourceBlock;
+  production: ResourceBlock;
+};
 
-export type EconomyBlock = { [K in ResourceType]: number };
+export type ResourceBlock = { [K in ResourceType]: number };

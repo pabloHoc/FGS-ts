@@ -8,9 +8,15 @@
       "has_empire": true
     }
   },
+  "duration": 3,
   "actions": {
     "modifiers": {
-      "agent_mp_add": -2
+      "empire": {
+        "production_mult": 1
+      },
+      "region": {
+        "buildings_wood_production_mult": 1
+      }
     }
   }
 }

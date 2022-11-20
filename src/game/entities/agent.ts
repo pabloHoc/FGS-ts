@@ -1,5 +1,6 @@
 import { Entity, EntityId } from '.';
 import { ActionKey } from '../commands/command-map';
+import { Modifier } from '../definitions/modifier';
 import { generateId } from '../helpers/id';
 import { ActionQueueItem } from './action-queue-item';
 
@@ -21,6 +22,7 @@ export interface Agent extends Entity {
   // Current location
   regionId: EntityId;
   mp: number;
+  modifiers: Modifier[];
   currentAction?: MoveAction | ActionQueueItem;
 }
 
@@ -35,6 +37,7 @@ export const createAgent = (
   empireId,
   regionId,
   mp: 10,
+  modifiers: [],
 });
 
 export const isAgent = (entity: Entity): entity is Agent =>

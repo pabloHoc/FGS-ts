@@ -26,11 +26,9 @@ export const GameCtxProvider = ({
 }) => {
   const { setUIState } = useContext(UIStateCtx);
 
-  useEffect(() => {
-    game.onCommandExecuted(() =>
-      setUIState((prevState: UIState) => ({ ...prevState }))
-    );
-  });
+  game.onCommandExecuted(() =>
+    setUIState((prevState: UIState) => ({ ...prevState }))
+  );
 
   return <GameCtx.Provider value={game}>{children}</GameCtx.Provider>;
 };

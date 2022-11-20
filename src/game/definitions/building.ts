@@ -7,27 +7,23 @@ import { EconomyUnit } from './economy-unit';
 interface IBuildingDefinition extends Definition {
   name: string;
   baseBuildtime: number;
-  resources: {
-    cost: EconomyUnit;
-    production: EconomyUnit;
-  };
+  resources: EconomyUnit;
 }
 
 export class BuildingDefinition implements IBuildingDefinition {
   readonly type = 'BUILDING';
   readonly name: string;
   readonly baseBuildtime: number;
-  readonly resources: {
-    readonly cost: EconomyUnit;
-    readonly production: EconomyUnit;
-  };
+  readonly resources: EconomyUnit;
 
   constructor(definition: IBuildingDefinition) {
     this.name = definition.name;
     this.baseBuildtime = definition.baseBuildtime;
     this.resources = {
       // ! These are not a shallow assignments
+      category: definition.resources.category,
       cost: definition.resources.cost,
+      upkeep: definition.resources.upkeep,
       production: definition.resources.production,
     };
   }

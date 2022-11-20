@@ -1,5 +1,6 @@
 import { Entity } from '.';
-import { EconomyBlock, EconomyUnit } from '../definitions/economy-unit';
+import { ResourceBlock } from '../definitions/economy-unit';
+import { Modifier } from '../definitions/modifier';
 import { generateId } from '../helpers/id';
 
 export interface Empire extends Entity {
@@ -10,8 +11,9 @@ export interface Empire extends Entity {
    * This shouldn't be here, probably it should be a separated
    * entity, like ResourceGroup? so it can be attached to other entities
    */
-  resources: EconomyBlock;
-  production: EconomyBlock;
+  resources: ResourceBlock;
+  production: ResourceBlock;
+  modifiers: Modifier[];
 }
 
 export const createEmpire = (name: string, isPlayer: boolean): Empire => {
@@ -30,5 +32,6 @@ export const createEmpire = (name: string, isPlayer: boolean): Empire => {
       iron: 0,
       food: 0,
     },
+    modifiers: [],
   };
 };

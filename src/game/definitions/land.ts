@@ -1,10 +1,10 @@
 import { Definition } from '.';
-import { EconomyUnit } from './economy-unit';
+import { ResourceBlock } from './economy-unit';
 
 interface ILandDefinition extends Definition {
   name: string;
   resources: {
-    production: EconomyUnit;
+    production: ResourceBlock;
   };
 }
 
@@ -12,7 +12,7 @@ export class LandDefinition implements ILandDefinition {
   readonly type = 'LAND';
   readonly name: string;
   readonly resources: {
-    readonly production: EconomyUnit;
+    readonly production: ResourceBlock;
   };
 
   constructor(definition: ILandDefinition) {

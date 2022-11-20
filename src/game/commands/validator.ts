@@ -1,6 +1,11 @@
 import { CommandExecutor } from '../core/command-executor';
 import { GameContext } from '../core/game-context';
+import { ModifierType } from '../definitions/modifier';
 import { Entities, Entity } from '../entities';
+import { Agent } from '../entities/agent';
+import { Empire } from '../entities/empire';
+import { Land } from '../entities/land';
+import { Region } from '../entities/region';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
 import { ActionKey, COMMANDS, getCommand } from './command-map';
 
@@ -34,7 +39,7 @@ const isModifier = (key: string) =>
   ['add', 'mult'].includes(key.split('_')[key.split('_').length - 1]);
 // ! See type JSON
 
-export const executeCommands = <T extends Entities>(
+export const executeCommands = <T extends Empire | Region | Land | Agent>(
   actions: Actions,
   scope: T,
   scopeContext: ScopeContext,
@@ -76,16 +81,6 @@ export const executeCommands = <T extends Entities>(
         commandExecutor,
         payload
       );
-    } else if (isModifier(key)) {
-      const modifierParts = (key as string).split('_');
-      const scopeKey = modifierParts[0] as never;
-      const newScope = getScopeFrom(scopeKey, scope, gameContext);
-
-      const modifierType = modifierParts[modifierParts.length - 1];
-
-      if (modifierType === 'add') {
-        (newScope[modifierParts[1] as never] as number) += actions[key];
-      }
     } else if (isScope(key)) {
       const newScope = getScopeFrom(key, scope, gameContext);
       scopeContext.prev = scope;
@@ -97,6 +92,19 @@ export const executeCommands = <T extends Entities>(
         commandExecutor,
         payload
       );
+    } else {
+      // Here we are in a modifier, but this is not a safe assumption
+      const modifierParts = (key as string).split('_');
+
+      const name = modifierParts.slice(0, modifierParts.length - 1).join('_');
+      const type = modifierParts[modifierParts.length - 1] as ModifierType;
+      const value = actions[key];
+
+      scope.modifiers.push({
+        name,
+        type,
+        value,
+      });
     }
   }
 };

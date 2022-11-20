@@ -3,6 +3,7 @@
   "name": "mine",
   "baseBuildtime": 2,
   "resources": {
+    "category": "buildings",
     "cost": {
       "iron": 5
     },
