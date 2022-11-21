@@ -9,13 +9,12 @@ import { ProcessBuildingQueues } from '../process-building-queues';
 
 export const processBuildingQueues = (
   command: ProcessBuildingQueues,
-  gameContext: GameContext,
   commandExecutor: CommandExecutor
 ) => {
-  const lands = gameContext.getAllEntities<Land>('LAND');
+  const lands = GameContext.instance.getAllEntities<Land>('LAND');
 
   for (const land of lands) {
-    const buildingQueue = getSortedBuildingQueueForLand(land.id, gameContext);
+    const buildingQueue = getSortedBuildingQueueForLand(land.id);
 
     if (buildingQueue.length) {
       const nextBuilding = buildingQueue[0];
@@ -32,7 +31,7 @@ export const processBuildingQueues = (
             nextBuilding.empireId
           )
         );
-        gameContext.deleteEntity<BuildingQueueItem>(nextBuilding);
+        GameContext.instance.deleteEntity<BuildingQueueItem>(nextBuilding);
       }
     }
   }

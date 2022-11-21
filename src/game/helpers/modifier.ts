@@ -39,10 +39,7 @@ export const getEconomyModifierSummary = (
       return summary;
     }, {});
 
-export const getModifiersForEntity = (
-  entityId: EntityId,
-  gameContext: GameContext
-) =>
-  gameContext
+export const getModifiersForEntity = (entityId: EntityId) =>
+  GameContext.instance
     .getAllEntities<Modifier>('MODIFIER')
     .filter((m) => m.entityId === entityId);

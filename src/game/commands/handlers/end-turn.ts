@@ -9,7 +9,6 @@ import { processAgentActions } from '../process-agent-actions';
 
 export const endTurn: Handler<EndTurn> = (
   command: EndTurn,
-  gameContext: GameContext,
   commandExecutor: CommandExecutor
 ) => {
   commandExecutor.execute(processAgentActions());

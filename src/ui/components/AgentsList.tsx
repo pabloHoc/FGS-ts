@@ -34,12 +34,12 @@ export const AgentsList = () => {
   const { uiState, setUIState } = useContext(UIStateCtx);
   const [agents, setAgents] = useState<Agent[]>([]);
 
-  const playerEmpire = getPlayerEmpire(game.context);
+  const playerEmpire = getPlayerEmpire();
 
   if (!playerEmpire) return null;
 
   const updateAgents = () => {
-    const agents = getEmpireAgents(playerEmpire.id, game.context);
+    const agents = getEmpireAgents(playerEmpire.id);
     setAgents(agents);
   };
 

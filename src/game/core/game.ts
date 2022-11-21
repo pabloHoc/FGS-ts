@@ -6,14 +6,8 @@ import { GameContext } from './game-context';
 import { World } from './world';
 
 export class Game {
-  private _gameContext = new GameContext();
-  private _definitionManager = new DefinitionManager();
-  private _commandExecutor = new CommandExecutor(HANDLERS, this._gameContext);
-  private _world = new World(
-    this._gameContext,
-    this._definitionManager,
-    this._commandExecutor
-  );
+  private _commandExecutor = new CommandExecutor(HANDLERS);
+  private _world = new World(this._commandExecutor);
 
   constructor() {
     this._world.generateWorld();
@@ -31,10 +25,10 @@ export class Game {
   }
 
   get context() {
-    return this._gameContext;
+    return GameContext.instance;
   }
 
   get definitions() {
-    return this._definitionManager;
+    return DefinitionManager.instance;
   }
 }

@@ -7,10 +7,9 @@ import { ProcessAgentActions } from '../process-agent-actions';
 
 export const processAgentActions = (
   command: ProcessAgentActions,
-  gameContext: GameContext,
   commandExecutor: CommandExecutor
 ) => {
-  const agents = gameContext.getAllEntities<Agent>('AGENT');
+  const agents = GameContext.instance.getAllEntities<Agent>('AGENT');
 
   for (const agent of agents) {
     if (agent.currentAction) {
@@ -27,7 +26,7 @@ export const processAgentActions = (
             );
           agentActionDefinition.execute(
             agent,
-            gameContext,
+            GameContext.instance,
             commandExecutor,
             agent.currentAction.payload
           );

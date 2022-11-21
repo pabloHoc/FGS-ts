@@ -99,7 +99,7 @@ export const LandsList = () => {
   };
 
   const getBuildingQueue = (landId: EntityId) =>
-    getSortedBuildingQueueForLand(landId, game.context);
+    getSortedBuildingQueueForLand(landId);
 
   return (
     <div>

@@ -2,8 +2,8 @@ import { CreateLand } from '../create-land';
 import { GameContext } from '../../core/game-context';
 import { createLand as createLandEntity } from '../../entities/land';
 
-export const createLand = (command: CreateLand, gameContext: GameContext) => {
+export const createLand = (command: CreateLand) => {
   const land = createLandEntity(command.name, command.regionId);
-  gameContext.addEntity(land);
+  GameContext.instance.addEntity(land);
   return land;
 };

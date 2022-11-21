@@ -10,12 +10,12 @@ import { getModifiersForEntity } from '../../helpers/modifier';
 import { getEmpireRegions } from '../../helpers/region';
 import { ProduceResources } from '../produce-resources';
 
-const computeEmpireProduction = (empire: Empire, gameContext: GameContext) => {
+const computeEmpireProduction = (empire: Empire) => {
   // * This can be cached
-  const empireRegions = getEmpireRegions(empire.id, gameContext);
+  const empireRegions = getEmpireRegions(empire.id);
 
   for (const region of empireRegions) {
-    computeRegionProduction(region, empire, gameContext);
+    computeRegionProduction(region, empire);
   }
 };
 
@@ -24,28 +24,20 @@ const computeEmpireProduction = (empire: Empire, gameContext: GameContext) => {
  * into account local and global bonuses, so probably this is not the best
  * architecture
  */
-const computeRegionProduction = (
-  region: Region,
-  empire: Empire,
-  gameContext: GameContext
-) => {
+const computeRegionProduction = (region: Region, empire: Empire) => {
   // * This can be cached
-  const lands = gameContext.getAllEntities<Land>('LAND');
+  const lands = GameContext.instance.getAllEntities<Land>('LAND');
   const regionLands = lands.filter((land) => land.regionId === region.id);
 
   for (const land of regionLands) {
-    computeLandProduction(land, empire, gameContext);
+    computeLandProduction(land, empire);
     for (const building of land.buildings) {
-      computeBuildingProdution(building, region, empire, gameContext);
+      computeBuildingProdution(building, region, empire);
     }
   }
 };
 
-const computeLandProduction = (
-  land: Land,
-  empire: Empire,
-  gameContext: GameContext
-) => {
+const computeLandProduction = (land: Land, empire: Empire) => {
   // * This can be cached
   const landDefinition = DefinitionManager.instance.get<LandDefinition>(
     'LAND',
@@ -65,8 +57,7 @@ const computeLandProduction = (
 const computeBuildingProdution = (
   building: string,
   region: Region,
-  empire: Empire,
-  gameContext: GameContext
+  empire: Empire
 ) => {
   const buildingDefinition = DefinitionManager.instance.get<BuildingDefinition>(
     'BUILDING',
@@ -86,8 +77,8 @@ const computeBuildingProdution = (
       'production',
       productionValue,
       resource,
-      getModifiersForEntity(region.id, gameContext),
-      getModifiersForEntity(empire.id, gameContext)
+      getModifiersForEntity(region.id),
+      getModifiersForEntity(empire.id)
     );
     empire.production[resource] += totalBuildingProduction;
   }
@@ -105,16 +96,13 @@ const produceEmpireResources = (empire: Empire) => {
   }
 };
 
-export const produceResources = (
-  command: ProduceResources,
-  gameContext: GameContext
-) => {
-  for (const empire of gameContext.getAllEntities<Empire>('EMPIRE')) {
+export const produceResources = (command: ProduceResources) => {
+  for (const empire of GameContext.instance.getAllEntities<Empire>('EMPIRE')) {
     // Production shoul be calculated in a different command
     // so we can determine production the first turn without
     // producing resources
     clearEmpireProduction(empire);
-    computeEmpireProduction(empire, gameContext);
+    computeEmpireProduction(empire);
     produceEmpireResources(empire);
   }
 };

@@ -17,17 +17,9 @@ export class World {
   private REGIONS_NUMBER = 10;
   private LANDS_PER_REGION = 5;
 
-  private _gameContext: GameContext;
-  private _definitionManager: DefinitionManager;
   private _commandExecutor: CommandExecutor;
 
-  constructor(
-    gameContext: GameContext,
-    definitionManager: DefinitionManager,
-    commandExecutor: CommandExecutor
-  ) {
-    this._gameContext = gameContext;
-    this._definitionManager = definitionManager;
+  constructor(commandExecutor: CommandExecutor) {
     this._commandExecutor = commandExecutor;
   }
 
@@ -42,7 +34,7 @@ export class World {
   }
 
   private generateRegions() {
-    const empires = this._gameContext.getAllEntities<Empire>('EMPIRE');
+    const empires = GameContext.instance.getAllEntities<Empire>('EMPIRE');
 
     for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
       this._commandExecutor.execute(
@@ -52,16 +44,16 @@ export class World {
   }
 
   private generateLands() {
-    const regions = this._gameContext.getAllEntities<Region>('REGION');
+    const regions = GameContext.instance.getAllEntities<Region>('REGION');
 
     for (const region of regions) {
       for (let i = 0; i < this.LANDS_PER_REGION; i++) {
         const landIndex = getRandom(
           0,
-          this._definitionManager.getAll<LandDefinition>('LAND').length - 1
+          DefinitionManager.instance.getAll<LandDefinition>('LAND').length - 1
         );
         const landName =
-          this._definitionManager.getAll<LandDefinition>('LAND')[landIndex]
+          DefinitionManager.instance.getAll<LandDefinition>('LAND')[landIndex]
             .name;
         this._commandExecutor.execute(createLand(landName, region.id));
       }
@@ -73,8 +65,8 @@ export class World {
   }
 
   private generateAgents() {
-    const empires = this._gameContext.getAllEntities<Empire>('EMPIRE');
-    const regions = this._gameContext.getAllEntities<Region>('REGION');
+    const empires = GameContext.instance.getAllEntities<Empire>('EMPIRE');
+    const regions = GameContext.instance.getAllEntities<Region>('REGION');
 
     for (const empire of empires) {
       const region = regions.find((region) => region.empireId === empire.id);

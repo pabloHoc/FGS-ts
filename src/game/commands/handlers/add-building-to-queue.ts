@@ -12,14 +12,8 @@ import {
 } from '../../helpers/building';
 import { AddBuildingToQueue } from '../add-building-to-queue';
 
-export const addBuildingToQueue = (
-  command: AddBuildingToQueue,
-  gameContext: GameContext
-) => {
-  const buildingQueue = getSortedBuildingQueueForLand(
-    command.landId,
-    gameContext
-  );
+export const addBuildingToQueue = (command: AddBuildingToQueue) => {
+  const buildingQueue = getSortedBuildingQueueForLand(command.landId);
   const lastBuildingInQueue = buildingQueue[buildingQueue.length - 1];
   const nextBuildingQueueOrder = lastBuildingInQueue
     ? lastBuildingInQueue.order + 1
@@ -37,7 +31,10 @@ export const addBuildingToQueue = (
   );
 
   // Apply building costs
-  const empire = gameContext.getEntity<Empire>('EMPIRE', command.empireId);
+  const empire = GameContext.instance.getEntity<Empire>(
+    'EMPIRE',
+    command.empireId
+  );
   for (const [resource, cost = 0] of Object.entries(
     buildingDefinition.resources.cost
   )) {
@@ -47,5 +44,5 @@ export const addBuildingToQueue = (
     empire.resources[resource] -= cost;
   }
 
-  gameContext.addEntity<BuildingQueueItem>(newBuildingQueueItem);
+  GameContext.instance.addEntity<BuildingQueueItem>(newBuildingQueueItem);
 };

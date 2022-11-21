@@ -9,7 +9,15 @@ import { Region } from '../entities/region';
 import { TypeMapper } from '../helpers/types';
 
 export class GameContext {
+  private static _instance: GameContext;
   private _turn = 0;
+
+  static get instance() {
+    if (!this._instance) {
+      this._instance = new GameContext();
+    }
+    return this._instance;
+  }
 
   // We could use typescript template strings to change property names
   private _context: {
