@@ -44,18 +44,12 @@ export class AgentActionDefinition implements IAgentActionDefinition {
   }
 
   // TODO: check cast here
-  execute(
-    agent: Agent,
-    gameContext: GameContext,
-    commandExecutor: CommandExecutor,
-    payload?: object
-  ) {
+  execute(agent: Agent, gameContext: GameContext, payload?: object) {
     executeCommands(
       this.actions,
       agent,
       { root: agent, this: agent, prev: undefined },
       gameContext,
-      commandExecutor,
       payload
     );
   }

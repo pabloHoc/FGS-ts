@@ -44,7 +44,6 @@ export const executeCommands = <T extends Empire | Region | Land | Agent>(
   scope: T,
   scopeContext: ScopeContext,
   gameContext: GameContext,
-  commandExecutor: CommandExecutor,
   payload?: object
 ) => {
   scopeContext.this = scope;
@@ -71,16 +70,11 @@ export const executeCommands = <T extends Empire | Region | Land | Agent>(
         }
       }
 
-      commandExecutor.execute(command(scopeContext.this, commandValue) as any);
-    } else if (isModifiers(key)) {
-      executeCommands(
-        actions[key],
-        scope,
-        scopeContext,
-        gameContext,
-        commandExecutor,
-        payload
+      CommandExecutor.instance.execute(
+        command(scopeContext.this, commandValue) as any
       );
+    } else if (isModifiers(key)) {
+      executeCommands(actions[key], scope, scopeContext, gameContext, payload);
     } else if (isScope(key)) {
       const newScope = getScopeFrom(key, scope, gameContext);
       scopeContext.prev = scope;
@@ -89,7 +83,6 @@ export const executeCommands = <T extends Empire | Region | Land | Agent>(
         newScope,
         scopeContext,
         gameContext,
-        commandExecutor,
         payload
       );
     } else {

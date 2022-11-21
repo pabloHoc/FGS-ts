@@ -5,10 +5,7 @@ import { AgentActionDefinition } from '../../definitions/agent-action';
 import { Agent, isMoveAction } from '../../entities/agent';
 import { ProcessAgentActions } from '../process-agent-actions';
 
-export const processAgentActions = (
-  command: ProcessAgentActions,
-  commandExecutor: CommandExecutor
-) => {
+export const processAgentActions = (command: ProcessAgentActions) => {
   const agents = GameContext.instance.getAllEntities<Agent>('AGENT');
 
   for (const agent of agents) {
@@ -27,7 +24,6 @@ export const processAgentActions = (
           agentActionDefinition.execute(
             agent,
             GameContext.instance,
-            commandExecutor,
             agent.currentAction.payload
           );
         }

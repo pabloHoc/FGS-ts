@@ -17,12 +17,6 @@ export class World {
   private REGIONS_NUMBER = 10;
   private LANDS_PER_REGION = 5;
 
-  private _commandExecutor: CommandExecutor;
-
-  constructor(commandExecutor: CommandExecutor) {
-    this._commandExecutor = commandExecutor;
-  }
-
   // ? What's the difference between world and worldGenerator or worldMap?
   // ! This needs to be moved to a GENERATE_WORLD command
 
@@ -37,7 +31,7 @@ export class World {
     const empires = GameContext.instance.getAllEntities<Empire>('EMPIRE');
 
     for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
-      this._commandExecutor.execute(
+      CommandExecutor.instance.execute(
         createRegion(`Region #${i}`, i === 1 ? empires[0].id : undefined)
       );
     }
@@ -55,13 +49,13 @@ export class World {
         const landName =
           DefinitionManager.instance.getAll<LandDefinition>('LAND')[landIndex]
             .name;
-        this._commandExecutor.execute(createLand(landName, region.id));
+        CommandExecutor.instance.execute(createLand(landName, region.id));
       }
     }
   }
 
   private generateEmpires() {
-    this._commandExecutor.execute(createEmpire('PLAYER EMPIRE', true));
+    CommandExecutor.instance.execute(createEmpire('PLAYER EMPIRE', true));
   }
 
   private generateAgents() {
@@ -72,7 +66,7 @@ export class World {
       const region = regions.find((region) => region.empireId === empire.id);
 
       if (region) {
-        this._commandExecutor.execute(
+        CommandExecutor.instance.execute(
           createAgent('Lorant', empire.id, region.id)
         );
       }

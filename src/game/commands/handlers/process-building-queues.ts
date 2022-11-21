@@ -7,10 +7,7 @@ import { getSortedBuildingQueueForLand } from '../../helpers/building';
 import { buildBuilding } from '../build-building';
 import { ProcessBuildingQueues } from '../process-building-queues';
 
-export const processBuildingQueues = (
-  command: ProcessBuildingQueues,
-  commandExecutor: CommandExecutor
-) => {
+export const processBuildingQueues = (command: ProcessBuildingQueues) => {
   const lands = GameContext.instance.getAllEntities<Land>('LAND');
 
   for (const land of lands) {
@@ -24,7 +21,7 @@ export const processBuildingQueues = (
         for (const queueItem of buildingQueue) {
           queueItem.order--;
         }
-        commandExecutor.execute(
+        CommandExecutor.instance.execute(
           buildBuilding(
             nextBuilding.buildingName,
             nextBuilding.landId,

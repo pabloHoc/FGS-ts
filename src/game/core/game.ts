@@ -6,22 +6,21 @@ import { GameContext } from './game-context';
 import { World } from './world';
 
 export class Game {
-  private _commandExecutor = new CommandExecutor(HANDLERS);
-  private _world = new World(this._commandExecutor);
+  private _world = new World();
 
   constructor() {
     this._world.generateWorld();
-    this._commandExecutor.execute(createEmpire('asd', false));
+    CommandExecutor.instance.execute(createEmpire('asd', false));
   }
 
   onCommandExecuted(callback: Function) {
-    this._commandExecutor.onCommandExecuted(callback);
+    CommandExecutor.instance.onCommandExecuted(callback);
   }
 
   // Getters
 
   get commands() {
-    return this._commandExecutor;
+    return CommandExecutor.instance;
   }
 
   get context() {

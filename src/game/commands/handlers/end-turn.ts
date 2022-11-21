@@ -7,12 +7,9 @@ import { startTurn } from '../start-turn';
 import { processBuildingQueues } from '../process-building-queues';
 import { processAgentActions } from '../process-agent-actions';
 
-export const endTurn: Handler<EndTurn> = (
-  command: EndTurn,
-  commandExecutor: CommandExecutor
-) => {
-  commandExecutor.execute(processAgentActions());
-  commandExecutor.execute(processBuildingQueues());
-  commandExecutor.execute(produceResources());
-  commandExecutor.execute(startTurn());
+export const endTurn: Handler<EndTurn> = (command: EndTurn) => {
+  CommandExecutor.instance.execute(processAgentActions());
+  CommandExecutor.instance.execute(processBuildingQueues());
+  CommandExecutor.instance.execute(produceResources());
+  CommandExecutor.instance.execute(startTurn());
 };
