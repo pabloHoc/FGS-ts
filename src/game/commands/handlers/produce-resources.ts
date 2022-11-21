@@ -10,16 +10,12 @@ import { getModifiersForEntity } from '../../helpers/modifier';
 import { getEmpireRegions } from '../../helpers/region';
 import { ProduceResources } from '../produce-resources';
 
-const computeEmpireProduction = (
-  empire: Empire,
-  gameContext: GameContext,
-  definitionManager: DefinitionManager
-) => {
+const computeEmpireProduction = (empire: Empire, gameContext: GameContext) => {
   // * This can be cached
   const empireRegions = getEmpireRegions(empire.id, gameContext);
 
   for (const region of empireRegions) {
-    computeRegionProduction(region, empire, gameContext, definitionManager);
+    computeRegionProduction(region, empire, gameContext);
   }
 };
 
@@ -31,23 +27,16 @@ const computeEmpireProduction = (
 const computeRegionProduction = (
   region: Region,
   empire: Empire,
-  gameContext: GameContext,
-  definitionManager: DefinitionManager
+  gameContext: GameContext
 ) => {
   // * This can be cached
   const lands = gameContext.getAllEntities<Land>('LAND');
   const regionLands = lands.filter((land) => land.regionId === region.id);
 
   for (const land of regionLands) {
-    computeLandProduction(land, empire, gameContext, definitionManager);
+    computeLandProduction(land, empire, gameContext);
     for (const building of land.buildings) {
-      computeBuildingProdution(
-        building,
-        region,
-        empire,
-        gameContext,
-        definitionManager
-      );
+      computeBuildingProdution(building, region, empire, gameContext);
     }
   }
 };
@@ -55,11 +44,10 @@ const computeRegionProduction = (
 const computeLandProduction = (
   land: Land,
   empire: Empire,
-  gameContext: GameContext,
-  definitionManager: DefinitionManager
+  gameContext: GameContext
 ) => {
   // * This can be cached
-  const landDefinition = definitionManager.get<LandDefinition>(
+  const landDefinition = DefinitionManager.instance.get<LandDefinition>(
     'LAND',
     land.name
   );
@@ -78,16 +66,15 @@ const computeBuildingProdution = (
   building: string,
   region: Region,
   empire: Empire,
-  gameContext: GameContext,
-  definitionManager: DefinitionManager
+  gameContext: GameContext
 ) => {
-  const buildingDefinition = definitionManager.get<BuildingDefinition>(
+  const buildingDefinition = DefinitionManager.instance.get<BuildingDefinition>(
     'BUILDING',
     building
   );
 
   const economicCategoryDefinition =
-    definitionManager.get<EconomicCategoryDefinition>(
+    DefinitionManager.instance.get<EconomicCategoryDefinition>(
       'ECONOMIC-CATEGORY',
       buildingDefinition.resources.category
     );
@@ -120,15 +107,14 @@ const produceEmpireResources = (empire: Empire) => {
 
 export const produceResources = (
   command: ProduceResources,
-  gameContext: GameContext,
-  definitionManager: DefinitionManager
+  gameContext: GameContext
 ) => {
   for (const empire of gameContext.getAllEntities<Empire>('EMPIRE')) {
     // Production shoul be calculated in a different command
     // so we can determine production the first turn without
     // producing resources
     clearEmpireProduction(empire);
-    computeEmpireProduction(empire, gameContext, definitionManager);
+    computeEmpireProduction(empire, gameContext);
     produceEmpireResources(empire);
   }
 };

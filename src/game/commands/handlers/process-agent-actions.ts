@@ -8,7 +8,6 @@ import { ProcessAgentActions } from '../process-agent-actions';
 export const processAgentActions = (
   command: ProcessAgentActions,
   gameContext: GameContext,
-  definitionManager: DefinitionManager,
   commandExecutor: CommandExecutor
 ) => {
   const agents = gameContext.getAllEntities<Agent>('AGENT');
@@ -22,7 +21,7 @@ export const processAgentActions = (
           agent.regionId = agent.currentAction.toRegion;
         } else {
           const agentActionDefinition =
-            definitionManager.get<AgentActionDefinition>(
+            DefinitionManager.instance.get<AgentActionDefinition>(
               'AGENT-ACTION',
               agent.currentAction.name
             );

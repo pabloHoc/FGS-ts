@@ -10,7 +10,6 @@ import { ProcessBuildingQueues } from '../process-building-queues';
 export const processBuildingQueues = (
   command: ProcessBuildingQueues,
   gameContext: GameContext,
-  definitionManager: DefinitionManager,
   commandExecutor: CommandExecutor
 ) => {
   const lands = gameContext.getAllEntities<Land>('LAND');

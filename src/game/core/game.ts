@@ -8,11 +8,7 @@ import { World } from './world';
 export class Game {
   private _gameContext = new GameContext();
   private _definitionManager = new DefinitionManager();
-  private _commandExecutor = new CommandExecutor(
-    HANDLERS,
-    this._gameContext,
-    this._definitionManager
-  );
+  private _commandExecutor = new CommandExecutor(HANDLERS, this._gameContext);
   private _world = new World(
     this._gameContext,
     this._definitionManager,

@@ -38,6 +38,8 @@ const definitionsConstructors = {
 type DefinitionType = keyof typeof definitionsMap;
 
 export class DefinitionManager {
+  private static _instance: DefinitionManager;
+
   private _definitions = {
     building: new Map<string, BuildingDefinition>(),
     resource: new Map<string, ResourceDefinition>(),
@@ -48,6 +50,13 @@ export class DefinitionManager {
 
   constructor() {
     this.loadDefinitions();
+  }
+
+  static get instance() {
+    if (!this._instance) {
+      this._instance = new DefinitionManager();
+    }
+    return this._instance;
   }
 
   private loadDefinitions() {

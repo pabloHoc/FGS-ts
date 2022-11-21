@@ -14,8 +14,7 @@ import { AddBuildingToQueue } from '../add-building-to-queue';
 
 export const addBuildingToQueue = (
   command: AddBuildingToQueue,
-  gameContext: GameContext,
-  definitionManager: DefinitionManager
+  gameContext: GameContext
 ) => {
   const buildingQueue = getSortedBuildingQueueForLand(
     command.landId,
@@ -25,7 +24,7 @@ export const addBuildingToQueue = (
   const nextBuildingQueueOrder = lastBuildingInQueue
     ? lastBuildingInQueue.order + 1
     : 0;
-  const buildingDefinition = definitionManager.get<BuildingDefinition>(
+  const buildingDefinition = DefinitionManager.instance.get<BuildingDefinition>(
     'BUILDING',
     command.name
   );
