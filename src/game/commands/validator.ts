@@ -1,13 +1,14 @@
 import { CommandExecutor } from '../core/command-executor';
 import { GameContext } from '../core/game-context';
 import { createModifier, ModifierType } from '../entities/modifier';
-import { Entities, Entity } from '../entities';
+import { Entity } from '../entities';
 import { Agent } from '../entities/agent';
 import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
 import { ActionKey, COMMANDS, getCommand } from './command-map';
+import { generateId } from '../helpers/id';
 
 // ? Can we type nested scopes? Do we want to?
 
@@ -20,7 +21,7 @@ export type Actions = Scope | ActionObj;
 type ScopeContext = {
   root: Entity;
   this: Entity;
-  prev: Entity | undefined;
+  prev?: Entity;
 };
 
 type ScopeContextKey = keyof ScopeContext;
@@ -39,12 +40,12 @@ const isModifier = (key: string) =>
   ['add', 'mult'].includes(key.split('_')[key.split('_').length - 1]);
 // ! See type JSON
 
-export const executeCommands = <T extends Empire | Region | Land | Agent>(
+export const execute = <T extends Empire | Region | Land | Agent>(
   actions: Actions,
   scope: T,
   scopeContext: ScopeContext,
-  gameContext: GameContext,
-  payload?: object
+  payload?: object,
+  sourceId?: string
 ) => {
   scopeContext.this = scope;
   for (const k in actions) {
@@ -74,17 +75,11 @@ export const executeCommands = <T extends Empire | Region | Land | Agent>(
         command(scopeContext.this, commandValue) as any
       );
     } else if (isModifiers(key)) {
-      executeCommands(actions[key], scope, scopeContext, gameContext, payload);
+      execute(actions[key], scope, scopeContext, payload, sourceId);
     } else if (isScope(key)) {
-      const newScope = getScopeFrom(key, scope, gameContext);
+      const newScope = getScopeFrom(key, scope);
       scopeContext.prev = scope;
-      executeCommands(
-        actions[key],
-        newScope,
-        scopeContext,
-        gameContext,
-        payload
-      );
+      execute(actions[key], newScope, scopeContext, payload, sourceId);
     } else {
       // Here we are in a modifier, but this is not a safe assumption
       const modifierParts = (key as string).split('_');
@@ -93,7 +88,18 @@ export const executeCommands = <T extends Empire | Region | Land | Agent>(
       const type = modifierParts[modifierParts.length - 1] as ModifierType;
       const value = actions[key];
 
-      gameContext.addEntity(createModifier(name, type, value, scope.id));
+      GameContext.instance.addEntity(
+        createModifier(name, type, value, scope.id, undefined, sourceId)
+      );
     }
   }
+};
+
+export const executeCommands = <T extends Empire | Region | Land | Agent>(
+  actions: Actions,
+  scope: T,
+  payload?: object,
+  sourceId?: string
+) => {
+  execute(actions, scope, { root: scope, this: scope }, payload, sourceId);
 };

@@ -17,8 +17,7 @@ export type Conditions = Scope | Condition;
 
 export const validateConditions = <T extends Entity>(
   conditions: Conditions,
-  scope: T,
-  gameContext: GameContext
+  scope: T
 ): boolean => {
   for (const k in conditions) {
     const key = k as keyof Conditions;
@@ -29,8 +28,8 @@ export const validateConditions = <T extends Entity>(
         return false;
       }
     } else if (isScope(key)) {
-      const newScope = getScopeFrom(key, scope, gameContext);
-      const result = validateConditions(conditions[key], newScope, gameContext);
+      const newScope = getScopeFrom(key, scope);
+      const result = validateConditions(conditions[key], newScope);
       if (!result) {
         return false;
       }

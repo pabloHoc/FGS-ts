@@ -10,6 +10,7 @@ export interface Modifier extends Entity {
   value: number;
   entityId: EntityId;
   remainingTurns?: number;
+  sourceId?: string;
 }
 
 export const modifierTypes = ['add', 'mult', 'reduction'] as const;
@@ -20,7 +21,8 @@ export const createModifier = (
   type: ModifierType,
   value: number,
   entityId: EntityId,
-  remainingTurns?: number
+  remainingTurns?: number,
+  sourceId?: string
 ): Modifier => ({
   id: generateId(),
   type: 'MODIFIER',
@@ -29,4 +31,5 @@ export const createModifier = (
   value,
   entityId,
   remainingTurns,
+  sourceId,
 });

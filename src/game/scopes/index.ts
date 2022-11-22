@@ -29,20 +29,16 @@ const scopesMap = {
 
 // TODO: IMPROVE THIS
 
-export const getScopeFrom = <T extends Entity>(
-  scope: ScopeType,
-  from: T,
-  gameContext: GameContext
-) => {
+export const getScopeFrom = <T extends Entity>(scope: ScopeType, from: T) => {
   if (scope === 'region') {
     if (isAgent(from)) {
-      return getRegionFromAgent(from, gameContext);
+      return getRegionFromAgent(from);
     }
     if (isRegion(from)) return from;
   }
   if (scope === 'empire') {
     if (isAgent(from)) {
-      return getEmpireFromAgent(from, gameContext);
+      return getEmpireFromAgent(from);
     }
   }
   if (scope === 'agent') {

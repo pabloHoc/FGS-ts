@@ -6,6 +6,7 @@ import { BuildingQueueItem } from './building-queue-item';
 import { Empire } from './empire';
 import { Land } from './land';
 import { Region } from './region';
+import { Spell } from './spell';
 
 // ? Do we want specific entity types id? e.g.: RegionId
 
@@ -25,6 +26,7 @@ export type Entities =
   // ! These are not entities, we need a new category
   | BuildingQueueItem
   | ActionQueueItem
-  | Modifier;
+  | Modifier
+  | Spell;
 
 export type EntityType = Entities['type'];

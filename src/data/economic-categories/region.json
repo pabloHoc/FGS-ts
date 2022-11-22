@@ -1,4 +1,5 @@
 {
+  "type": "economic-category",
   "name": "region",
   "parent": "empire"
 }

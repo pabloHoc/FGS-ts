@@ -7,6 +7,7 @@ import { BuildingsPanel } from './components/BuildingsPanel';
 import { AgentsList } from './components/AgentsList';
 import { UIStateCtxProvider } from './context/UIStateCtx';
 import { AgentActionsPanel } from './components/AgentActionsPanel';
+import { AgentSpellsPanel } from './components/AgentSpellsPanel';
 
 /**
  * We probably need to listen to a START GAME event
@@ -19,6 +20,7 @@ const App = () => {
         <EmpireDetails />
         <AgentsList />
         <AgentActionsPanel />
+        <AgentSpellsPanel />
         <RegionsList />
         <LandsList />
         <BuildingsPanel />

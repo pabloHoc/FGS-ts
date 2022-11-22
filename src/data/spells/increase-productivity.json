@@ -1,6 +1,6 @@
 {
-  "type": "agent-action",
-  "name": "cast_productivity_spell",
+  "type": "spell",
+  "name": "increase_productivity",
   "baseExecutionTime": 2,
   "mpCost": 10,
   "conditions": {

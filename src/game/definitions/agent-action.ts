@@ -1,26 +1,32 @@
 import { Definition } from '.';
 import { Actions, executeCommands } from '../commands/validator';
 import { Conditions, validateConditions } from '../conditions/validator';
-import { CommandExecutor } from '../core/command-executor';
-import { GameContext } from '../core/game-context';
+import { ActionType } from '../entities/action-queue-item';
 import { Agent } from '../entities/agent';
 
-interface IAgentActionDefinition extends Definition {
+// ! Move this
+export interface AgentExecutableAction {
   name: string;
+  actionType: ActionType;
   baseExecutionTime: number;
-  conditions: Conditions;
+  conditions?: Conditions;
   actions: Actions;
-  showInUI?: boolean;
   mpCost?: number;
+  execute(agent: Agent, payload?: object): void;
+}
+
+interface IAgentActionDefinition extends Definition, AgentExecutableAction {
+  showInUI?: boolean;
 }
 
 export class AgentActionDefinition implements IAgentActionDefinition {
   readonly type = 'AGENT-ACTION';
+  readonly actionType = 'action';
   readonly name: string;
-  readonly conditions: Conditions;
+  readonly conditions?: Conditions;
   readonly actions: Actions;
   readonly baseExecutionTime: number;
-  readonly showInUI?: boolean | undefined;
+  readonly showInUI?: boolean;
   readonly mpCost?: number;
 
   constructor(definition: IAgentActionDefinition) {
@@ -36,21 +42,15 @@ export class AgentActionDefinition implements IAgentActionDefinition {
     return this.showInUI !== false;
   }
 
-  allow(agent: Agent, gameContext: GameContext) {
+  allow(agent: Agent) {
     return (
-      validateConditions(this.conditions, agent, gameContext) &&
+      (this.conditions ? validateConditions(this.conditions, agent) : true) &&
       (this.mpCost ? this.mpCost <= agent.mp : true)
     );
   }
 
   // TODO: check cast here
-  execute(agent: Agent, gameContext: GameContext, payload?: object) {
-    executeCommands(
-      this.actions,
-      agent,
-      { root: agent, this: agent, prev: undefined },
-      gameContext,
-      payload
-    );
+  execute(agent: Agent, payload?: object) {
+    executeCommands(this.actions, agent, payload);
   }
 }

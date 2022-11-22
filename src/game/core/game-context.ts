@@ -7,6 +7,7 @@ import { Empire } from '../entities/empire';
 import { Land } from '../entities/land';
 import { Region } from '../entities/region';
 import { TypeMapper } from '../helpers/types';
+import { Spell } from '../entities/spell';
 
 export class GameContext {
   private static _instance: GameContext;
@@ -33,6 +34,7 @@ export class GameContext {
     building_queue_item: new Map<EntityId, BuildingQueueItem>(),
     action_queue_item: new Map<EntityId, ActionQueueItem>(),
     modifier: new Map<EntityId, Modifier>(),
+    spell: new Map<EntityId, Spell>(),
   };
 
   private _variables = new Map<string, string>();

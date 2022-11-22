@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
 import { AgentActionDefinition } from '../../game/definitions/agent-action';
+import { SpellDefinition } from '../../game/definitions/spell';
 import { createActionQueueItem } from '../../game/entities/action-queue-item';
 import { Agent } from '../../game/entities/agent';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
 
-export const AgentActionsPanel = () => {
+export const AgentSpellsPanel = () => {
   const game = useContext(GameCtx);
   const { uiState, setUIState } = useContext(UIStateCtx);
   const [selectedAgent, setSelectedAgent] = useState<Agent>();
@@ -22,31 +23,29 @@ export const AgentActionsPanel = () => {
 
   if (!selectedAgent) return null;
 
-  const handleClick = (agentAction: AgentActionDefinition) => {
-    selectedAgent.currentAction = createActionQueueItem(agentAction, 1);
+  const handleClick = (spell: SpellDefinition) => {
+    selectedAgent.currentAction = createActionQueueItem(spell, 1);
     setUIState({ ...uiState });
   };
 
   return (
     <>
-      {game.definitions
-        .getAll<AgentActionDefinition>('AGENT-ACTION')
-        .map((agentAction) =>
-          agentAction.show() ? (
-            <button
-              key={`${agentAction.name.replaceAll('_', ' ')} (${
-                agentAction.baseExecutionTime
-              })`}
-              onClick={() => handleClick(agentAction)}
-              disabled={
-                agentAction.name === selectedAgent.currentAction?.name ||
-                !agentAction.allow(selectedAgent)
-              }
-            >
-              {agentAction.name}
-            </button>
-          ) : null
-        )}
+      {game.definitions.getAll<SpellDefinition>('SPELL').map((spell) =>
+        spell.show() ? (
+          <button
+            key={`${spell.name.replaceAll('_', ' ')} (${
+              spell.baseExecutionTime
+            })`}
+            onClick={() => handleClick(spell)}
+            disabled={
+              spell.name === selectedAgent.currentAction?.name ||
+              !spell.allow(selectedAgent)
+            }
+          >
+            {spell.name}
+          </button>
+        ) : null
+      )}
     </>
   );
 };
