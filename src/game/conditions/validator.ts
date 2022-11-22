@@ -7,7 +7,7 @@ import { ConditionKey, CONDITIONS_MAP, useHandler } from './condition-map';
 const isCondition = (key: ConditionKey) =>
   Object.keys(CONDITIONS_MAP).includes(key);
 
-// ? Can we type nested scopes? Do we want to?
+// TODO: check if we need nested scopes
 
 type Condition = {
   [key in ConditionKey]?: boolean | number | string;

@@ -1,4 +1,4 @@
-// Stat? Other name?
+// TODO: Check name (stat? other?)
 export type Attribute = {
   value: number;
   modifiers: {

@@ -7,6 +7,10 @@ import { getSortedBuildingQueueForLand } from '../../helpers/building';
 import { buildBuilding } from '../build-building';
 import { ProcessBuildingQueues } from '../process-building-queues';
 
+// TODO: There should be commands for:
+// - add building to queue
+// - remove building from
+// - finish building from queue
 export const processBuildingQueues = (command: ProcessBuildingQueues) => {
   const lands = GameContext.instance.getAllEntities<Land>('LAND');
 

@@ -20,7 +20,7 @@ export class GameContext {
     return this._instance;
   }
 
-  // We could use typescript template strings to change property names
+  // TODO: We could use typescript template strings to change property names
   private _context: {
     [k in Lowercase<EntityType>]: Map<
       EntityId,
@@ -71,8 +71,7 @@ export class GameContext {
     return this._variables.get(variable);
   }
 
-  // Turn Manager?
-
+  // TODO: Turn Manager?
   get turn() {
     return this._turn;
   }

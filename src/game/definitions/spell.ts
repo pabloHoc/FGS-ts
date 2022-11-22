@@ -37,7 +37,7 @@ export class SpellDefinition implements ISpellDefinition {
     return true;
   }
 
-  // Can we define target here?
+  // TODO: define target
   allow(agent: Agent) {
     return (
       (this.conditions ? validateConditions(this.conditions, agent) : true) &&
@@ -46,8 +46,8 @@ export class SpellDefinition implements ISpellDefinition {
   }
 
   execute(caster: Agent) {
-    // we need a target system here
-    // does effects always apply to target?
+    // TODO: we need a target system here
+    // TODO: does effects always apply to target?
     const spell = createSpell(
       this.name,
       getEmpireFromAgent(caster).id, // ! temporary

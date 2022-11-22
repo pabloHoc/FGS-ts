@@ -18,7 +18,7 @@ export class World {
   private LANDS_PER_REGION = 5;
 
   // ? What's the difference between world and worldGenerator or worldMap?
-  // ! This needs to be moved to a GENERATE_WORLD command
+  // TODO: This needs to be moved to a GENERATE_WORLD command
 
   generateWorld() {
     this.generateEmpires();

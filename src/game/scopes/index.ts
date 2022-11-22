@@ -25,8 +25,6 @@ const scopesMap = {
   },
 };
 
-// Add owner scope
-
 // TODO: IMPROVE THIS
 
 export const getScopeFrom = <T extends Entity>(scope: ScopeType, from: T) => {

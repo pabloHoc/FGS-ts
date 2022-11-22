@@ -11,7 +11,7 @@ import { getEmpireRegions } from '../../helpers/region';
 import { ProduceResources } from '../produce-resources';
 
 const computeEmpireProduction = (empire: Empire) => {
-  // * This can be cached
+  // This can be cached
   const empireRegions = getEmpireRegions(empire.id);
 
   for (const region of empireRegions) {
@@ -25,7 +25,7 @@ const computeEmpireProduction = (empire: Empire) => {
  * architecture
  */
 const computeRegionProduction = (region: Region, empire: Empire) => {
-  // * This can be cached
+  // This can be cached
   const lands = GameContext.instance.getAllEntities<Land>('LAND');
   const regionLands = lands.filter((land) => land.regionId === region.id);
 
@@ -38,7 +38,7 @@ const computeRegionProduction = (region: Region, empire: Empire) => {
 };
 
 const computeLandProduction = (land: Land, empire: Empire) => {
-  // * This can be cached
+  // This can be cached
   const landDefinition = DefinitionManager.instance.get<LandDefinition>(
     'LAND',
     land.name
@@ -98,7 +98,7 @@ const produceEmpireResources = (empire: Empire) => {
 
 export const produceResources = (command: ProduceResources) => {
   for (const empire of GameContext.instance.getAllEntities<Empire>('EMPIRE')) {
-    // Production shoul be calculated in a different command
+    // TODO: Production shoul be calculated in a different command
     // so we can determine production the first turn without
     // producing resources
     clearEmpireProduction(empire);

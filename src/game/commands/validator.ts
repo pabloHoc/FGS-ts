@@ -8,9 +8,9 @@ import { Land } from '../entities/land';
 import { Region } from '../entities/region';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
 import { ActionKey, COMMANDS, getCommand } from './command-map';
-import { generateId } from '../helpers/id';
 
-// ? Can we type nested scopes? Do we want to?
+// TODO: check if we want nested scopes
+// TODO: check recursive type JSON
 
 type ActionObj = {
   [key in ActionKey]?: boolean | number | string | ScopeType;
@@ -38,7 +38,6 @@ const isModifiers = (key: string) => key === 'modifiers';
 
 const isModifier = (key: string) =>
   ['add', 'mult'].includes(key.split('_')[key.split('_').length - 1]);
-// ! See type JSON
 
 export const execute = <T extends Empire | Region | Land | Agent>(
   actions: Actions,

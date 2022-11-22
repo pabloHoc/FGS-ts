@@ -4,7 +4,7 @@ import { createEmpire as createEmpireEntity } from '../../entities/empire';
 
 export const createEmpire = (command: CreateEmpire) => {
   const empire = createEmpireEntity(command.name, command.isPlayer);
-  // Validation to check for only one isPlayer empire
+  // TODO: Validation to check for only one isPlayer empire
   GameContext.instance.addEntity(empire);
   return empire;
 };

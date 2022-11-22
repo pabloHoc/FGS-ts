@@ -8,11 +8,10 @@ import { Land } from './land';
 import { Region } from './region';
 import { Spell } from './spell';
 
-// ? Do we want specific entity types id? e.g.: RegionId
+// TODO: check if we want specific entity types id? e.g.: RegionId
 
 export type EntityId = Brand<string, 'EntityID'>;
 
-// ? should we have type here?
 export interface Entity {
   id: EntityId;
   type: Uppercase<EntityType>;
@@ -23,7 +22,7 @@ export type Entities =
   | Region
   | Land
   | Agent
-  // ! These are not entities, we need a new category
+  // TODO: These are not entities, we need a new category
   | BuildingQueueItem
   | ActionQueueItem
   | Modifier

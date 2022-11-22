@@ -18,7 +18,7 @@ export class LandDefinition implements ILandDefinition {
   constructor(definition: ILandDefinition) {
     this.name = definition.name;
     this.resources = {
-      // ! This is not a shallow assignment
+      // TODO: check these assignments, they are not shallow
       production: definition.resources.production,
     };
   }

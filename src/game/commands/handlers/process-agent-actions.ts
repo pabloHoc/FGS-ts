@@ -13,7 +13,7 @@ export const processAgentActions = (command: ProcessAgentActions) => {
       agent.currentAction.remainingTurns--;
       if (agent.currentAction.remainingTurns === 0) {
         if (isMoveAction(agent.currentAction)) {
-          // This can be turn into a setLocation command
+          // TODO: turn this into a setLocation command
           agent.regionId = agent.currentAction.toRegion;
         } else if (agent.currentAction.actionType === 'action') {
           const agentActionDefinition =

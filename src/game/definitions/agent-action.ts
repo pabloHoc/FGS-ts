@@ -4,7 +4,7 @@ import { Conditions, validateConditions } from '../conditions/validator';
 import { ActionType } from '../entities/action-queue-item';
 import { Agent } from '../entities/agent';
 
-// ! Move this
+// TODO: Move this interface
 export interface AgentExecutableAction {
   name: string;
   actionType: ActionType;
@@ -49,7 +49,6 @@ export class AgentActionDefinition implements IAgentActionDefinition {
     );
   }
 
-  // TODO: check cast here
   execute(agent: Agent, payload?: object) {
     executeCommands(this.actions, agent, payload);
   }

@@ -3,7 +3,6 @@ import { Empire } from '../entities/empire';
 import { objectKeys } from '../helpers/object';
 import { EconomyUnit } from './economy-unit';
 
-// TODO: change name
 interface IBuildingDefinition extends Definition {
   name: string;
   baseBuildtime: number;
@@ -20,7 +19,7 @@ export class BuildingDefinition implements IBuildingDefinition {
     this.name = definition.name;
     this.baseBuildtime = definition.baseBuildtime;
     this.resources = {
-      // ! These are not a shallow assignments
+      // TODO: check these assignments, they are not shallow
       category: definition.resources.category,
       cost: definition.resources.cost,
       upkeep: definition.resources.upkeep,

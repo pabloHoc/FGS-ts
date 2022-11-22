@@ -30,7 +30,7 @@ export const addBuildingToQueue = (command: AddBuildingToQueue) => {
     command.landId
   );
 
-  // Apply building costs
+  // TODO: Apply building upkeep costs
   const empire = GameContext.instance.getEntity<Empire>(
     'EMPIRE',
     command.empireId

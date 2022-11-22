@@ -1,5 +1,3 @@
-// ? Where should this be? It's not a definition, types maybe?
-
 import { Entity, EntityId } from '.';
 import { generateId } from '../helpers/id';
 

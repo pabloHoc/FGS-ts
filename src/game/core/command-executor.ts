@@ -1,9 +1,5 @@
-// Narrows a Union type base on N
-
 import { Command, Commands } from '../commands';
 import { HANDLERS } from '../commands/handlers';
-import { DefinitionManager } from './definition-manager';
-import { GameContext } from './game-context';
 
 export type NarrowAction<T, N> = T extends { action: N } ? T : never;
 
@@ -13,7 +9,6 @@ export type Handlers = {
   [k in Commands['action']]: Handler<NarrowAction<Commands, k>>;
 };
 
-// TODO: Change name
 export class CommandExecutor {
   private static _instance: CommandExecutor;
   private handlers = HANDLERS;

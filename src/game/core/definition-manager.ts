@@ -21,8 +21,8 @@ type Definitions =
   | EconomicCategoryDefinition
   | SpellDefinition;
 
-// We could merge these in one object maybe
-// ! any here
+// TODO: We could merge these in one object maybe
+// TODO: check any here
 type DefinitionMap = {
   [k in Lowercase<Definitions['type']>]: Record<string, any>;
 };

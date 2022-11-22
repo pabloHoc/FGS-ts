@@ -25,7 +25,6 @@ const RegionItem = ({
   const handleClick = (event: MouseEvent<HTMLLIElement>) => {
     event.preventDefault();
 
-    // HOW IS THIS WORKING?
     if (event.button === 0) {
       onClick(id);
     }
@@ -53,8 +52,6 @@ export const RegionsList = () => {
   const { uiState, setUIState } = useContext(UIStateCtx);
 
   useEffect(() => {
-    // Do we have to update this every time? Are regions going
-    // to be created dinamycally?
     setRegions(game.context.getAllEntities<Region>('REGION'));
   }, [uiState]);
 

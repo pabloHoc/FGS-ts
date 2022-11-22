@@ -17,7 +17,7 @@ export interface Command {
   action: string;
 }
 
-// ! Create a command line for effects
+// TODO: Create a command line tool for commands
 
 export type Commands =
   | CreateEmpire
