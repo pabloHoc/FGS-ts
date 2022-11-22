@@ -12,6 +12,7 @@ import { processBuildingQueues } from './process-building-queues';
 import { setOwner } from './set-owner';
 import { processAgentActions } from './process-agent-actions';
 import { setLocation } from './set-location';
+import { processSpells } from './process-spells';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
@@ -27,4 +28,5 @@ export const HANDLERS: Handlers = {
   SET_OWNER: setOwner,
   PROCESS_AGENT_ACTIONS: processAgentActions,
   SET_LOCATION: setLocation,
+  PROCESS_SPELLS: processSpells,
 };

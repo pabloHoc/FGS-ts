@@ -7,6 +7,7 @@ import { CreateRegion } from './create-region';
 import { EndTurn } from './end-turn';
 import { ProcessAgentActions } from './process-agent-actions';
 import { ProcessBuildingQueues } from './process-building-queues';
+import { ProcessSpells } from './process-spells';
 import { ProduceResources } from './produce-resources';
 import { SetLocation } from './set-location';
 import { SetOwner } from './set-owner';
@@ -29,6 +30,7 @@ export type Commands =
   | AddBuildingToQueue
   | SetOwner
   // Called each turn
+  | ProcessSpells
   | ProcessAgentActions
   | ProcessBuildingQueues
   | ProduceResources
