@@ -6,6 +6,7 @@ export interface UIState {
   selected_agent_id?: EntityId;
   selected_region_id?: EntityId;
   selected_land_id?: EntityId;
+  selected_army_id?: EntityId;
 }
 
 interface ContextProps {

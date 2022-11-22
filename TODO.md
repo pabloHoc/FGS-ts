@@ -22,3 +22,7 @@ handle them separately
 [] AI
 [] Connected cities
 [] Pathfinding
+
+---
+
+[] Are armies like agents (regarding actions) ? Should agents actions be interchangeable with armies'?

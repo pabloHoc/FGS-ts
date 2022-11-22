@@ -7,6 +7,7 @@ import { Empire } from './empire';
 import { Land } from './land';
 import { Region } from './region';
 import { Spell } from './spell';
+import { Army } from './army';
 
 // TODO: check if we want specific entity types id? e.g.: RegionId
 
@@ -22,6 +23,7 @@ export type Entities =
   | Region
   | Land
   | Agent
+  | Army
   // TODO: These are not entities, we need a new category
   | BuildingQueueItem
   | ActionQueueItem

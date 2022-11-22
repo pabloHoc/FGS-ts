@@ -1,4 +1,5 @@
 import { MouseEvent, useContext, useEffect, useState } from 'react';
+import { setLocation } from '../../game/commands/set-location';
 import { AgentActionDefinition } from '../../game/definitions/agent-action';
 import { EntityId } from '../../game/entities';
 import { createActionQueueItem } from '../../game/entities/action-queue-item';
@@ -60,18 +61,21 @@ export const RegionsList = () => {
   };
 
   const handleRightClickedRegion = (regionId: EntityId) => {
-    if (!uiState.selected_agent_id) return;
-    const moveAction = game.definitions.get<AgentActionDefinition>(
-      'AGENT-ACTION',
-      'move_agent'
-    );
-    const selectedAgent = game.context.getEntity<Agent>(
-      'AGENT',
-      uiState.selected_agent_id
-    );
-    selectedAgent.currentAction = createActionQueueItem(moveAction, 1, {
-      region_id: regionId,
-    });
+    if (uiState.selected_agent_id) {
+      const moveAction = game.definitions.get<AgentActionDefinition>(
+        'AGENT-ACTION',
+        'move_agent'
+      );
+      const selectedAgent = game.context.getEntity<Agent>(
+        'AGENT',
+        uiState.selected_agent_id
+      );
+      selectedAgent.currentAction = createActionQueueItem(moveAction, 1, {
+        region_id: regionId,
+      });
+    } else if (uiState.selected_army_id) {
+      game.commands.execute(setLocation(uiState.selected_army_id, regionId));
+    }
     setUIState({ ...uiState });
   };
 

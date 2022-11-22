@@ -13,6 +13,7 @@ import { setOwner } from './set-owner';
 import { processAgentActions } from './process-agent-actions';
 import { setLocation } from './set-location';
 import { processSpells } from './process-spells';
+import { createArmy } from './create-army';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
@@ -21,6 +22,7 @@ export const HANDLERS: Handlers = {
   CREATE_REGION: createRegion,
   CREATE_LAND: createLand,
   CREATE_AGENT: createAgent,
+  CREATE_ARMY: createArmy,
   BUILD_BUILDING: buildBuilding,
   ADD_BUILDING_TO_QUEUE: addBuildingToQueue,
   PROCESS_BUILDING_QUEUES: processBuildingQueues,

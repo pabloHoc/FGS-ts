@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
+import { createArmy } from '../../game/commands/create-army';
 import { BuildingDefinition } from '../../game/definitions/building';
 import { LandDefinition } from '../../game/definitions/land';
 import { Entity, EntityId } from '../../game/entities';
@@ -57,7 +58,7 @@ const LandItem = ({
   </li>
 );
 
-export const LandsList = () => {
+export const RegionPanel = () => {
   const game = useContext(GameCtx);
   const { uiState, setUIState } = useContext(UIStateCtx);
   const [lands, setLands] = useState<Land[]>([]);
@@ -75,7 +76,7 @@ export const LandsList = () => {
       'REGION',
       uiState.selected_region_id
     );
-    console.log(uiState.selected_region_id);
+
     setSelectedRegion(region);
 
     // Fetch empire
@@ -101,12 +102,23 @@ export const LandsList = () => {
   const getBuildingQueue = (landId: EntityId) =>
     getSortedBuildingQueueForLand(landId);
 
+  const handleBuildArmy = () =>
+    selectedRegion?.empireId &&
+    game.commands.execute(
+      createArmy(100, selectedRegion.empireId, selectedRegion.id)
+    );
+
   return (
     <div>
       {selectedRegion && (
-        <h3>{`${selectedRegion.name} ${
-          empireName ? '(' + empireName + ')' : ''
-        }`}</h3>
+        <>
+          <h3>{`${selectedRegion.name} ${
+            empireName ? '(' + empireName + ')' : ''
+          }`}</h3>
+          {selectedRegion.empireId && (
+            <button onClick={handleBuildArmy}>Build Army</button>
+          )}
+        </>
       )}
       <ul>
         {lands.map((land) => (

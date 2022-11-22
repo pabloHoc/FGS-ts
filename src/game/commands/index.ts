@@ -1,6 +1,7 @@
 import { AddBuildingToQueue } from './add-building-to-queue';
 import { BuildBuilding } from './build-building';
 import { CreateAgent } from './create-agent';
+import { CreateArmy } from './create-army';
 import { CreateEmpire } from './create-empire';
 import { CreateLand } from './create-land';
 import { CreateRegion } from './create-region';
@@ -24,6 +25,7 @@ export type Commands =
   | CreateLand
   | CreateRegion
   | CreateAgent
+  | CreateArmy
   | StartTurn
   | EndTurn
   | BuildBuilding

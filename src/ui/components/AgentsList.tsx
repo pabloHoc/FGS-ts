@@ -12,15 +12,20 @@ const AgentItem = ({
   agent,
   entities,
   onClick,
+  selected,
 }: {
   agent: Agent;
   entities: GameContext;
   onClick: (agentId: EntityId) => void;
+  selected: boolean;
 }) => {
   const region = entities.getEntity<Region>('REGION', agent.regionId);
 
   return (
-    <li onClick={() => onClick(agent.id)}>
+    <li
+      onClick={() => onClick(agent.id)}
+      style={{ color: selected ? 'red' : 'black' }}
+    >
       {agent.name} ({region.name}){' '}
       {agent.currentAction
         ? `| Action: ${agent.currentAction.name} | Remaining Turns: ${agent.currentAction.remainingTurns}`
@@ -46,7 +51,11 @@ export const AgentsList = () => {
   useEffect(updateAgents, [uiState]);
 
   const handleAgentClicked = (agentId: EntityId) => {
-    setUIState({ ...uiState, selected_agent_id: agentId });
+    setUIState({
+      ...uiState,
+      selected_army_id: undefined,
+      selected_agent_id: agentId,
+    });
   };
 
   return (
@@ -59,6 +68,7 @@ export const AgentsList = () => {
             agent={agent}
             entities={game.context}
             onClick={handleAgentClicked}
+            selected={uiState.selected_agent_id === agent.id}
           />
         ))}
       </ul>
