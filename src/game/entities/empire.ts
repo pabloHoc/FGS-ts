@@ -2,6 +2,10 @@ import { Entity } from '.';
 import { ResourceBlock } from '../definitions/economy-unit';
 import { Modifier } from './modifier';
 import { generateId } from '../helpers/id';
+import { Planner } from '../ai/planner';
+import { Blackboard } from '../ai/blackboard';
+import { empireDomain } from '../domains/empire-domain';
+import { GameBlackboard } from '../core/blackboard';
 
 export interface Empire extends Entity {
   type: 'EMPIRE';
@@ -13,10 +17,11 @@ export interface Empire extends Entity {
    */
   resources: ResourceBlock;
   production: ResourceBlock;
+  ai?: Planner<GameBlackboard, Empire>;
 }
 
-export const createEmpire = (name: string, isPlayer: boolean): Empire => {
-  return {
+export const createEmpire = (name: string, isPlayer = false): Empire => {
+  const empire: Empire = {
     type: 'EMPIRE',
     id: generateId(),
     name,
@@ -32,4 +37,8 @@ export const createEmpire = (name: string, isPlayer: boolean): Empire => {
       food: 0,
     },
   };
+  empire.ai = !isPlayer
+    ? new Planner(empireDomain, new GameBlackboard(), empire)
+    : undefined;
+  return empire;
 };

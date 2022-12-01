@@ -33,7 +33,10 @@ export class World {
 
     for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
       CommandExecutor.instance.execute(
-        createRegion(`Region #${i}`, i === 1 ? empires[0].id : undefined)
+        createRegion(
+          `Region #${i}`,
+          i === 1 ? empires[0].id : i === 2 ? empires[1].id : undefined
+        )
       );
     }
   }
@@ -58,6 +61,7 @@ export class World {
 
   private generateEmpires() {
     CommandExecutor.instance.execute(createEmpire('PLAYER EMPIRE', true));
+    CommandExecutor.instance.execute(createEmpire('AI PLAYER #1', false));
   }
 
   private generateAgents() {

@@ -1,3 +1,4 @@
+import { GlobalGameBlackboard } from '../core/game-context';
 import { Entity } from '../entities';
 import { Agent } from '../entities/agent';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
@@ -22,7 +23,7 @@ export const validateConditions = <T extends Entity>(
     const key = k as keyof Conditions;
     if (isCondition(key)) {
       const expectedValue = conditions[key]; // value is never because union of primitive types
-      const actualValue = useHandler(scope, key);
+      const actualValue = useHandler(GlobalGameBlackboard.instance, scope, key);
       if (expectedValue !== actualValue) {
         return false;
       }

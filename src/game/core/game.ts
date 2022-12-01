@@ -10,7 +10,6 @@ export class Game {
 
   constructor() {
     this._world.generateWorld();
-    CommandExecutor.instance.execute(createEmpire('asd', false));
   }
 
   onCommandExecuted(callback: Function) {

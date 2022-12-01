@@ -9,9 +9,6 @@ import { UIStateCtxProvider } from './context/UIStateCtx';
 import { AgentActionsPanel } from './components/AgentActionsPanel';
 import { AgentSpellsPanel } from './components/AgentSpellsPanel';
 import { ArmiesList } from './components/ArmiesList';
-import { planner } from '../game/ai/test';
-
-planner.generatePlan();
 
 const EmpirePanel = () => (
   <>
