@@ -1,5 +1,5 @@
 import { DefinitionManager } from '../../core/definition-manager';
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 import { BuildingDefinition } from '../../definitions/building';
 import { EconomicCategoryDefinition } from '../../definitions/economic-category';
 import { LandDefinition } from '../../definitions/land';
@@ -26,7 +26,7 @@ const computeEmpireProduction = (empire: Empire) => {
  */
 const computeRegionProduction = (region: Region, empire: Empire) => {
   // This can be cached
-  const lands = GameContext.instance.getAllEntities<Land>('LAND');
+  const lands = GlobalGameBlackboard.instance.getAllEntities<Land>('LAND');
   const regionLands = lands.filter((land) => land.regionId === region.id);
 
   for (const land of regionLands) {
@@ -97,7 +97,9 @@ const produceEmpireResources = (empire: Empire) => {
 };
 
 export const produceResources = (command: ProduceResources) => {
-  for (const empire of GameContext.instance.getAllEntities<Empire>('EMPIRE')) {
+  for (const empire of GlobalGameBlackboard.instance.getAllEntities<Empire>(
+    'EMPIRE'
+  )) {
     // TODO: Production shoul be calculated in a different command
     // so we can determine production the first turn without
     // producing resources

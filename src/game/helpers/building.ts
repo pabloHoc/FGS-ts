@@ -1,10 +1,10 @@
-import { GameContext } from '../core/game-context';
+import { GlobalGameBlackboard } from '../core/game-context';
 import { EntityId } from '../entities';
 import { BuildingQueueItem } from '../entities/building-queue-item';
 
 export const getSortedBuildingQueueForLand = (landId: EntityId) => {
   const buildingQueueItems =
-    GameContext.instance.getAllEntities<BuildingQueueItem>(
+    GlobalGameBlackboard.instance.getAllEntities<BuildingQueueItem>(
       'BUILDING_QUEUE_ITEM'
     );
   return buildingQueueItems

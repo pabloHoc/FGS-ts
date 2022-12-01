@@ -1,5 +1,5 @@
 import { createAgent as createAgentEntity } from '../../entities/agent';
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 import { CreateAgent } from '../create-agent';
 
 export const createAgent = (command: CreateAgent) => {
@@ -8,6 +8,6 @@ export const createAgent = (command: CreateAgent) => {
     command.empireId,
     command.regionId
   );
-  GameContext.instance.addEntity(agent);
+  GlobalGameBlackboard.instance.addEntity(agent);
   return agent;
 };

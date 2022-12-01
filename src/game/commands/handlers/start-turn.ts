@@ -1,5 +1,5 @@
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 
 export const startTurn = () => {
-  GameContext.instance.increaseTurn();
+  GlobalGameBlackboard.instance.increaseTurn();
 };

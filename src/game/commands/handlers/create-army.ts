@@ -1,4 +1,4 @@
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 import { createArmy as createArmyEntity } from '../../entities/army';
 import { CreateArmy } from '../create-army';
 
@@ -8,6 +8,6 @@ export const createArmy = (command: CreateArmy) => {
     command.empireId,
     command.regionId
   );
-  GameContext.instance.addEntity(army);
+  GlobalGameBlackboard.instance.addEntity(army);
   return army;
 };

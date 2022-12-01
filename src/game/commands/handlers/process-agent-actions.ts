@@ -1,12 +1,12 @@
 import { DefinitionManager } from '../../core/definition-manager';
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 import { AgentActionDefinition } from '../../definitions/agent-action';
 import { Agent, isMoveAction } from '../../entities/agent';
 import { ProcessAgentActions } from '../process-agent-actions';
 import { SpellDefinition } from '../../definitions/spell';
 
 export const processAgentActions = (command: ProcessAgentActions) => {
-  const agents = GameContext.instance.getAllEntities<Agent>('AGENT');
+  const agents = GlobalGameBlackboard.instance.getAllEntities<Agent>('AGENT');
 
   for (const agent of agents) {
     if (agent.currentAction) {

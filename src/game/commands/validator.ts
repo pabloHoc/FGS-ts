@@ -1,5 +1,5 @@
 import { CommandExecutor } from '../core/command-executor';
-import { GameContext } from '../core/game-context';
+import { GlobalGameBlackboard } from '../core/game-context';
 import { createModifier, ModifierType } from '../entities/modifier';
 import { Entity } from '../entities';
 import { Agent } from '../entities/agent';
@@ -87,7 +87,7 @@ export const execute = <T extends Empire | Region | Land | Agent>(
       const type = modifierParts[modifierParts.length - 1] as ModifierType;
       const value = actions[key];
 
-      GameContext.instance.addEntity(
+      GlobalGameBlackboard.instance.addEntity(
         createModifier(name, type, value, scope.id, undefined, sourceId)
       );
     }

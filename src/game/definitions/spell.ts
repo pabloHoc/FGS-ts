@@ -2,7 +2,7 @@ import { Definition } from '.';
 import { Conditions, validateConditions } from '../conditions/validator';
 import { Actions, executeCommands } from '../commands/validator';
 import { Agent } from '../entities/agent';
-import { GameContext } from '../core/game-context';
+import { GlobalGameBlackboard } from '../core/game-context';
 import { CommandExecutor } from '../core/command-executor';
 import { createSpell } from '../entities/spell';
 import { getEmpireFromAgent } from '../scopes/agent';
@@ -53,7 +53,7 @@ export class SpellDefinition implements ISpellDefinition {
       getEmpireFromAgent(caster).id, // ! temporary
       this.duration
     );
-    GameContext.instance.addEntity(spell);
+    GlobalGameBlackboard.instance.addEntity(spell);
     executeCommands(this.actions, caster, undefined, spell.id);
   }
 }

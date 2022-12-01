@@ -1,5 +1,4 @@
-import { GameContext } from '../core/game-context';
-import { Entities, Entity } from '../entities';
+import { Entity } from '../entities';
 import { Agent } from '../entities/agent';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
 import { ConditionKey, CONDITIONS_MAP, useHandler } from './condition-map';

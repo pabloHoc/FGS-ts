@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { GameContext } from '../../game/core/game-context';
+import { GameBlackboard } from '../../game/core/blackboard';
 import { EntityId } from '../../game/entities';
 import { Agent } from '../../game/entities/agent';
 import { Region } from '../../game/entities/region';
@@ -15,7 +15,7 @@ const AgentItem = ({
   selected,
 }: {
   agent: Agent;
-  entities: GameContext;
+  entities: GameBlackboard;
   onClick: (agentId: EntityId) => void;
   selected: boolean;
 }) => {

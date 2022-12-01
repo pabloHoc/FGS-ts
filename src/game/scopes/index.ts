@@ -1,4 +1,4 @@
-import { GameContext } from '../core/game-context';
+import { GlobalGameBlackboard } from '../core/game-context';
 import { Entity } from '../entities';
 import { isAgent } from '../entities/agent';
 import { isRegion } from '../entities/region';

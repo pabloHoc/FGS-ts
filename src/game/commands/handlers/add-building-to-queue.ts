@@ -1,5 +1,5 @@
 import { DefinitionManager } from '../../core/definition-manager';
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 import { BuildingDefinition } from '../../definitions/building';
 import {
   BuildingQueueItem,
@@ -31,7 +31,7 @@ export const addBuildingToQueue = (command: AddBuildingToQueue) => {
   );
 
   // TODO: Apply building upkeep costs
-  const empire = GameContext.instance.getEntity<Empire>(
+  const empire = GlobalGameBlackboard.instance.getEntity<Empire>(
     'EMPIRE',
     command.empireId
   );
@@ -44,5 +44,7 @@ export const addBuildingToQueue = (command: AddBuildingToQueue) => {
     empire.resources[resource] -= cost;
   }
 
-  GameContext.instance.addEntity<BuildingQueueItem>(newBuildingQueueItem);
+  GlobalGameBlackboard.instance.addEntity<BuildingQueueItem>(
+    newBuildingQueueItem
+  );
 };

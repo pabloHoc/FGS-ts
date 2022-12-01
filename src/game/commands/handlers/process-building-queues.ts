@@ -1,6 +1,6 @@
 import { DefinitionManager } from '../../core/definition-manager';
 import { CommandExecutor } from '../../core/command-executor';
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 import { BuildingQueueItem } from '../../entities/building-queue-item';
 import { Land } from '../../entities/land';
 import { getSortedBuildingQueueForLand } from '../../helpers/building';
@@ -12,7 +12,7 @@ import { ProcessBuildingQueues } from '../process-building-queues';
 // - remove building from
 // - finish building from queue
 export const processBuildingQueues = (command: ProcessBuildingQueues) => {
-  const lands = GameContext.instance.getAllEntities<Land>('LAND');
+  const lands = GlobalGameBlackboard.instance.getAllEntities<Land>('LAND');
 
   for (const land of lands) {
     const buildingQueue = getSortedBuildingQueueForLand(land.id);
@@ -32,7 +32,9 @@ export const processBuildingQueues = (command: ProcessBuildingQueues) => {
             nextBuilding.empireId
           )
         );
-        GameContext.instance.deleteEntity<BuildingQueueItem>(nextBuilding);
+        GlobalGameBlackboard.instance.deleteEntity<BuildingQueueItem>(
+          nextBuilding
+        );
       }
     }
   }

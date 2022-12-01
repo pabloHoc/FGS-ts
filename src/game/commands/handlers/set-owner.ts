@@ -1,9 +1,9 @@
-import { GameContext } from '../../core/game-context';
+import { GlobalGameBlackboard } from '../../core/game-context';
 import { Region } from '../../entities/region';
 import { SetOwner } from '../set-owner';
 
 export const setOwner = (command: SetOwner) => {
-  const region = GameContext.instance.getEntity<Region>(
+  const region = GlobalGameBlackboard.instance.getEntity<Region>(
     'REGION',
     command.targetId
   );

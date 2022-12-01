@@ -2,7 +2,7 @@ import { createEmpire } from '../commands/create-empire';
 import { HANDLERS } from '../commands/handlers';
 import { DefinitionManager } from './definition-manager';
 import { CommandExecutor } from './command-executor';
-import { GameContext } from './game-context';
+import { GlobalGameBlackboard } from './game-context';
 import { World } from './world';
 
 export class Game {
@@ -24,7 +24,7 @@ export class Game {
   }
 
   get context() {
-    return GameContext.instance;
+    return GlobalGameBlackboard.instance;
   }
 
   get definitions() {

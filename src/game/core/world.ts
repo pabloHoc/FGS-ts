@@ -10,7 +10,7 @@ import { Region } from '../entities/region';
 import { getRandom } from '../helpers/random';
 import { DefinitionManager } from './definition-manager';
 import { CommandExecutor } from './command-executor';
-import { GameContext } from './game-context';
+import { GlobalGameBlackboard } from './game-context';
 
 export class World {
   // TODO: this should be a config
@@ -28,7 +28,8 @@ export class World {
   }
 
   private generateRegions() {
-    const empires = GameContext.instance.getAllEntities<Empire>('EMPIRE');
+    const empires =
+      GlobalGameBlackboard.instance.getAllEntities<Empire>('EMPIRE');
 
     for (let i = 1; i <= this.REGIONS_NUMBER; i++) {
       CommandExecutor.instance.execute(
@@ -38,7 +39,8 @@ export class World {
   }
 
   private generateLands() {
-    const regions = GameContext.instance.getAllEntities<Region>('REGION');
+    const regions =
+      GlobalGameBlackboard.instance.getAllEntities<Region>('REGION');
 
     for (const region of regions) {
       for (let i = 0; i < this.LANDS_PER_REGION; i++) {
@@ -59,8 +61,10 @@ export class World {
   }
 
   private generateAgents() {
-    const empires = GameContext.instance.getAllEntities<Empire>('EMPIRE');
-    const regions = GameContext.instance.getAllEntities<Region>('REGION');
+    const empires =
+      GlobalGameBlackboard.instance.getAllEntities<Empire>('EMPIRE');
+    const regions =
+      GlobalGameBlackboard.instance.getAllEntities<Region>('REGION');
 
     for (const empire of empires) {
       const region = regions.find((region) => region.empireId === empire.id);
