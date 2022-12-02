@@ -3,5 +3,6 @@ import { Entity } from '../entities';
 
 export type Condition<B extends Blackboard, T extends Entity> = (
   context: B,
-  entity: T
+  entity: T,
+  value?: any // TODO: this should be string | number
 ) => boolean;

@@ -2,7 +2,11 @@ import { GlobalGameBlackboard } from '../core/game-context';
 import { Entity } from '../entities';
 import { Agent } from '../entities/agent';
 import { getScopeFrom, isScope, ScopeType } from '../scopes';
-import { ConditionKey, CONDITIONS_MAP, useHandler } from './condition-map';
+import {
+  ConditionKey,
+  CONDITIONS_MAP,
+  validateCondition,
+} from './condition-map';
 
 const isCondition = (key: ConditionKey) =>
   Object.keys(CONDITIONS_MAP).includes(key);
@@ -22,9 +26,14 @@ export const validateConditions = <T extends Entity>(
   for (const k in conditions) {
     const key = k as keyof Conditions;
     if (isCondition(key)) {
-      const expectedValue = conditions[key]; // value is never because union of primitive types
-      const actualValue = useHandler(GlobalGameBlackboard.instance, scope, key);
-      if (expectedValue !== actualValue) {
+      const value = conditions[key]; // value is never because union of primitive types
+      const result = validateCondition(
+        GlobalGameBlackboard.instance,
+        scope,
+        key,
+        value
+      );
+      if (!result) {
         return false;
       }
     } else if (isScope(key)) {

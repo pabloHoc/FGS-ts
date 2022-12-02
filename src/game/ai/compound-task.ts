@@ -1,23 +1,25 @@
 import { Condition } from '../conditions';
 import { Entity } from '../entities';
 import { Blackboard } from './blackboard';
+import { isPrimitiveTask } from './primitive-task';
 import { Task, TaskType } from './task';
 
-export class CompoundTask<B extends Blackboard, E extends Entity>
+export abstract class CompoundTask<B extends Blackboard, E extends Entity>
   implements Task<B, E>
 {
   readonly type = TaskType.Compound;
   readonly name: string;
-  readonly subtasksNames: string[];
+  readonly subTasks: Task<B, E>[];
   private conditions: Condition<B, E>[];
+  protected score: number = 1.0; // TODO: review default score
 
   constructor(
     name: string,
-    subtasksNames: string[],
+    subTasks: Task<B, E>[],
     conditions: Condition<B, E>[] = []
   ) {
     this.name = name;
-    this.subtasksNames = subtasksNames;
+    this.subTasks = subTasks;
     this.conditions = conditions;
   }
 
@@ -30,8 +32,16 @@ export class CompoundTask<B extends Blackboard, E extends Entity>
     return true;
   }
 
+  abstract computeScore(context: B, entity: E): void;
+
+  getScore() {
+    return this.score;
+  }
+
+  abstract getScoredTasks(context: B, entity: E): Task<B, E>[];
+
   decompose() {
-    return this.subtasksNames;
+    return this.subTasks;
   }
 }
 

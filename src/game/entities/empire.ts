@@ -1,10 +1,8 @@
 import { Entity } from '.';
 import { ResourceBlock } from '../definitions/economy-unit';
-import { Modifier } from './modifier';
 import { generateId } from '../helpers/id';
 import { Planner } from '../ai/planner';
-import { Blackboard } from '../ai/blackboard';
-import { empireDomain } from '../domains/empire-domain';
+import { winGame } from '../tasks/win-game';
 import { GameBlackboard } from '../core/blackboard';
 
 export interface Empire extends Entity {
@@ -38,7 +36,7 @@ export const createEmpire = (name: string, isPlayer = false): Empire => {
     },
   };
   empire.ai = !isPlayer
-    ? new Planner(empireDomain, new GameBlackboard(), empire)
+    ? new Planner(new GameBlackboard(), empire, winGame)
     : undefined;
   return empire;
 };

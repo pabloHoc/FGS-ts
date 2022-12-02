@@ -1,7 +1,6 @@
 import { Entity } from '../entities';
 import { Blackboard } from './blackboard';
 import { CompoundTask, isCompoundTask } from './compound-task';
-import { Domain } from './domain';
 import { isPrimitiveTask, PrimitiveTask } from './primitive-task';
 import { Task } from './task';
 
@@ -10,26 +9,20 @@ import { Task } from './task';
  */
 export class Planner<B extends Blackboard, E extends Entity> {
   private tasksToProcess: Task<B, E>[] = [];
-  private domain: Domain<B, E>;
-  private rootTaskName?: string;
+  private rootTask: Task<B, E>;
   private context: B;
   private owner: E;
-  finalTasks: string[] = [];
+  finalTasks: PrimitiveTask<B, E>[] = [];
 
-  constructor(
-    domain: Domain<B, E>,
-    context: B,
-    owner: E,
-    rootTaskName?: string
-  ) {
-    this.domain = domain;
+  constructor(context: B, owner: E, rootTask: Task<B, E>) {
     this.context = context;
-    this.rootTaskName = rootTaskName || domain.rootTask.name;
+    this.rootTask = rootTask;
     this.owner = owner;
   }
 
   generatePlan() {
     this.resetPlan();
+    this.scoreTasks();
 
     while (this.tasksToProcess.length) {
       const task = this.tasksToProcess.pop();
@@ -46,39 +39,32 @@ export class Planner<B extends Blackboard, E extends Entity> {
   }
 
   resetPlan() {
-    this.tasksToProcess = [this.chooseRootTask()];
+    this.tasksToProcess = [this.rootTask];
     this.finalTasks = [];
   }
 
   executePlan() {
-    for (const taskName of this.finalTasks) {
-      const task = this.domain.getTask(taskName) as PrimitiveTask<B, E>;
-      console.log(`EXECUTING TASK ${taskName}`);
+    for (const task of this.finalTasks) {
+      console.log(`EXECUTING TASK ${task.name}`);
       task.execute(this.owner);
     }
   }
 
-  chooseRootTask() {
-    if (this.rootTaskName !== undefined) {
-      const customRootTask = this.domain.getTask(this.rootTaskName);
-      if (customRootTask !== undefined) {
-        return customRootTask;
-      }
-    }
-    return this.domain.rootTask;
+  scoreTasks() {
+    this.rootTask.computeScore(this.context, this.owner);
   }
 
-  processPrimitiveTask(task: Task<B, E>) {
+  processPrimitiveTask(task: PrimitiveTask<B, E>) {
     if (task.isValid(this.context, this.owner)) {
-      this.finalTasks.push(task.name);
+      this.finalTasks.push(task);
     }
   }
 
   processCompoundTask(task: CompoundTask<B, E>) {
     if (task.isValid(this.context, this.owner)) {
-      const subtaskNames = this.domain.getTasks(task.subtasksNames);
-      // subtaskNames.reverse() --> check why
-      this.tasksToProcess.push(...subtaskNames);
+      this.tasksToProcess.push(
+        ...task.getScoredTasks(this.context, this.owner)
+      );
     }
   }
 }

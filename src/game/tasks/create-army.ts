@@ -1,6 +1,8 @@
 import { PrimitiveTask } from '../ai/primitive-task';
 import { createArmy } from '../commands/create-army';
-import { hasResources } from '../conditions/empire/has-resources';
+import { hasFood } from '../conditions/empire/has-food';
+import { hasIron } from '../conditions/empire/has-iron';
+import { hasWood } from '../conditions/empire/has-wood';
 import { GameBlackboard } from '../core/blackboard';
 import { CommandExecutor } from '../core/command-executor';
 import { GlobalGameBlackboard } from '../core/game-context';
@@ -9,7 +11,12 @@ import { Region } from '../entities/region';
 
 export class CreateArmy extends PrimitiveTask<GameBlackboard, Empire> {
   constructor() {
-    super('CREATE_ARMY', [hasResources]);
+    super('CREATE_ARMY', [hasFood(10)]);
+  }
+
+  computeScore(context: GameBlackboard, entity: Empire): void {
+    this.score = 0.1;
+    console.log(this.name, this.score);
   }
 
   override execute(empire: Empire): void {

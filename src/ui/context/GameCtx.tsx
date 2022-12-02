@@ -1,11 +1,4 @@
-import {
-  createContext,
-  ReactElement,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, ReactElement, useContext } from 'react';
 import { game } from '../../game';
 import { UIState, UIStateCtx } from './UIStateCtx';
 
