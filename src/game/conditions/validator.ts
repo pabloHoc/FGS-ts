@@ -42,6 +42,8 @@ export const validateConditions = <T extends Entity>(
       if (!result) {
         return false;
       }
+    } else {
+      throw Error(`INVALID CONDITION KEY ${key}`);
     }
   }
   return true;

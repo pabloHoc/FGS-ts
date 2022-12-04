@@ -11,20 +11,19 @@ export const BuildingsPanel = () => {
   const game = useContext(GameCtx);
   const { uiState } = useContext(UIStateCtx);
   const [empire, setEmpire] = useState<Empire>();
-
-  const clearSelection = () => {
-    setEmpire(undefined);
-  };
+  const [selectedLand, setSelectedLand] = useState<Land>();
 
   useEffect(() => {
     if (!uiState.selected_land_id) return;
 
     const land = game.context.getEntity<Land>('LAND', uiState.selected_land_id);
+    setSelectedLand(land);
+
     const region = game.context.getEntity<Region>('REGION', land.regionId);
-    if (!region.empireId) return clearSelection();
+    if (!region.empireId) return setEmpire(undefined);
 
     const empire = game.context.getEntity<Empire>('EMPIRE', region.empireId);
-    if (!empire.isPlayer) return clearSelection();
+    if (!empire.isPlayer) return setEmpire(undefined);
 
     setEmpire(empire);
   }, [uiState]);
@@ -37,7 +36,7 @@ export const BuildingsPanel = () => {
     );
   };
 
-  if (!uiState.selected_land_id || !empire) return null;
+  if (!selectedLand || !empire) return null;
 
   return (
     <div>
@@ -48,7 +47,7 @@ export const BuildingsPanel = () => {
           <button
             key={building.name}
             onClick={() => handleBuildBuilding(building.name)}
-            disabled={!building.allow(empire)}
+            disabled={!building.allow(empire, selectedLand)}
           >
             {building.name}
           </button>

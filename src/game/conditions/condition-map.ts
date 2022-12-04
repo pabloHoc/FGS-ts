@@ -1,9 +1,11 @@
 import { GameBlackboard } from '../core/blackboard';
 import { Entity } from '../entities';
 import { Empire } from '../entities/empire';
+import { Land } from '../entities/land';
 import { Region } from '../entities/region';
 import { hasFood } from './empire/has-food';
 import { isPlayer } from './empire/is-player';
+import { isLandType } from './land/is-land-type';
 import { hasEmpire } from './region/has-empire';
 
 type ConditionsMap<B, T> = Record<
@@ -20,9 +22,14 @@ const REGION_CONDITIONS_MAP: ConditionsMap<GameBlackboard, Region> = {
   has_empire: hasEmpire,
 };
 
+const LAND_CONDITIONS_MAP: ConditionsMap<GameBlackboard, Land> = {
+  is_land_type: isLandType,
+};
+
 export const CONDITIONS_MAP = {
   ...REGION_CONDITIONS_MAP,
   ...EMPIRE_CONDITIONS_MAP,
+  ...LAND_CONDITIONS_MAP,
 };
 
 // TODO: use handlers typed here
@@ -30,6 +37,7 @@ const map = handlers({
   is_player: isPlayer,
   has_food: hasFood,
   has_empire: hasEmpire,
+  is_land_type: isLandType,
 });
 
 function handlers<H>(h: {
@@ -52,5 +60,5 @@ export const validateCondition = <
   context: B,
   entity: P,
   key: K,
-  value: any
+  value: never
 ) => map[key](value)(context, entity as never);
