@@ -14,6 +14,7 @@ import { processAgentActions } from './process-agent-actions';
 import { setLocation } from './set-location';
 import { processSpells } from './process-spells';
 import { createArmy } from './create-army';
+import { processBattles } from './process-battles';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
@@ -31,4 +32,5 @@ export const HANDLERS: Handlers = {
   PROCESS_AGENT_ACTIONS: processAgentActions,
   SET_LOCATION: setLocation,
   PROCESS_SPELLS: processSpells,
+  PROCESS_BATTLES: processBattles,
 };

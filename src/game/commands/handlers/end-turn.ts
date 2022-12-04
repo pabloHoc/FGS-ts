@@ -7,6 +7,7 @@ import { processAgentActions } from '../process-agent-actions';
 import { processSpells } from '../process-spells';
 import { GlobalGameBlackboard } from '../../core/game-context';
 import { Empire } from '../../entities/empire';
+import { processBattles } from '../process-battles';
 
 export const endTurn: Handler<EndTurn> = () => {
   const empires =
@@ -20,6 +21,7 @@ export const endTurn: Handler<EndTurn> = () => {
   }
 
   CommandExecutor.instance.execute(processSpells());
+  CommandExecutor.instance.execute(processBattles());
   CommandExecutor.instance.execute(processAgentActions());
   CommandExecutor.instance.execute(processBuildingQueues());
   CommandExecutor.instance.execute(produceResources());

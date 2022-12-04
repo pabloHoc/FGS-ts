@@ -7,6 +7,7 @@ import { CreateLand } from './create-land';
 import { CreateRegion } from './create-region';
 import { EndTurn } from './end-turn';
 import { ProcessAgentActions } from './process-agent-actions';
+import { ProcessBattles } from './process-battles';
 import { ProcessBuildingQueues } from './process-building-queues';
 import { ProcessSpells } from './process-spells';
 import { ProduceResources } from './produce-resources';
@@ -33,6 +34,7 @@ export type Commands =
   | SetOwner
   // Called each turn
   | ProcessSpells
+  | ProcessBattles
   | ProcessAgentActions
   | ProcessBuildingQueues
   | ProduceResources

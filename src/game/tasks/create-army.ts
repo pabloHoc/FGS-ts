@@ -15,7 +15,7 @@ export class CreateArmy extends PrimitiveTask<GameBlackboard, Empire> {
   }
 
   computeScore(context: GameBlackboard, entity: Empire): void {
-    this.score = 0.1;
+    this.score = 1;
     console.log(this.name, this.score);
   }
 
@@ -25,7 +25,9 @@ export class CreateArmy extends PrimitiveTask<GameBlackboard, Empire> {
       .find((region) => region.empireId === empire.id);
 
     if (region) {
-      CommandExecutor.instance.execute(createArmy(100, empire.id, region.id));
+      CommandExecutor.instance.execute(
+        createArmy(100, 10, 1, empire.id, region.id)
+      );
     }
   }
 }

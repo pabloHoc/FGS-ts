@@ -105,8 +105,15 @@ export const RegionPanel = () => {
   const handleBuildArmy = () =>
     selectedRegion?.empireId &&
     game.commands.execute(
-      createArmy(100, selectedRegion.empireId, selectedRegion.id)
+      createArmy(100, 20, 5, selectedRegion.empireId, selectedRegion.id)
     );
+
+  // TODO: maybe move this?
+  const isPlayerEmpire = (empireId: EntityId) => {
+    return game.context
+      .getAllEntities<Empire>('EMPIRE')
+      .find((empire) => empire.id === empireId)?.isPlayer;
+  };
 
   return (
     <div>
@@ -115,9 +122,10 @@ export const RegionPanel = () => {
           <h3>{`${selectedRegion.name} ${
             empireName ? '(' + empireName + ')' : ''
           }`}</h3>
-          {selectedRegion.empireId && (
-            <button onClick={handleBuildArmy}>Build Army</button>
-          )}
+          {selectedRegion.empireId &&
+            isPlayerEmpire(selectedRegion.empireId) && (
+              <button onClick={handleBuildArmy}>Build Army</button>
+            )}
         </>
       )}
       <ul>

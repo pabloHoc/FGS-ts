@@ -5,6 +5,8 @@ import { CreateArmy } from '../create-army';
 export const createArmy = (command: CreateArmy) => {
   const army = createArmyEntity(
     command.size,
+    command.attack,
+    command.defense,
     command.empireId,
     command.regionId
   );
