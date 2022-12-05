@@ -10,4 +10,4 @@ export const COMMANDS = {
 export type ActionKey = keyof typeof COMMANDS;
 
 export const getCommand = (action: ActionKey) => (scope: Entity, values: any) =>
-  COMMANDS[action](scope, values);
+  COMMANDS[action](scope as any, values);

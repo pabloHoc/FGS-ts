@@ -11,10 +11,11 @@ import { Army } from './army';
 
 // TODO: check if we want specific entity types id? e.g.: RegionId
 
-export type EntityId = Brand<string, 'EntityID'>;
+export type BaseEntityId = Brand<string, 'EntityID'>;
 
+export type EntityId<T> = T & BaseEntityId;
 export interface Entity {
-  id: EntityId;
+  id: BaseEntityId;
   type: Uppercase<EntityType>;
 }
 

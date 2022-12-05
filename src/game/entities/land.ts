@@ -3,18 +3,22 @@ import { BuildingDefinition } from '../definitions/building';
 import { LandDefinition } from '../definitions/land';
 import { Modifier } from './modifier';
 import { generateId } from '../helpers/id';
+import { RegionId } from './region';
+
+export type LandId = EntityId<Land>;
 
 export interface Land extends Entity {
   type: 'LAND';
+  id: LandId;
   name: LandDefinition['name'];
   buildings: BuildingDefinition['name'][];
-  regionId: EntityId;
+  regionId: RegionId;
   modifiers: Modifier[];
 }
 
 export const createLand = (
   name: LandDefinition['name'],
-  regionId: EntityId
+  regionId: RegionId
 ): Land => ({
   type: 'LAND',
   id: generateId(),

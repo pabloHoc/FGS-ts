@@ -1,14 +1,26 @@
 import { Blackboard } from '../ai/blackboard';
-import { EntityType, EntityId, Entities, Entity } from '../entities';
-import { ActionQueueItem } from '../entities/action-queue-item';
-import { Agent } from '../entities/agent';
-import { Army } from '../entities/army';
-import { BuildingQueueItem } from '../entities/building-queue-item';
-import { Empire } from '../entities/empire';
-import { Land } from '../entities/land';
-import { Modifier } from '../entities/modifier';
-import { Region } from '../entities/region';
-import { Spell } from '../entities/spell';
+import {
+  EntityType,
+  EntityId,
+  Entities,
+  Entity,
+  BaseEntityId,
+} from '../entities';
+import {
+  ActionQueueItem,
+  ActionQueueItemId,
+} from '../entities/action-queue-item';
+import { Agent, AgentId } from '../entities/agent';
+import { Army, ArmyId } from '../entities/army';
+import {
+  BuildingQueueItem,
+  BuildingQueueItemId,
+} from '../entities/building-queue-item';
+import { Empire, EmpireId } from '../entities/empire';
+import { Land, LandId } from '../entities/land';
+import { Modifier, ModifierId } from '../entities/modifier';
+import { Region, RegionId } from '../entities/region';
+import { Spell, SpellId } from '../entities/spell';
 import { TypeMapper } from '../helpers/types';
 
 // TODO: add method to subscribe to add and deletes
@@ -18,19 +30,19 @@ export class GameBlackboard implements Blackboard {
   // TODO: We could use typescript template strings to change property names
   private _context: {
     [k in Lowercase<EntityType>]: Map<
-      EntityId,
+      Extract<Entities, { type: Uppercase<k> }>['id'],
       Extract<Entities, { type: Uppercase<k> }>
     >;
   } = {
-    region: new Map<EntityId, Region>(),
-    land: new Map<EntityId, Land>(),
-    empire: new Map<EntityId, Empire>(),
-    agent: new Map<EntityId, Agent>(),
-    building_queue_item: new Map<EntityId, BuildingQueueItem>(),
-    action_queue_item: new Map<EntityId, ActionQueueItem>(),
-    modifier: new Map<EntityId, Modifier>(),
-    spell: new Map<EntityId, Spell>(),
-    army: new Map<EntityId, Army>(),
+    region: new Map<RegionId, Region>(),
+    land: new Map<LandId, Land>(),
+    empire: new Map<EmpireId, Empire>(),
+    agent: new Map<AgentId, Agent>(),
+    building_queue_item: new Map<BuildingQueueItemId, BuildingQueueItem>(),
+    action_queue_item: new Map<ActionQueueItemId, ActionQueueItem>(),
+    modifier: new Map<ModifierId, Modifier>(),
+    spell: new Map<SpellId, Spell>(),
+    army: new Map<ArmyId, Army>(),
   };
 
   // TODO: if this is a blackboard, maybe we should remove this
@@ -44,11 +56,13 @@ export class GameBlackboard implements Blackboard {
 
   // TODO: can we remove never?
   addEntity<T extends Entity>(entity: T) {
-    this.getEntitiesByType(entity.type).set(entity.id, entity as never);
+    this.getEntitiesByType<Lowercase<T['type']>>(
+      entity.type as Uppercase<Lowercase<T['type']>>
+    ).set(entity.id as never, entity as never);
   }
 
-  getEntity<T extends Entities>(entityType: T['type'], entityId: EntityId): T {
-    return this.getEntitiesByType(entityType).get(entityId) as T;
+  getEntity<T extends Entities>(entityType: T['type'], entityId: T['id']): T {
+    return this.getEntitiesByType(entityType).get(entityId as never) as T;
   }
 
   getAllEntities<T extends Entity>(entityType: T['type']): T[] {
@@ -56,7 +70,7 @@ export class GameBlackboard implements Blackboard {
   }
 
   deleteEntity<T extends Entities>(entity: T) {
-    this.getEntitiesByType(entity.type).delete(entity.id);
+    this.getEntitiesByType(entity.type).delete(entity.id as never);
   }
 
   setVariable(variable: string, value: string) {

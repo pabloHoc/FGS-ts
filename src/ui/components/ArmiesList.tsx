@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { EntityId } from '../../game/entities';
-import { Army } from '../../game/entities/army';
+import { Army, ArmyId } from '../../game/entities/army';
 import { Empire } from '../../game/entities/empire';
 import { Region } from '../../game/entities/region';
 import { GameCtx } from '../context/GameCtx';
@@ -25,7 +24,7 @@ export const ArmiesList = () => {
     setArmies(armies);
   }, [uiState]);
 
-  const handleClick = (armyId: EntityId) =>
+  const handleClick = (armyId: ArmyId) =>
     setUIState({
       ...uiState,
       selected_agent_id: undefined,

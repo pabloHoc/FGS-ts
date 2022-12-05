@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { GameBlackboard } from '../../game/core/blackboard';
-import { EntityId } from '../../game/entities';
-import { Agent } from '../../game/entities/agent';
+import { Agent, AgentId } from '../../game/entities/agent';
 import { Region } from '../../game/entities/region';
 import { getEmpireAgents } from '../../game/helpers/agent';
 import { getPlayerEmpire } from '../../game/helpers/empire';
@@ -16,7 +15,7 @@ const AgentItem = ({
 }: {
   agent: Agent;
   entities: GameBlackboard;
-  onClick: (agentId: EntityId) => void;
+  onClick: (agentId: AgentId) => void;
   selected: boolean;
 }) => {
   const region = entities.getEntity<Region>('REGION', agent.regionId);
@@ -50,7 +49,7 @@ export const AgentsList = () => {
 
   useEffect(updateAgents, [uiState]);
 
-  const handleAgentClicked = (agentId: EntityId) => {
+  const handleAgentClicked = (agentId: AgentId) => {
     setUIState({
       ...uiState,
       selected_army_id: undefined,

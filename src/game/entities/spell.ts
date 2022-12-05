@@ -1,16 +1,19 @@
-import { Entity, EntityId } from '.';
+import { BaseEntityId, Entity, EntityId } from '.';
 import { generateId } from '../helpers/id';
+
+export type SpellId = EntityId<Spell>;
 
 export interface Spell extends Entity {
   type: 'SPELL';
+  id: SpellId;
   name: string;
-  entityId: EntityId; // target
+  entityId: BaseEntityId; // target
   remainingTime?: number;
 }
 
 export const createSpell = (
   name: string,
-  entityId: EntityId,
+  entityId: BaseEntityId,
   remainingTime?: number
 ): Spell => ({
   id: generateId(),

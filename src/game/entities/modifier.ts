@@ -1,12 +1,15 @@
-import { Entity, EntityId } from '.';
+import { BaseEntityId, Entity, EntityId } from '.';
 import { generateId } from '../helpers/id';
+
+export type ModifierId = EntityId<Modifier>;
 
 export interface Modifier extends Entity {
   type: 'MODIFIER';
+  id: ModifierId;
   name: string;
   modifierType: ModifierType;
   value: number;
-  entityId: EntityId;
+  entityId: BaseEntityId;
   remainingTurns?: number;
   sourceId?: string;
 }
@@ -18,7 +21,7 @@ export const createModifier = (
   name: string,
   type: ModifierType,
   value: number,
-  entityId: EntityId,
+  entityId: BaseEntityId,
   remainingTurns?: number,
   sourceId?: string
 ): Modifier => ({

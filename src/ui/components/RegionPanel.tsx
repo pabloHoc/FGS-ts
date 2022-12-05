@@ -4,19 +4,19 @@ import { BuildingDefinition } from '../../game/definitions/building';
 import { LandDefinition } from '../../game/definitions/land';
 import { Entity, EntityId } from '../../game/entities';
 import { BuildingQueueItem } from '../../game/entities/building-queue-item';
-import { Empire } from '../../game/entities/empire';
-import { Land } from '../../game/entities/land';
+import { Empire, EmpireId } from '../../game/entities/empire';
+import { Land, LandId } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
 import { getSortedBuildingQueueForLand } from '../../game/helpers/building';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
 
 interface LandItemProps {
-  id: EntityId;
+  id: LandId;
   name: LandDefinition['name'];
   buildings: BuildingDefinition['name'][];
   buildingQueue: BuildingQueueItem[];
-  onClick: (id: EntityId) => void;
+  onClick: (id: LandId) => void;
   selected: boolean;
 }
 
@@ -95,11 +95,11 @@ export const RegionPanel = () => {
     setLands(regionLands);
   }, [uiState]);
 
-  const handleClickedLand = (landId: EntityId) => {
+  const handleClickedLand = (landId: LandId) => {
     setUIState({ ...uiState, selected_land_id: landId });
   };
 
-  const getBuildingQueue = (landId: EntityId) =>
+  const getBuildingQueue = (landId: LandId) =>
     getSortedBuildingQueueForLand(landId);
 
   const handleBuildArmy = () =>
@@ -109,7 +109,7 @@ export const RegionPanel = () => {
     );
 
   // TODO: maybe move this?
-  const isPlayerEmpire = (empireId: EntityId) => {
+  const isPlayerEmpire = (empireId: EmpireId) => {
     return game.context
       .getAllEntities<Empire>('EMPIRE')
       .find((empire) => empire.id === empireId)?.isPlayer;

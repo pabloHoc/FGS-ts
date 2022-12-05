@@ -1,6 +1,6 @@
 import { GlobalGameBlackboard } from '../core/game-context';
 import { EconomicType, economicTypes } from '../definitions/economic-category';
-import { EntityId } from '../entities';
+import { BaseEntityId } from '../entities';
 import { Modifier } from '../entities/modifier';
 
 interface ModifierSummary {
@@ -39,7 +39,7 @@ export const getEconomyModifierSummary = (
       return summary;
     }, {});
 
-export const getModifiersForEntity = (entityId: EntityId) =>
+export const getModifiersForEntity = (entityId: BaseEntityId) =>
   GlobalGameBlackboard.instance
     .getAllEntities<Modifier>('MODIFIER')
     .filter((m) => m.entityId === entityId);

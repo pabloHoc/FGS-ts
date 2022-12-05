@@ -1,11 +1,13 @@
-import { Entity } from '.';
+import { Entity, EntityId } from '.';
 import { ResourceBlock } from '../definitions/economy-unit';
 import { generateId } from '../helpers/id';
 import { Planner } from '../ai/planner';
 import { winGame } from '../tasks/win-game';
 import { GameBlackboard } from '../core/blackboard';
 
+export type EmpireId = EntityId<Empire>;
 export interface Empire extends Entity {
+  id: EmpireId;
   type: 'EMPIRE';
   name: string;
   isPlayer: boolean;

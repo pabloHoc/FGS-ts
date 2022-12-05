@@ -1,18 +1,17 @@
 import { MouseEvent, useContext, useEffect, useState } from 'react';
 import { setLocation } from '../../game/commands/set-location';
 import { AgentActionDefinition } from '../../game/definitions/agent-action';
-import { EntityId } from '../../game/entities';
 import { createActionQueueItem } from '../../game/entities/action-queue-item';
 import { Agent } from '../../game/entities/agent';
-import { Region } from '../../game/entities/region';
+import { Region, RegionId } from '../../game/entities/region';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
 
 interface RegionItemProps {
-  id: EntityId;
+  id: RegionId;
   name: string;
-  onClick: (id: EntityId) => void;
-  onRightClick: (id: EntityId) => void;
+  onClick: (id: RegionId) => void;
+  onRightClick: (id: RegionId) => void;
   selected: boolean;
 }
 
@@ -56,11 +55,11 @@ export const RegionsList = () => {
     setRegions(game.context.getAllEntities<Region>('REGION'));
   }, [uiState]);
 
-  const handleClickedRegion = (regionId: EntityId) => {
+  const handleClickedRegion = (regionId: RegionId) => {
     setUIState({ ...uiState, selected_region_id: regionId });
   };
 
-  const handleRightClickedRegion = (regionId: EntityId) => {
+  const handleRightClickedRegion = (regionId: RegionId) => {
     if (uiState.selected_agent_id) {
       const moveAction = game.definitions.get<AgentActionDefinition>(
         'AGENT-ACTION',

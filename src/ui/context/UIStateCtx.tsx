@@ -1,12 +1,15 @@
 import { createContext, ReactElement, useEffect, useState } from 'react';
 import { game } from '../../game';
-import { EntityId } from '../../game/entities';
+import { AgentId } from '../../game/entities/agent';
+import { ArmyId } from '../../game/entities/army';
+import { LandId } from '../../game/entities/land';
+import { RegionId } from '../../game/entities/region';
 
 export interface UIState {
-  selected_agent_id?: EntityId;
-  selected_region_id?: EntityId;
-  selected_land_id?: EntityId;
-  selected_army_id?: EntityId;
+  selected_agent_id?: AgentId;
+  selected_region_id?: RegionId;
+  selected_land_id?: LandId;
+  selected_army_id?: ArmyId;
 }
 
 interface ContextProps {

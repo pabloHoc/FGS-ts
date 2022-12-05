@@ -5,13 +5,15 @@ import {
 } from '../definitions/agent-action';
 import { generateId } from '../helpers/id';
 
+export type ActionQueueItemId = EntityId<ActionQueueItem>;
+
 // TODO: check whom this type belongs to
 export type ActionType = 'action' | 'spell';
 
 // TODO: check if this is really a queue
 export interface ActionQueueItem extends Entity {
   type: 'ACTION_QUEUE_ITEM';
-  id: EntityId;
+  id: ActionQueueItemId;
   actionType: ActionType;
   name: AgentActionDefinition['name'];
   order: number;

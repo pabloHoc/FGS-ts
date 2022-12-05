@@ -3,11 +3,15 @@ import { ActionKey } from '../commands/command-map';
 import { Modifier } from './modifier';
 import { generateId } from '../helpers/id';
 import { ActionQueueItem } from './action-queue-item';
+import { EmpireId } from './empire';
+import { RegionId } from './region';
 
+export type AgentId = EntityId<Agent>;
 interface MoveAction {
+  id: AgentId;
   name: 'MOVE';
-  fromRegion: EntityId;
-  toRegion: EntityId;
+  fromRegion: RegionId;
+  toRegion: RegionId;
   remainingTurns: number;
 }
 
@@ -17,10 +21,11 @@ export const isMoveAction = (
 
 export interface Agent extends Entity {
   type: 'AGENT';
+  id: AgentId;
   name: string;
-  empireId: EntityId;
+  empireId: EmpireId;
   // Current location
-  regionId: EntityId;
+  regionId: RegionId;
   mp: number;
   modifiers: Modifier[];
   currentAction?: MoveAction | ActionQueueItem;
@@ -28,11 +33,11 @@ export interface Agent extends Entity {
 
 export const createAgent = (
   name: string,
-  empireId: EntityId,
-  regionId: EntityId
+  empireId: EmpireId,
+  regionId: RegionId
 ): Agent => ({
   type: 'AGENT',
-  id: generateId(),
+  id: generateId<Agent>(),
   name,
   empireId,
   regionId,

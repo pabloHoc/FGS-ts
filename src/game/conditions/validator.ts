@@ -33,7 +33,7 @@ export const validateConditions = <T extends Entity>(
         key,
         value
       );
-      if (!result) {
+      if (result !== value) {
         return false;
       }
     } else if (isScope(key)) {

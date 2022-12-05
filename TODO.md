@@ -17,11 +17,28 @@ handle them separately
 
 ---
 
-[] Armies
-[] Combat
+[X] Armies
+[X] Combat
 [] AI
-[] Connected cities
+[] Connected cities & Map
 [] Pathfinding
+
+---
+
+[] Building requirements
+[] Events
+[] Exploration
+[] Quests
+
+---
+
+# AI
+
+[x] HTN
+[x] Utility AI
+[x] HTN + Utility
+[] Tag System? Tags vs Traits? -> Tags is for AI, Traits is for game
+[] Need based AI
 
 ---
 

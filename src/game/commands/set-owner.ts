@@ -1,19 +1,25 @@
 import { Command } from '.';
-import { Entity, EntityId } from '../entities';
+import { BaseEntityId, Entity } from '../entities';
+import { AgentId } from '../entities/agent';
+import { EmpireId } from '../entities/empire';
+import { RegionId } from '../entities/region';
 
 export interface SetOwner extends Command {
   action: 'SET_OWNER';
-  targetId: EntityId;
-  ownerId: EntityId;
+  targetId: RegionId | AgentId;
+  ownerId: EmpireId;
 }
 
-export const setOwner = (targetId: EntityId, ownerId: EntityId): SetOwner => ({
+export const setOwner = (
+  targetId: RegionId | AgentId,
+  ownerId: EmpireId
+): SetOwner => ({
   action: 'SET_OWNER',
   targetId,
   ownerId,
 });
 
 // values is ScopeEntity, e.g.: ROOT
-export const setOwnerWithScope = (scope: Entity, values: any) => {
+export const setOwnerWithScope = (scope: RegionId | AgentId, values: any) => {
   return setOwner(scope.id, values.empireId);
 };
