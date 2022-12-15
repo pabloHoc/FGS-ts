@@ -9,6 +9,9 @@ import { UIStateCtxProvider } from './context/UIStateCtx';
 import { AgentActionsPanel } from './components/AgentActionsPanel';
 import { AgentSpellsPanel } from './components/AgentSpellsPanel';
 import { ArmiesList } from './components/ArmiesList';
+import { WorldMap } from './components/WorldMap';
+
+import './App.css';
 
 const EmpirePanel = () => (
   <>
@@ -43,16 +46,25 @@ const RegionPanel = () => (
  */
 const App = () => {
   return (
-    <UIStateCtxProvider>
-      <GameCtxProvider>
-        <EmpirePanel />
-        <AgentsPanel />
-        <ArmiesList />
-        <RegionsPanel />
-        <RegionPanel />
-        <EndTurnButton />
-      </GameCtxProvider>
-    </UIStateCtxProvider>
+    <>
+      <UIStateCtxProvider>
+        <GameCtxProvider>
+          <div className="container">
+            <div className="panel">
+              <EmpirePanel />
+              <AgentsPanel />
+              <ArmiesList />
+              <div className="regions">
+                <RegionsPanel />
+              </div>
+              <RegionPanel />
+              <EndTurnButton />
+            </div>
+            <WorldMap />
+          </div>
+        </GameCtxProvider>
+      </UIStateCtxProvider>
+    </>
   );
 };
 

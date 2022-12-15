@@ -11,13 +11,24 @@ export interface Region extends Entity {
   id: RegionId;
   name: string;
   empireId?: EmpireId;
+  x: number;
+  y: number;
+  connectedTo: RegionId[];
 }
 
-export const createRegion = (name: string, empireId?: EmpireId): Region => ({
+export const createRegion = (
+  name: string,
+  x: number,
+  y: number,
+  empireId?: EmpireId
+): Region => ({
   type: 'REGION',
   id: generateId(),
   name,
   empireId,
+  x,
+  y,
+  connectedTo: [],
 });
 
 export const isRegion = (entity: Entity): entity is Region =>

@@ -22,11 +22,12 @@ export class CommandExecutor {
   }
 
   execute<T extends Commands>(command: NarrowAction<T, T['action']>) {
-    console.log(command);
+    // console.log(command);
     const handler = this.handlers[command['action'] as T['action']];
     if (handler) {
-      handler(command);
+      const result = handler(command);
       if (this.callback) this.callback();
+      return result;
     }
   }
 
