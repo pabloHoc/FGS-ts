@@ -1,0 +1,8 @@
+{
+  "type": "task",
+  "name": "primitive_task_c",
+  "weight": 0.6,
+  "conditions": {
+    "has_food": 10
+  }
+}

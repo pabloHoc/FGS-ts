@@ -1,6 +1,6 @@
 import { Entity } from '../../entities';
 import { Blackboard } from '../blackboard';
-import { CompoundTask, isCompoundTask } from '../compound-task';
+import { ComplexTask, isComplexTask } from '../compound-task';
 import { Task } from '../task';
 
 /**
@@ -59,12 +59,15 @@ import { Task } from '../task';
 export class HighestScoreTask<
   B extends Blackboard,
   E extends Entity
-> extends CompoundTask<B, E> {
+> extends ComplexTask<B, E> {
   computeScore(context: B, entity: E): void {
     let score = 1.0;
     for (const task of this.subTasks) {
-      task.computeScore(context, entity);
-      score *= task.getScore(); // factor
+      if (task.isValid(context, entity)) {
+        task.computeScore(context, entity);
+        console.log(task.name, task.getScore());
+        score *= task.getScore(); // factor
+      }
     }
     this.score = Number(score.toFixed(2));
     console.log(this.name, this.score);
@@ -75,13 +78,13 @@ export class HighestScoreTask<
     let highestScoreTask: Task<B, E> = this.subTasks[0];
 
     for (const task of this.subTasks) {
-      if (task.getScore() > highestScore) {
+      if (task.isValid(context, entity) && task.getScore() > highestScore) {
         highestScore = task.getScore();
         highestScoreTask = task;
       }
     }
 
-    if (isCompoundTask(highestScoreTask)) {
+    if (isComplexTask(highestScoreTask)) {
       return highestScoreTask.getScoredTasks(context, entity);
     }
 

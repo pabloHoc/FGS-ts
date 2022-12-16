@@ -16,6 +16,7 @@ import { processSpells } from './process-spells';
 import { createArmy } from './create-army';
 import { processBattles } from './process-battles';
 import { setAgentCurrentAction } from './set-agent-current-action';
+import { processEmpireAIs } from './process-empire-ais';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
@@ -35,4 +36,5 @@ export const HANDLERS: Handlers = {
   PROCESS_SPELLS: processSpells,
   PROCESS_BATTLES: processBattles,
   SET_AGENT_CURRENT_ACTION: setAgentCurrentAction,
+  PROCESS_EMPIRE_AIS: processEmpireAIs,
 };

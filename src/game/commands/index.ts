@@ -9,6 +9,7 @@ import { EndTurn } from './end-turn';
 import { ProcessAgentActions } from './process-agent-actions';
 import { ProcessBattles } from './process-battles';
 import { ProcessBuildingQueues } from './process-building-queues';
+import { ProcessEmpireAIs } from './process-empire-ais';
 import { ProcessSpells } from './process-spells';
 import { ProduceResources } from './produce-resources';
 import { SetAgentCurrentAction } from './set-agent-current-action';
@@ -34,6 +35,7 @@ export type Commands =
   | AddBuildingToQueue
   | SetOwner
   // Called each turn
+  | ProcessEmpireAIs
   | ProcessSpells
   | ProcessBattles
   | ProcessAgentActions

@@ -4,6 +4,8 @@ import landsDefinitions from '../../data/lands';
 import agentActionsDefinitions from '../../data/agent-actions';
 import economicCategoriesDefinitions from '../../data/economic-categories';
 import spellsDefinitions from '../../data/spells';
+import taskDefinitions from '../../data/tasks';
+
 import { BuildingDefinition } from '../definitions/building';
 import { ResourceDefinition } from '../definitions/resource';
 import { LandDefinition } from '../definitions/land';
@@ -11,7 +13,7 @@ import { AgentActionDefinition } from '../definitions/agent-action';
 import { EconomicCategoryDefinition } from '../definitions/economic-category';
 import { TypeMapper } from '../helpers/types';
 import { SpellDefinition } from '../definitions/spell';
-import { Definition } from '../definitions';
+import { TaskDefinition } from '../definitions/task';
 
 type Definitions =
   | BuildingDefinition
@@ -19,7 +21,8 @@ type Definitions =
   | LandDefinition
   | AgentActionDefinition
   | EconomicCategoryDefinition
-  | SpellDefinition;
+  | SpellDefinition
+  | TaskDefinition;
 
 // TODO: We could merge these in one object maybe
 // TODO: check any here
@@ -34,6 +37,7 @@ const definitionsMap: DefinitionMap = {
   'agent-action': agentActionsDefinitions,
   'economic-category': economicCategoriesDefinitions,
   spell: spellsDefinitions,
+  task: taskDefinitions,
 };
 
 const definitionsConstructors = {
@@ -43,10 +47,12 @@ const definitionsConstructors = {
   'agent-action': AgentActionDefinition,
   'economic-category': EconomicCategoryDefinition,
   spell: SpellDefinition,
+  task: TaskDefinition,
 };
 
 type DefinitionType = keyof typeof definitionsMap;
 
+// possible name: Specification
 export class DefinitionManager {
   private static _instance: DefinitionManager;
 
@@ -57,6 +63,7 @@ export class DefinitionManager {
     'agent-action': new Map<string, AgentActionDefinition>(),
     'economic-category': new Map<string, EconomicCategoryDefinition>(),
     spell: new Map<string, SpellDefinition>(),
+    task: new Map<string, TaskDefinition>(),
   };
 
   constructor() {

@@ -1,22 +1,23 @@
 import { Condition } from '../conditions';
+import { Conditions, validateConditions } from '../conditions/validator';
 import { Entity } from '../entities';
 import { Blackboard } from './blackboard';
 import { isPrimitiveTask } from './primitive-task';
 import { Task, TaskType } from './task';
 
-export abstract class CompoundTask<B extends Blackboard, E extends Entity>
+export abstract class ComplexTask<B extends Blackboard, E extends Entity>
   implements Task<B, E>
 {
-  readonly type = TaskType.Compound;
+  readonly type = TaskType.Complex;
   readonly name: string;
   readonly subTasks: Task<B, E>[];
-  private conditions: Condition<B, E>[];
+  private conditions: Conditions;
   protected score: number = 1.0; // TODO: review default score
 
   constructor(
     name: string,
     subTasks: Task<B, E>[],
-    conditions: Condition<B, E>[] = []
+    conditions: Conditions = {}
   ) {
     this.name = name;
     this.subTasks = subTasks;
@@ -24,12 +25,7 @@ export abstract class CompoundTask<B extends Blackboard, E extends Entity>
   }
 
   isValid(context: B, entity: E) {
-    for (const condition of this.conditions) {
-      if (!condition(context, entity)) {
-        return false;
-      }
-    }
-    return true;
+    return validateConditions(this.conditions, entity);
   }
 
   abstract computeScore(context: B, entity: E): void;
@@ -39,12 +35,8 @@ export abstract class CompoundTask<B extends Blackboard, E extends Entity>
   }
 
   abstract getScoredTasks(context: B, entity: E): Task<B, E>[];
-
-  decompose() {
-    return this.subTasks;
-  }
 }
 
-export const isCompoundTask = <B extends Blackboard, E extends Entity>(
+export const isComplexTask = <B extends Blackboard, E extends Entity>(
   task: Task<B, E>
-): task is CompoundTask<B, E> => task.type === TaskType.Compound;
+): task is ComplexTask<B, E> => task.type === TaskType.Complex;

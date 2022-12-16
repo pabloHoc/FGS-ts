@@ -19,6 +19,7 @@ type Condition = {
 type Scope = { [key in ScopeType]?: Condition | Scope };
 export type Conditions = Scope | Condition;
 
+// TODO: add custom blackboard as param
 export const validateConditions = <T extends Entity>(
   conditions: Conditions,
   scope: T
@@ -33,7 +34,7 @@ export const validateConditions = <T extends Entity>(
         key,
         value
       );
-      if (result !== value) {
+      if (result === false) {
         return false;
       }
     } else if (isScope(key)) {

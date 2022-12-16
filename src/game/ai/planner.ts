@@ -1,6 +1,9 @@
+import { isComplexTaskDefinition, TaskDefinition } from '../definitions/task';
 import { Entity } from '../entities';
 import { Blackboard } from './blackboard';
-import { CompoundTask, isCompoundTask } from './compound-task';
+import { ComplexTask, isComplexTask } from './compound-task';
+import { HighestScoreTask } from './complex-tasks/highest-score-task';
+import { Domain } from './domain';
 import { isPrimitiveTask, PrimitiveTask } from './primitive-task';
 import { Task } from './task';
 
@@ -14,11 +17,14 @@ export class Planner<B extends Blackboard, E extends Entity> {
   private owner: E;
   finalTasks: PrimitiveTask<B, E>[] = [];
 
-  constructor(context: B, owner: E, rootTask: Task<B, E>) {
+  constructor(context: B, owner: E, domain: Domain<B, E>) {
     this.context = context;
-    this.rootTask = rootTask;
     this.owner = owner;
+
+    this.rootTask = domain.getRootTask();
   }
+
+  // assumption: complex task doesn't have child at this point
 
   generatePlan() {
     this.resetPlan();
@@ -32,7 +38,7 @@ export class Planner<B extends Blackboard, E extends Entity> {
       if (isPrimitiveTask(task)) {
         this.processPrimitiveTask(task);
       }
-      if (isCompoundTask(task)) {
+      if (isComplexTask(task)) {
         this.processCompoundTask(task);
       }
     }
@@ -60,7 +66,7 @@ export class Planner<B extends Blackboard, E extends Entity> {
     }
   }
 
-  processCompoundTask(task: CompoundTask<B, E>) {
+  processCompoundTask(task: ComplexTask<B, E>) {
     if (task.isValid(this.context, this.owner)) {
       this.tasksToProcess.push(
         ...task.getScoredTasks(this.context, this.owner)

@@ -1,0 +1,7 @@
+{
+  "type": "task",
+  "name": "root_task",
+  "taskType": "highest-score",
+  "subtasks": ["complex_task_a", "complex_task_b"],
+  "isRoot": true
+}
