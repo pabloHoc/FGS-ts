@@ -7,17 +7,6 @@ import { EmpireId } from './empire';
 import { RegionId } from './region';
 
 export type AgentId = EntityId<Agent>;
-export interface MoveAction {
-  id: AgentId;
-  name: 'MOVE';
-  fromRegion: RegionId;
-  toRegion: RegionId;
-  remainingTurns: number;
-}
-
-export const isMoveAction = (
-  action: MoveAction | ActionQueueItem
-): action is MoveAction => action.name === 'MOVE';
 
 export interface Agent extends Entity {
   type: 'AGENT';
@@ -28,7 +17,7 @@ export interface Agent extends Entity {
   regionId: RegionId;
   mp: number;
   modifiers: Modifier[];
-  currentAction?: MoveAction | ActionQueueItem;
+  currentAction?: ActionQueueItem;
 }
 
 export const createAgent = (
