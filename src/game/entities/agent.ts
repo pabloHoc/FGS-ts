@@ -7,7 +7,7 @@ import { EmpireId } from './empire';
 import { RegionId } from './region';
 
 export type AgentId = EntityId<Agent>;
-interface MoveAction {
+export interface MoveAction {
   id: AgentId;
   name: 'MOVE';
   fromRegion: RegionId;

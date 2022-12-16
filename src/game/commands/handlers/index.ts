@@ -15,6 +15,7 @@ import { setLocation } from './set-location';
 import { processSpells } from './process-spells';
 import { createArmy } from './create-army';
 import { processBattles } from './process-battles';
+import { setAgentCurrentAction } from './set-agent-current-action';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
@@ -33,4 +34,5 @@ export const HANDLERS: Handlers = {
   SET_LOCATION: setLocation,
   PROCESS_SPELLS: processSpells,
   PROCESS_BATTLES: processBattles,
+  SET_AGENT_CURRENT_ACTION: setAgentCurrentAction,
 };

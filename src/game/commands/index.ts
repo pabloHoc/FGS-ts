@@ -11,6 +11,7 @@ import { ProcessBattles } from './process-battles';
 import { ProcessBuildingQueues } from './process-building-queues';
 import { ProcessSpells } from './process-spells';
 import { ProduceResources } from './produce-resources';
+import { SetAgentCurrentAction } from './set-agent-current-action';
 import { SetLocation } from './set-location';
 import { SetOwner } from './set-owner';
 import { StartTurn } from './start-turn';
@@ -39,4 +40,5 @@ export type Commands =
   | ProcessBuildingQueues
   | ProduceResources
   // Agent actions
-  | SetLocation;
+  | SetLocation
+  | SetAgentCurrentAction;

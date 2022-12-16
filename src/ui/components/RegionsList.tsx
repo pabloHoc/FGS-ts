@@ -1,4 +1,5 @@
 import { MouseEvent, useContext, useEffect, useState } from 'react';
+import { setAgentCurrentAction } from '../../game/commands/set-agent-current-action';
 import { setLocation } from '../../game/commands/set-location';
 import { AgentActionDefinition } from '../../game/definitions/agent-action';
 import { createActionQueueItem } from '../../game/entities/action-queue-item';
@@ -69,9 +70,14 @@ export const RegionsList = () => {
         'AGENT',
         uiState.selected_agent_id
       );
-      selectedAgent.currentAction = createActionQueueItem(moveAction, 1, {
-        region_id: regionId,
-      });
+      game.commands.execute(
+        setAgentCurrentAction(
+          selectedAgent.id,
+          createActionQueueItem(moveAction, 1, {
+            region_id: regionId,
+          })
+        )
+      );
     } else if (uiState.selected_army_id) {
       game.commands.execute(setLocation(uiState.selected_army_id, regionId));
     }
