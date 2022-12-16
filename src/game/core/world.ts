@@ -232,6 +232,22 @@ export class World {
         region.connectedTo.push(this.locations[twoRowsBottomLeftChunk].id);
       }
     }
+
+    // Connect roads in the opposite direction
+    // TODO: this sucks
+    const regions =
+      GlobalGameBlackboard.instance.getAllEntities<Region>('REGION');
+    for (const region of regions) {
+      for (const regionId of region.connectedTo) {
+        const connectedRegion = GlobalGameBlackboard.instance.getEntity<Region>(
+          'REGION',
+          regionId
+        );
+        if (!connectedRegion.connectedTo.includes(region.id)) {
+          connectedRegion.connectedTo.push(region.id);
+        }
+      }
+    }
   }
 
   private generateLands() {

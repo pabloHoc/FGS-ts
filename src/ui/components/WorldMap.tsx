@@ -113,12 +113,14 @@ export const WorldMap = () => {
       onContextMenu={(e) => e.evt.preventDefault()}
     >
       <Layer>
+        <GridLines />
         {game.context.getAllEntities<Region>('REGION').map((region, i) =>
           region.connectedTo.map((regionToConnectId, j) => {
             const regionToConnect = game.context.getEntity<Region>(
               'REGION',
               regionToConnectId
             );
+            // TODO: we have duplicated roads here!
             return regionToConnect ? (
               <Line
                 key={i + j}
@@ -145,7 +147,6 @@ export const WorldMap = () => {
             selected={uiState.selected_region_id === region.id}
           />
         ))}
-        <GridLines />
       </Layer>
     </Stage>
   );
