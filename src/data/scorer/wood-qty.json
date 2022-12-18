@@ -1,0 +1,10 @@
+{
+  "type": "scorer",
+  "name": "wood_qty",
+  "curve": "linear 1 1 1 1",
+  "input": {
+    "name": "wood",
+    "min": 0,
+    "max": 10
+  }
+}

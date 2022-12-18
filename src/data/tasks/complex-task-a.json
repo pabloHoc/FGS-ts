@@ -2,5 +2,6 @@
   "type": "task",
   "name": "complex_task_a",
   "taskType": "highest-score",
+  "weight": 0.4,
   "subtasks": ["primitive_task_a", "primitive_task_b"]
 }

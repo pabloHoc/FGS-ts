@@ -40,7 +40,6 @@ export class BuildingDefinition implements IBuildingDefinition {
     }
 
     if (this.conditions) {
-      console.log('HERE');
       return validateConditions(this.conditions, land);
     }
 

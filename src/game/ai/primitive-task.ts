@@ -1,41 +1,57 @@
-import { Condition } from '../conditions';
 import { Conditions, validateConditions } from '../conditions/validator';
+import { GameBlackboard } from '../core/blackboard';
 import { Entity } from '../entities';
 import { Blackboard } from './blackboard';
+import { InputValue } from './input-value';
 import { Scorer } from './scorer';
-import { Task, TaskType } from './task';
+import { Task } from './task';
 
-export class PrimitiveTask<B extends Blackboard, E extends Entity>
+export class PrimitiveTask<B extends GameBlackboard, E extends Entity>
   implements Task<B, E>
 {
-  readonly type = TaskType.Primitive;
   readonly name: string;
   private conditions: Conditions;
-  private scorers: Scorer<B, E>[];
-  protected score: number = 1.0;
+  private scorers: Scorer[];
+  private weight: number = 1.0;
+  private score: number = 1.0;
+  // private momentum = 1.25;
 
   constructor(
     name: string,
     weight: number,
     conditions: Conditions = {},
-    scorers: Scorer<B, E>[] = []
+    scorers: Scorer[] = []
   ) {
     this.name = name;
     this.conditions = conditions;
     this.scorers = scorers;
-    this.score = weight;
+    this.weight = weight;
   }
 
   isValid(context: B, entity: E) {
     const result = validateConditions(this.conditions, entity);
-    console.log(this.name, result);
     return result;
   }
 
+  /**
+   * We could have different ways to score scorer:
+   * allOrNothing, FixedScore, SumOfChildThresold
+   */
   computeScore(context: B, entity: E) {
-    // Dynamically score somehow
-    // for (const scorer of this.scorers) {
-    //   this.score *= scorer.score(context, entity);
+    const inputValue = new InputValue(context, entity);
+    const compensationFactor = 1.0 - 1.0 / this.scorers.length; // TODO: compute momentum and bonus here
+    let result = this.weight;
+
+    for (const scorer of this.scorers) {
+      let finalScore = scorer.score(inputValue); // TODO: add target
+      const modification = (1.0 - finalScore) * compensationFactor;
+      finalScore += modification * finalScore;
+      result *= finalScore;
+    }
+    this.score = result;
+
+    // if (this == context.last) {
+    //   result *= momentum;
     // }
   }
 
@@ -43,9 +59,11 @@ export class PrimitiveTask<B extends Blackboard, E extends Entity>
     return this.score;
   }
 
-  execute(entity: E) {}
+  execute() {
+    console.log(`TASK ${this.name} EXECUTED`);
+  }
 }
 
-export const isPrimitiveTask = <B extends Blackboard, E extends Entity>(
+export const isPrimitiveTask = <B extends GameBlackboard, E extends Entity>(
   task: Task<B, E>
-): task is PrimitiveTask<B, E> => task.type === TaskType.Primitive;
+): task is PrimitiveTask<B, E> => !('getScoredTasks' in task);

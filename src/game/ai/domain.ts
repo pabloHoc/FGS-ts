@@ -4,13 +4,15 @@ import {
   TaskDefinition,
 } from '../definitions/task';
 import { Entity } from '../entities';
-import { Blackboard } from './blackboard';
 import { HighestScoreTask } from './complex-tasks/highest-score-task';
-import { isComplexTask } from './compound-task';
+import { isComplexTask } from './complex-task';
 import { PrimitiveTask } from './primitive-task';
 import { Task } from './task';
+import { GameBlackboard } from '../core/blackboard';
+import { DefinitionManager } from '../core/definition-manager';
+import { ScorerDefinition } from '../definitions/scorer';
 
-export class Domain<B extends Blackboard, E extends Entity> {
+export class Domain<B extends GameBlackboard, E extends Entity> {
   private tasks: TaskDefinition[];
 
   constructor(tasks: TaskDefinition[]) {
@@ -34,7 +36,13 @@ export class Domain<B extends Blackboard, E extends Entity> {
       throw Error('ROOT TASK IS NOT A COMPLEX TASK');
     }
 
-    return new HighestScoreTask(rootTask.name, [], rootTask.conditions);
+    return new HighestScoreTask(
+      rootTask.name,
+      1.0,
+      rootTask.conditions,
+      [],
+      []
+    );
   }
 
   // task doesn't have subtask yet
@@ -52,11 +60,21 @@ export class Domain<B extends Blackboard, E extends Entity> {
           throw Error(`TASK ${subTaskDefinitionName} NOT FOUND IN DOMAIN`);
         }
 
+        const scorers = subTaskDefinition.scorers?.map(
+          (scorerName) =>
+            DefinitionManager.instance.get<ScorerDefinition>(
+              'SCORER',
+              scorerName
+            ).scorer
+        );
+
         if (isComplexTaskDefinition(subTaskDefinition)) {
           const subTask = new HighestScoreTask(
             subTaskDefinition.name,
-            [],
-            subTaskDefinition.conditions
+            subTaskDefinition.weight, // TODO: do we need this here?
+            subTaskDefinition.conditions,
+            scorers,
+            []
           );
           task.subTasks.push(subTask);
           this.generateTaskNetwork(subTask);
@@ -64,7 +82,8 @@ export class Domain<B extends Blackboard, E extends Entity> {
           const subTask = new PrimitiveTask(
             subTaskDefinition.name,
             subTaskDefinition.weight,
-            subTaskDefinition.conditions
+            subTaskDefinition.conditions,
+            scorers
           );
           task.subTasks.push(subTask);
         }

@@ -1,8 +1,6 @@
-import { isComplexTaskDefinition, TaskDefinition } from '../definitions/task';
+import { GameBlackboard } from '../core/blackboard';
 import { Entity } from '../entities';
-import { Blackboard } from './blackboard';
-import { ComplexTask, isComplexTask } from './compound-task';
-import { HighestScoreTask } from './complex-tasks/highest-score-task';
+import { ComplexTask, isComplexTask } from './complex-task';
 import { Domain } from './domain';
 import { isPrimitiveTask, PrimitiveTask } from './primitive-task';
 import { Task } from './task';
@@ -10,7 +8,7 @@ import { Task } from './task';
 /**
  * Planner should generate a plan each turn
  */
-export class Planner<B extends Blackboard, E extends Entity> {
+export class Planner<B extends GameBlackboard, E extends Entity> {
   private tasksToProcess: Task<B, E>[] = [];
   private rootTask: Task<B, E>;
   private context: B;
@@ -52,7 +50,7 @@ export class Planner<B extends Blackboard, E extends Entity> {
   executePlan() {
     for (const task of this.finalTasks) {
       console.log(`EXECUTING TASK ${task.name}`);
-      task.execute(this.owner);
+      task.execute();
     }
   }
 

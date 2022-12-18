@@ -2,5 +2,6 @@
   "type": "task",
   "name": "complex_task_b",
   "taskType": "highest-score",
+  "scorers": ["wood_qty"],
   "subtasks": ["primitive_task_c", "primitive_task_d"]
 }

@@ -5,6 +5,7 @@ import agentActionsDefinitions from '../../data/agent-actions';
 import economicCategoriesDefinitions from '../../data/economic-categories';
 import spellsDefinitions from '../../data/spells';
 import taskDefinitions from '../../data/tasks';
+import scorerDefinitions from '../../data/scorer';
 
 import { BuildingDefinition } from '../definitions/building';
 import { ResourceDefinition } from '../definitions/resource';
@@ -14,6 +15,7 @@ import { EconomicCategoryDefinition } from '../definitions/economic-category';
 import { TypeMapper } from '../helpers/types';
 import { SpellDefinition } from '../definitions/spell';
 import { TaskDefinition } from '../definitions/task';
+import { ScorerDefinition } from '../definitions/scorer';
 
 type Definitions =
   | BuildingDefinition
@@ -22,7 +24,8 @@ type Definitions =
   | AgentActionDefinition
   | EconomicCategoryDefinition
   | SpellDefinition
-  | TaskDefinition;
+  | TaskDefinition
+  | ScorerDefinition;
 
 // TODO: We could merge these in one object maybe
 // TODO: check any here
@@ -38,6 +41,7 @@ const definitionsMap: DefinitionMap = {
   'economic-category': economicCategoriesDefinitions,
   spell: spellsDefinitions,
   task: taskDefinitions,
+  scorer: scorerDefinitions,
 };
 
 const definitionsConstructors = {
@@ -48,6 +52,7 @@ const definitionsConstructors = {
   'economic-category': EconomicCategoryDefinition,
   spell: SpellDefinition,
   task: TaskDefinition,
+  scorer: ScorerDefinition,
 };
 
 type DefinitionType = keyof typeof definitionsMap;
@@ -64,6 +69,7 @@ export class DefinitionManager {
     'economic-category': new Map<string, EconomicCategoryDefinition>(),
     spell: new Map<string, SpellDefinition>(),
     task: new Map<string, TaskDefinition>(),
+    scorer: new Map<string, ScorerDefinition>(),
   };
 
   constructor() {
