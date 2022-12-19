@@ -1,6 +1,5 @@
-import { GameBlackboard } from '../core/blackboard';
-import { Entity } from '../entities';
 import { normalize } from '../helpers/math';
+import { Blackboard } from './blackboard';
 import { Curve } from './curve';
 import { InputParameter } from './input-parameter';
 import { InputValue } from './input-value';
@@ -15,8 +14,8 @@ export class Scorer {
     this.curve = curve;
   }
 
-  score<B extends GameBlackboard, E extends Entity>(
-    inputValue: InputValue<B, E>
+  score<Context extends Blackboard, Target>(
+    inputValue: InputValue<Context, Target>
   ) {
     const rawValue = inputValue.getFrom(this.inputParameter);
     const normalizedValue = normalize(

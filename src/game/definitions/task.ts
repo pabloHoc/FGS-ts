@@ -1,5 +1,9 @@
 import { Definition } from '.';
-import { Conditions } from '../conditions/validator';
+import { Conditions, validateConditions } from '../conditions/validator';
+import { DefinitionManager } from '../core/definition-manager';
+import { Entity } from '../entities';
+import { Blackboard } from '../utility-ai/blackboard';
+import { ScorerDefinition } from './scorer';
 
 type TaskType = 'highest-score';
 
@@ -40,6 +44,24 @@ export class TaskDefinition implements BaseTaskDefinition {
     this.conditions = definition.conditions;
     this.scorers = definition.scorers;
     this.isRoot = definition.isRoot;
+  }
+
+  // TODO: fix any
+  validate<B extends Blackboard, T extends Entity>(context: B, target: T) {
+    if (this.conditions) {
+      return validateConditions(this.conditions, target);
+    }
+    return true;
+  }
+
+  getScorers() {
+    return (
+      this.scorers?.map(
+        (scorerName) =>
+          DefinitionManager.instance.get<ScorerDefinition>('SCORER', scorerName)
+            .scorer
+      ) || []
+    );
   }
 }
 

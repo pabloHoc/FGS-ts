@@ -1,4 +1,4 @@
-import { GameBlackboard } from '../../core/blackboard';
+import { GameBlackboard } from '../../core/game-blackboard';
 import { Entity } from '../../entities';
 import { Empire } from '../../entities/empire';
 import { getWoodInput } from './wood-input';

@@ -1,4 +1,4 @@
-import { GameBlackboard } from '../../core/blackboard';
+import { GameBlackboard } from '../../core/game-blackboard';
 import { Land } from '../../entities/land';
 
 export const isLandType =

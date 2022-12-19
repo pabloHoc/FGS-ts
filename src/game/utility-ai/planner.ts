@@ -1,28 +1,25 @@
-import { GameBlackboard } from '../core/blackboard';
-import { Entity } from '../entities';
+import { Blackboard } from './blackboard';
 import { ComplexTask, isComplexTask } from './complex-task';
-import { Domain } from './domain';
 import { isPrimitiveTask, PrimitiveTask } from './primitive-task';
 import { Task } from './task';
 
-/**
- * Planner should generate a plan each turn
- */
-export class Planner<B extends GameBlackboard, E extends Entity> {
-  private tasksToProcess: Task<B, E>[] = [];
-  private rootTask: Task<B, E>;
-  private context: B;
-  private owner: E;
-  finalTasks: PrimitiveTask<B, E>[] = [];
+export class Planner<Context extends Blackboard, Target> {
+  private tasksToProcess: Task<Context, Target>[] = [];
+  private rootTask: Task<Context, Target>;
+  private context: Context;
+  private target: Target;
+  finalTasks: PrimitiveTask<Context, Target>[] = [];
 
-  constructor(context: B, owner: E, domain: Domain<B, E>) {
+  constructor(
+    context: Context,
+    target: Target,
+    rootTask: ComplexTask<Context, Target>
+  ) {
     this.context = context;
-    this.owner = owner;
+    this.target = target;
 
-    this.rootTask = domain.getRootTask();
+    this.rootTask = rootTask;
   }
-
-  // assumption: complex task doesn't have child at this point
 
   generatePlan() {
     this.resetPlan();
@@ -55,19 +52,19 @@ export class Planner<B extends GameBlackboard, E extends Entity> {
   }
 
   scoreTasks() {
-    this.rootTask.computeScore(this.context, this.owner);
+    this.rootTask.computeScore(this.context, this.target);
   }
 
-  processPrimitiveTask(task: PrimitiveTask<B, E>) {
-    if (task.isValid(this.context, this.owner)) {
+  processPrimitiveTask(task: PrimitiveTask<Context, Target>) {
+    if (task.isValid(this.context, this.target)) {
       this.finalTasks.push(task);
     }
   }
 
-  processCompoundTask(task: ComplexTask<B, E>) {
-    if (task.isValid(this.context, this.owner)) {
+  processCompoundTask(task: ComplexTask<Context, Target>) {
+    if (task.isValid(this.context, this.target)) {
       this.tasksToProcess.push(
-        ...task.getScoredTasks(this.context, this.owner)
+        ...task.getScoredTasks(this.context, this.target)
       );
     }
   }

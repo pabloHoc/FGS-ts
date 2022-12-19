@@ -1,5 +1,4 @@
-import { Condition } from '..';
-import { GameBlackboard } from '../../core/blackboard';
+import { GameBlackboard } from '../../core/game-blackboard';
 import { Region } from '../../entities/region';
 
 export const hasEmpire =

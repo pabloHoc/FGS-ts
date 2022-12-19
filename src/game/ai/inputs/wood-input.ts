@@ -1,4 +1,4 @@
-import { GameBlackboard } from '../../core/blackboard';
+import { GameBlackboard } from '../../core/game-blackboard';
 import { Empire } from '../../entities/empire';
 
 export const getWoodInput = (context: GameBlackboard, empire: Empire) => {

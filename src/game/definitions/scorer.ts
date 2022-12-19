@@ -1,8 +1,6 @@
 import { Definition } from '.';
-import { Curve, CurveType } from '../ai/curve';
-import { InputParameter } from '../ai/input-parameter';
-import { InputValue } from '../ai/input-value';
-import { Scorer } from '../ai/scorer';
+import { Curve, CurveType } from '../utility-ai/curve';
+import { Scorer } from '../utility-ai/scorer';
 
 interface IScorerDefinition extends Definition {
   type: 'SCORER';

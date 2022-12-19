@@ -1,5 +1,4 @@
-import { Blackboard } from '../ai/blackboard';
-import { GameBlackboard } from './blackboard';
+import { GameBlackboard } from './game-blackboard';
 
 // name: World state? Global blackboard
 export class GlobalGameBlackboard extends GameBlackboard {
