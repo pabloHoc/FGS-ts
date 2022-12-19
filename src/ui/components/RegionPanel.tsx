@@ -8,6 +8,7 @@ import { Empire, EmpireId } from '../../game/entities/empire';
 import { Land, LandId } from '../../game/entities/land';
 import { Region } from '../../game/entities/region';
 import { getSortedBuildingQueueForLand } from '../../game/helpers/building';
+import { getPlayerEmpire, isPlayerEmpire } from '../../game/helpers/empire';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
 
@@ -107,13 +108,6 @@ export const RegionPanel = () => {
     game.commands.execute(
       createArmy(100, 20, 5, selectedRegion.empireId, selectedRegion.id)
     );
-
-  // TODO: maybe move this?
-  const isPlayerEmpire = (empireId: EmpireId) => {
-    return game.context
-      .getAllEntities<Empire>('EMPIRE')
-      .find((empire) => empire.id === empireId)?.isPlayer;
-  };
 
   return (
     <div>

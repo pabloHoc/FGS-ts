@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { Empire } from '../../game/entities/empire';
+import { getPlayerEmpire } from '../../game/helpers/empire';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
 
@@ -10,9 +11,7 @@ export const EmpireDetails = () => {
 
   const updateEmpire = () => {
     // * This can be cached
-    const playerEmpire = game.context
-      .getAllEntities<Empire>('EMPIRE')
-      .find((empire) => empire.isPlayer);
+    const playerEmpire = getPlayerEmpire();
     setEmpire(playerEmpire ? { ...playerEmpire } : undefined);
   };
 

@@ -2,6 +2,7 @@ import { createAgent } from '../commands/create-agent';
 import { createEmpire } from '../commands/create-empire';
 import { createLand } from '../commands/create-land';
 import { createRegion } from '../commands/create-region';
+import { createPlayer } from '../commands/create-player';
 import { LandDefinition } from '../definitions/land';
 import { Empire } from '../entities/empire';
 import { Region } from '../entities/region';
@@ -83,7 +84,7 @@ export class World {
   // TODO: This needs to be moved to a GENERATE_WORLD command
 
   generateWorld() {
-    this.generateEmpires();
+    this.generatePlayerAndEmpires();
     this.generateRegions();
     this.generateRoads();
     this.generateLands();
@@ -268,9 +269,18 @@ export class World {
     }
   }
 
-  private generateEmpires() {
-    CommandExecutor.instance.execute(createEmpire('PLAYER EMPIRE', true));
-    CommandExecutor.instance.execute(createEmpire('AI PLAYER #1', false));
+  private generatePlayerAndEmpires() {
+    const playerEmpire = CommandExecutor.instance.execute(
+      createEmpire('PLAYER EMPIRE')
+    ) as unknown as Empire;
+    const aiEmpire = CommandExecutor.instance.execute(
+      createEmpire('AI PLAYER #1')
+    ) as unknown as Empire;
+
+    CommandExecutor.instance.execute(
+      createPlayer('PLAYER', playerEmpire.id, false)
+    );
+    CommandExecutor.instance.execute(createPlayer('AI', aiEmpire.id, true));
   }
 
   private generateAgents() {

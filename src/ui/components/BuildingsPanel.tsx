@@ -6,6 +6,7 @@ import { Region } from '../../game/entities/region';
 import { GameCtx } from '../context/GameCtx';
 import { UIStateCtx } from '../context/UIStateCtx';
 import { addBuildingToQueue } from '../../game/commands/add-building-to-queue';
+import { isPlayerEmpire } from '../../game/helpers/empire';
 
 export const BuildingsPanel = () => {
   const game = useContext(GameCtx);
@@ -23,7 +24,7 @@ export const BuildingsPanel = () => {
     if (!region.empireId) return setEmpire(undefined);
 
     const empire = game.context.getEntity<Empire>('EMPIRE', region.empireId);
-    if (!empire.isPlayer) return setEmpire(undefined);
+    if (!isPlayerEmpire(empire.id)) return setEmpire(undefined);
 
     setEmpire(empire);
   }, [uiState]);

@@ -6,7 +6,7 @@ import { processBuildingQueues } from '../process-building-queues';
 import { processAgentActions } from '../process-agent-actions';
 import { processSpells } from '../process-spells';
 import { processBattles } from '../process-battles';
-import { processEmpireAIs } from '../process-empire-ais';
+import { processEmpireAIs } from '../process-player-ais';
 
 export const endTurn: Handler<EndTurn> = () => {
   CommandExecutor.instance.execute(processEmpireAIs());

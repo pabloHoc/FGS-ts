@@ -4,12 +4,13 @@ import { CreateAgent } from './create-agent';
 import { CreateArmy } from './create-army';
 import { CreateEmpire } from './create-empire';
 import { CreateLand } from './create-land';
+import { CreatePlayer } from './create-player';
 import { CreateRegion } from './create-region';
 import { EndTurn } from './end-turn';
 import { ProcessAgentActions } from './process-agent-actions';
 import { ProcessBattles } from './process-battles';
 import { ProcessBuildingQueues } from './process-building-queues';
-import { ProcessEmpireAIs } from './process-empire-ais';
+import { ProcessPlayerAIs } from './process-player-ais';
 import { ProcessSpells } from './process-spells';
 import { ProduceResources } from './produce-resources';
 import { SetAgentCurrentAction } from './set-agent-current-action';
@@ -24,6 +25,7 @@ export interface Command {
 // TODO: Create a command line tool for commands
 
 export type Commands =
+  | CreatePlayer
   | CreateEmpire
   | CreateLand
   | CreateRegion
@@ -35,7 +37,7 @@ export type Commands =
   | AddBuildingToQueue
   | SetOwner
   // Called each turn
-  | ProcessEmpireAIs
+  | ProcessPlayerAIs
   | ProcessSpells
   | ProcessBattles
   | ProcessAgentActions

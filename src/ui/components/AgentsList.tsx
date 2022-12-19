@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from 'react';
-import { GameBlackboard } from '../../game/core/blackboard';
+import { GameBlackboard } from '../../game/core/game-blackboard';
 import { Agent, AgentId } from '../../game/entities/agent';
 import { Region } from '../../game/entities/region';
 import { getEmpireAgents } from '../../game/helpers/agent';

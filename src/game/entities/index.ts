@@ -8,24 +8,23 @@ import { Land } from './land';
 import { Region } from './region';
 import { Spell } from './spell';
 import { Army } from './army';
-
-// TODO: check if we want specific entity types id? e.g.: RegionId
+import { Player } from './player';
 
 export type BaseEntityId = Brand<string, 'EntityID'>;
 
-export type EntityId<T> = T & BaseEntityId;
+export type EntityId<T> = T & BaseEntityId; // TODO: fix Entity = EntityId
 export interface Entity {
   id: BaseEntityId;
   type: Uppercase<EntityType>;
 }
 
 export type Entities =
+  | Player
   | Empire
   | Region
   | Land
   | Agent
   | Army
-  // TODO: These are not entities, we need a new category
   | BuildingQueueItem
   | ActionQueueItem
   | Modifier

@@ -16,11 +16,13 @@ import { processSpells } from './process-spells';
 import { createArmy } from './create-army';
 import { processBattles } from './process-battles';
 import { setAgentCurrentAction } from './set-agent-current-action';
-import { processEmpireAIs } from './process-empire-ais';
+import { processPlayerAIs } from './process-player-ais';
+import { createPlayer } from './create-player';
 
 export const HANDLERS: Handlers = {
   START_TURN: startTurn,
   END_TURN: endTurn,
+  CREATE_PLAYER: createPlayer,
   CREATE_EMPIRE: createEmpire,
   CREATE_REGION: createRegion,
   CREATE_LAND: createLand,
@@ -36,5 +38,5 @@ export const HANDLERS: Handlers = {
   PROCESS_SPELLS: processSpells,
   PROCESS_BATTLES: processBattles,
   SET_AGENT_CURRENT_ACTION: setAgentCurrentAction,
-  PROCESS_EMPIRE_AIS: processEmpireAIs,
+  PROCESS_PLAYER_AIS: processPlayerAIs,
 };
