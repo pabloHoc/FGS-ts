@@ -1,7 +1,9 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { useContext } from 'react';
 import { Layer, Line, Rect, Stage } from 'react-konva';
+import { setAgentCurrentAction } from '../../game/commands/set-agent-current-action';
 import { setLocation } from '../../game/commands/set-location';
+import { CommandExecutor } from '../../game/core/command-executor';
 import { AgentActionDefinition } from '../../game/definitions/agent-action';
 import { createActionQueueItem } from '../../game/entities/action-queue-item';
 import { Agent } from '../../game/entities/agent';
@@ -97,9 +99,14 @@ export const WorldMap = () => {
         'AGENT',
         uiState.selected_agent_id
       );
-      selectedAgent.currentAction = createActionQueueItem(moveAction, 1, {
-        region_id: regionId,
-      });
+      CommandExecutor.instance.execute(
+        setAgentCurrentAction(
+          selectedAgent.id,
+          createActionQueueItem(moveAction, {
+            region_id: regionId,
+          })
+        )
+      );
     } else if (uiState.selected_army_id) {
       game.commands.execute(setLocation(uiState.selected_army_id, regionId));
     }

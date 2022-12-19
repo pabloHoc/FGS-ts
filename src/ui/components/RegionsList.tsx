@@ -73,7 +73,7 @@ export const RegionsList = () => {
       game.commands.execute(
         setAgentCurrentAction(
           selectedAgent.id,
-          createActionQueueItem(moveAction, 1, {
+          createActionQueueItem(moveAction, {
             region_id: regionId,
           })
         )

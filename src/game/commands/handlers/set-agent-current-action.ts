@@ -7,5 +7,5 @@ export const setAgentCurrentAction = (command: SetAgentCurrentAction) => {
     'AGENT',
     command.agentId
   );
-  agent.currentAction = command.newCurrentAction;
+  agent.actions = [command.newCurrentAction];
 };

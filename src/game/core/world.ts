@@ -294,7 +294,7 @@ export class World {
 
       if (region) {
         CommandExecutor.instance.execute(
-          createAgent('Lorant', empire.id, region.id)
+          createAgent(`${empire.name}'S AGENT`, empire.id, region.id)
         );
       }
     }

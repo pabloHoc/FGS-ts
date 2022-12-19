@@ -10,7 +10,7 @@ export interface Player extends Entity {
   name: string;
   empireId: EmpireId;
   isAi: boolean;
-  ai?: AI;
+  ai?: AI; // TODO: this breaks the contract that entity should be simple objects only
 }
 
 export const createPlayer = (

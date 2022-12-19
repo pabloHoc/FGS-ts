@@ -14,12 +14,12 @@ export const processAgentActions = () => {
   const agents = GlobalGameBlackboard.instance.getAllEntities<Agent>('AGENT');
 
   for (const agent of agents) {
-    if (agent.currentAction) {
-      agent.currentAction.remainingTurns--;
-      if (agent.currentAction.remainingTurns === 0) {
+    if (agent.actions[0]) {
+      agent.actions[0].remainingTurns--;
+      if (agent.actions[0].remainingTurns === 0) {
         if (
-          agent.currentAction.name === 'move_agent' &&
-          isMoveAgentPayload(agent.currentAction.payload)
+          agent.actions[0].name === 'move_agent' &&
+          isMoveAgentPayload(agent.actions[0].payload)
         ) {
           const start = GlobalGameBlackboard.instance.getEntity<Region>(
             'REGION',
@@ -27,7 +27,7 @@ export const processAgentActions = () => {
           );
           const end = GlobalGameBlackboard.instance.getEntity<Region>(
             'REGION',
-            agent.currentAction.payload.region_id as RegionId
+            agent.actions[0].payload.region_id as RegionId
           );
           const path = findPath(
             regionToNode(start),
@@ -39,7 +39,7 @@ export const processAgentActions = () => {
 
           if (path[2]) {
             // TODO: review turns in move action
-            agent.currentAction.remainingTurns = 1;
+            agent.actions[0].remainingTurns = 1;
             CommandExecutor.instance.execute(
               setLocation(agent.id, path[1].id as RegionId)
             );
@@ -47,24 +47,24 @@ export const processAgentActions = () => {
             CommandExecutor.instance.execute(
               setLocation(agent.id, path[1].id as RegionId)
             );
-            delete agent.currentAction;
+            agent.actions.shift();
           }
-        } else if (agent.currentAction.actionType === 'action') {
+        } else if (agent.actions[0].actionType === 'action') {
           const agentActionDefinition =
             DefinitionManager.instance.get<AgentActionDefinition>(
               'AGENT-ACTION',
-              agent.currentAction.name
+              agent.actions[0].name
             );
-          agentActionDefinition.execute(agent, agent.currentAction.payload);
-          delete agent.currentAction;
-        } else if (agent.currentAction.actionType === 'spell') {
+          agentActionDefinition.execute(agent, agent.actions[0].payload);
+          agent.actions.shift();
+        } else if (agent.actions[0].actionType === 'spell') {
           const spellDefinition =
             DefinitionManager.instance.get<SpellDefinition>(
               'SPELL',
-              agent.currentAction.name
+              agent.actions[0].name
             );
           spellDefinition.execute(agent);
-          delete agent.currentAction;
+          agent.actions.shift();
         }
       }
     }

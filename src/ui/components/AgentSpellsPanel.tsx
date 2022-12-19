@@ -1,4 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
+import { setAgentCurrentAction } from '../../game/commands/set-agent-current-action';
+import { CommandExecutor } from '../../game/core/command-executor';
 import { AgentActionDefinition } from '../../game/definitions/agent-action';
 import { SpellDefinition } from '../../game/definitions/spell';
 import { createActionQueueItem } from '../../game/entities/action-queue-item';
@@ -24,7 +26,9 @@ export const AgentSpellsPanel = () => {
   if (!selectedAgent) return null;
 
   const handleClick = (spell: SpellDefinition) => {
-    selectedAgent.currentAction = createActionQueueItem(spell, 1);
+    CommandExecutor.instance.execute(
+      setAgentCurrentAction(selectedAgent.id, createActionQueueItem(spell))
+    );
     setUIState({ ...uiState });
   };
 
@@ -38,7 +42,8 @@ export const AgentSpellsPanel = () => {
             })`}
             onClick={() => handleClick(spell)}
             disabled={
-              spell.name === selectedAgent.currentAction?.name ||
+              (selectedAgent.actions[0] &&
+                spell.name === selectedAgent.actions[0].name) ||
               !spell.allow(selectedAgent)
             }
           >

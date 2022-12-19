@@ -1,4 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
+import { setAgentCurrentAction } from '../../game/commands/set-agent-current-action';
+import { CommandExecutor } from '../../game/core/command-executor';
 import { AgentActionDefinition } from '../../game/definitions/agent-action';
 import { createActionQueueItem } from '../../game/entities/action-queue-item';
 import { Agent } from '../../game/entities/agent';
@@ -23,7 +25,12 @@ export const AgentActionsPanel = () => {
   if (!selectedAgent) return null;
 
   const handleClick = (agentAction: AgentActionDefinition) => {
-    selectedAgent.currentAction = createActionQueueItem(agentAction, 1);
+    CommandExecutor.instance.execute(
+      setAgentCurrentAction(
+        selectedAgent.id,
+        createActionQueueItem(agentAction)
+      )
+    );
     setUIState({ ...uiState });
   };
 
@@ -39,7 +46,8 @@ export const AgentActionsPanel = () => {
               })`}
               onClick={() => handleClick(agentAction)}
               disabled={
-                agentAction.name === selectedAgent.currentAction?.name ||
+                (selectedAgent.actions[0] &&
+                  agentAction.name === selectedAgent.actions[0].name) ||
                 !agentAction.allow(selectedAgent)
               }
             >

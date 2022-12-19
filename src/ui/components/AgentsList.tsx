@@ -26,8 +26,8 @@ const AgentItem = ({
       style={{ color: selected ? 'red' : 'black' }}
     >
       {agent.name} ({region.name}){' '}
-      {agent.currentAction
-        ? `| Action: ${agent.currentAction.name} | Remaining Turns: ${agent.currentAction.remainingTurns}`
+      {agent.actions[0]
+        ? `| Action: ${agent.actions[0].name} | Remaining Turns: ${agent.actions[0].remainingTurns}`
         : ''}
     </li>
   );

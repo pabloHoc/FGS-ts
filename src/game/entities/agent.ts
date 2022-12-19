@@ -17,7 +17,7 @@ export interface Agent extends Entity {
   regionId: RegionId;
   mp: number;
   modifiers: Modifier[];
-  currentAction?: ActionQueueItem;
+  actions: ActionQueueItem[]; // TODO: turn it into a queue
 }
 
 export const createAgent = (
@@ -32,6 +32,7 @@ export const createAgent = (
   regionId,
   mp: 10,
   modifiers: [],
+  actions: [],
 });
 
 export const isAgent = (entity: Entity): entity is Agent =>

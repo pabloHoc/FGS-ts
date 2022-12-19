@@ -21,21 +21,18 @@ export interface ActionQueueItem extends Entity {
   id: ActionQueueItemId;
   actionType: ActionType;
   name: AgentActionDefinition['name'];
-  order: number;
   remainingTurns: number;
   payload?: ActionQueueItemPayload;
 }
 
 export const createActionQueueItem = (
   agentActionDefinition: AgentExecutableAction,
-  order: number,
   payload?: object
 ): ActionQueueItem => ({
   type: 'ACTION_QUEUE_ITEM',
   id: generateId(),
   actionType: agentActionDefinition.actionType,
   name: agentActionDefinition.name,
-  order,
   remainingTurns: agentActionDefinition.baseExecutionTime,
   payload,
 });
