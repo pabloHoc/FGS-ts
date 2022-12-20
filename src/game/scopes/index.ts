@@ -50,7 +50,6 @@ export const getScopeFrom = <T extends Entity>(
   }
   if (scope === 'all-regions') {
     const regions = getAllRegionsFromContext(context);
-    console.log({ regions });
     return regions;
   }
   throw Error('INVALID SCOPE PARAMS');

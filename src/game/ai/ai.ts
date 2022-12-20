@@ -15,7 +15,7 @@ export class AI {
   }
 
   playTurn() {
-    const context = new GameBlackboard();
+    const context = GlobalGameBlackboard.instance; // new GameBlackboard();
     const empire = GlobalGameBlackboard.instance.getEntity<Empire>(
       'EMPIRE',
       this.empireId

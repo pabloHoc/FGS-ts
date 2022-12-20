@@ -1,5 +1,6 @@
 {
   "type": "task",
   "name": "evaluate_region_to_conquest",
-  "target": "all-regions"
+  "target": "all-regions",
+  "scorers": ["grassland_number"]
 }

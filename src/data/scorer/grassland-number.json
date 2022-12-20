@@ -1,0 +1,10 @@
+{
+  "type": "scorer",
+  "name": "grassland_number",
+  "curve": "linear 1 1 1 1",
+  "input": {
+    "name": "grassland",
+    "min": 0,
+    "max": 5
+  }
+}

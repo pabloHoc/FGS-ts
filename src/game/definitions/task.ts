@@ -69,8 +69,7 @@ export class TaskDefinition implements BaseTaskDefinition {
   }
 
   getTargets<T extends Entity>(context: GameBlackboard, target: T) {
-    const scope = getScopeFrom(this.target, target);
-    console.log({ scope, key: this.target });
+    const scope = getScopeFrom(this.target, target, context);
     return 'length' in scope ? scope : [scope];
   }
 }

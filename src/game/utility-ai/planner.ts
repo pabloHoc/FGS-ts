@@ -37,7 +37,7 @@ export class Planner<Context extends Blackboard, Target> {
 
   executePlan() {
     for (const task of this.finalTasks) {
-      console.log(`EXECUTING TASK ${task.name}`);
+      console.log('EXECUTING TASK', task);
       task.execute();
     }
   }
