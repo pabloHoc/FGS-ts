@@ -1,17 +1,10 @@
-import root_task from './root-task.json';
-import complex_task_a from './complex-task-a.json';
-import complex_task_b from './complex-task-b.json';
-import primitive_task_a from './primitive-task-a.json';
-import primitive_task_b from './primitive-task-b.json';
-import primitive_task_c from './primitive-task-c.json';
-import primitive_task_d from './primitive-task-d.json';
+import send_agent_to_conquest_region from './send-agent-to-conquest-region.json';
+import win_game from './win-game.json';
+import evaluate_regions_to_conquest from './evaluate-regions-to-conquest.json';
+import evaluate_region_to_conquest from './evaluate-region-to-conquest.json';
 
 export default {
-  root_task,
-  complex_task_a,
-  complex_task_b,
-  primitive_task_a,
-  primitive_task_b,
-  primitive_task_c,
-  primitive_task_d,
+  win_game,
+  evaluate_regions_to_conquest,
+  evaluate_region_to_conquest,
 };

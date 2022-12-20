@@ -1,0 +1,5 @@
+{
+  "type": "task",
+  "name": "send_agent_to_conquest_region",
+  "target": "empire"
+}

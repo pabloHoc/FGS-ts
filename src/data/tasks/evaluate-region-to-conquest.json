@@ -1,0 +1,5 @@
+{
+  "type": "task",
+  "name": "evaluate_region_to_conquest",
+  "target": "all-regions"
+}

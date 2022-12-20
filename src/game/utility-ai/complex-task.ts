@@ -14,23 +14,22 @@ export abstract class ComplexTask<
     weight: number,
     validator: TaskValidator<Context, Target> = () => true,
     scorers: Scorer[] = [],
-    subTasks: Task<Context, Target>[]
+    subTasks: Task<Context, Target>[],
+    context: Context,
+    target: Target
   ) {
-    super(name, weight, validator, scorers);
+    super(name, weight, validator, scorers, context, target);
     this.subTasks = subTasks;
   }
 
-  computeScore(context: Context, target: Target) {
+  computeScore() {
     for (const task of this.subTasks) {
-      task.computeScore(context, target);
+      task.computeScore();
     }
-    super.computeScore(context, target);
+    super.computeScore();
   }
 
-  abstract getScoredTasks(
-    context: Context,
-    target: Target
-  ): Task<Context, Target>[];
+  abstract getScoredTasks(): Task<Context, Target>[];
 }
 
 export const isComplexTask = <Context extends Blackboard, Target>(

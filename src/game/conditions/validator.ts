@@ -17,7 +17,7 @@ type Condition = {
   [key in ConditionKey]?: boolean | number | string;
 };
 type Scope = { [key in ScopeType]?: Condition | Scope };
-export type Conditions = Scope | Condition;
+export type Conditions = Omit<Scope, 'all-regions'> | Condition;
 
 // TODO: add custom blackboard as param
 export const validateConditions = <T extends Entity>(
@@ -39,9 +39,12 @@ export const validateConditions = <T extends Entity>(
       }
     } else if (isScope(key)) {
       const newScope = getScopeFrom(key, scope);
-      const result = validateConditions(conditions[key], newScope);
-      if (!result) {
-        return false;
+      if (!('length' in newScope)) {
+        // TODO: check what to do with multiple results scope
+        const result = validateConditions(conditions[key], newScope);
+        if (!result) {
+          return false;
+        }
       }
     } else {
       throw Error(`INVALID CONDITION KEY ${key}`);

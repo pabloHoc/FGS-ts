@@ -8,17 +8,24 @@ import { HighestScoreTask } from '../utility-ai/complex-tasks/highest-score-task
 import { isComplexTask } from '../utility-ai/complex-task';
 import { PrimitiveTask } from '../utility-ai/primitive-task';
 import { Task } from '../utility-ai/task';
-import { Blackboard } from '../utility-ai/blackboard';
+import { GameBlackboard } from '../core/game-blackboard';
+import { Empire } from '../entities/empire';
+import { Region } from '../entities/region';
 
-export class TaskTreeBuilder<
-  Context extends Blackboard,
-  Target extends Entity
-> {
+export class TaskTreeBuilder<Target extends Entity> {
   private tasks: TaskDefinition[];
+  private context: GameBlackboard;
+  private target: Target;
 
   // TODO: remove this type from here (abstrqct it)
-  constructor(tasks: TaskDefinition[]) {
+  constructor(
+    tasks: TaskDefinition[],
+    context: GameBlackboard,
+    target: Target
+  ) {
     this.tasks = tasks;
+    this.context = context;
+    this.target = target;
   }
 
   getRootTask() {
@@ -40,16 +47,18 @@ export class TaskTreeBuilder<
 
     // We create a complex task without subtask and we recursively create
     // the task tree from the subtasks names in the task definition
-    return new HighestScoreTask<Context, Target>(
+    return new HighestScoreTask<GameBlackboard, Target>(
       rootTask.name,
       1.0,
       rootTask.validate,
       [], // The root task shouldn't have any scorer
-      []
+      [],
+      this.context,
+      this.target
     );
   }
 
-  private generateTaskTree(task: Task<Context, Target>) {
+  private generateTaskTree(task: Task<GameBlackboard, Target>) {
     const taskDefinition = this.tasks.find((t) => t.name === task.name);
     if (!taskDefinition) {
       throw Error(`TASK ${task.name} NOT FOUND`);
@@ -66,24 +75,38 @@ export class TaskTreeBuilder<
         throw Error(`TASK ${subTaskDefinitionName} NOT FOUND`);
       }
 
-      if (isComplexTaskDefinition(subTaskDefinition)) {
-        const subTask = new HighestScoreTask<Context, Target>(
-          subTaskDefinition.name,
-          subTaskDefinition.weight,
-          subTaskDefinition.validate,
-          subTaskDefinition.getScorers(),
-          []
-        );
-        task.subTasks.push(subTask);
-        this.generateTaskTree(subTask);
-      } else if (isPrimitiveTaskDefinition(subTaskDefinition)) {
-        const subTask = new PrimitiveTask<Context, Target>(
-          subTaskDefinition.name,
-          subTaskDefinition.weight,
-          subTaskDefinition.validate,
-          subTaskDefinition.getScorers()
-        );
-        task.subTasks.push(subTask);
+      const targets = subTaskDefinition.getTargets(this.context, this.target);
+
+      for (const target of targets) {
+        if (isComplexTaskDefinition(subTaskDefinition)) {
+          const subTask = new HighestScoreTask<
+            GameBlackboard,
+            Target | Empire | Region
+          >(
+            subTaskDefinition.name,
+            subTaskDefinition.weight,
+            subTaskDefinition.validate,
+            subTaskDefinition.getScorers(),
+            [],
+            this.context,
+            target
+          );
+          task.subTasks.push(subTask);
+          this.generateTaskTree(subTask);
+        } else if (isPrimitiveTaskDefinition(subTaskDefinition)) {
+          const subTask = new PrimitiveTask<
+            GameBlackboard,
+            Target | Empire | Region
+          >(
+            subTaskDefinition.name,
+            subTaskDefinition.weight,
+            subTaskDefinition.validate,
+            subTaskDefinition.getScorers(),
+            this.context,
+            target
+          );
+          task.subTasks.push(subTask);
+        }
       }
     }
   }

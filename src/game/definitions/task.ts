@@ -1,7 +1,9 @@
 import { Definition } from '.';
 import { Conditions, validateConditions } from '../conditions/validator';
 import { DefinitionManager } from '../core/definition-manager';
+import { GameBlackboard } from '../core/game-blackboard';
 import { Entity } from '../entities';
+import { getScopeFrom, ScopeType } from '../scopes';
 import { Blackboard } from '../utility-ai/blackboard';
 import { ScorerDefinition } from './scorer';
 
@@ -13,6 +15,7 @@ interface BaseTaskDefinition extends Definition {
   conditions?: Conditions;
   scorers?: string[];
   weight?: number;
+  target: ScopeType;
 }
 
 interface ComplexTaskDefinition extends BaseTaskDefinition {
@@ -35,6 +38,7 @@ export class TaskDefinition implements BaseTaskDefinition {
   readonly conditions?: Conditions;
   readonly scorers?: string[];
   readonly isRoot?: boolean;
+  readonly target: ScopeType;
 
   constructor(definition: ITaskDefinition) {
     this.name = definition.name;
@@ -44,9 +48,9 @@ export class TaskDefinition implements BaseTaskDefinition {
     this.conditions = definition.conditions;
     this.scorers = definition.scorers;
     this.isRoot = definition.isRoot;
+    this.target = definition.target;
   }
 
-  // TODO: fix any
   validate<B extends Blackboard, T extends Entity>(context: B, target: T) {
     if (this.conditions) {
       return validateConditions(this.conditions, target);
@@ -62,6 +66,12 @@ export class TaskDefinition implements BaseTaskDefinition {
             .scorer
       ) || []
     );
+  }
+
+  getTargets<T extends Entity>(context: GameBlackboard, target: T) {
+    const scope = getScopeFrom(this.target, target);
+    console.log({ scope, key: this.target });
+    return 'length' in scope ? scope : [scope];
   }
 }
 

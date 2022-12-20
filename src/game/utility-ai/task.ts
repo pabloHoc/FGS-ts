@@ -2,8 +2,8 @@ import { Blackboard } from './blackboard';
 
 export interface Task<Context extends Blackboard, Target> {
   readonly name: string;
-  isValid: TaskValidator<Context, Target>;
-  computeScore: (context: Context, target: Target) => void;
+  isValid: () => boolean;
+  computeScore: () => void;
   getScore: () => number;
 }
 

@@ -6,18 +6,9 @@ import { Task } from './task';
 export class Planner<Context extends Blackboard, Target> {
   private tasksToProcess: Task<Context, Target>[] = [];
   private rootTask: Task<Context, Target>;
-  private context: Context;
-  private target: Target;
   finalTasks: PrimitiveTask<Context, Target>[] = [];
 
-  constructor(
-    context: Context,
-    target: Target,
-    rootTask: ComplexTask<Context, Target>
-  ) {
-    this.context = context;
-    this.target = target;
-
+  constructor(rootTask: ComplexTask<Context, Target>) {
     this.rootTask = rootTask;
   }
 
@@ -52,20 +43,18 @@ export class Planner<Context extends Blackboard, Target> {
   }
 
   scoreTasks() {
-    this.rootTask.computeScore(this.context, this.target);
+    this.rootTask.computeScore();
   }
 
   processPrimitiveTask(task: PrimitiveTask<Context, Target>) {
-    if (task.isValid(this.context, this.target)) {
+    if (task.isValid()) {
       this.finalTasks.push(task);
     }
   }
 
   processCompoundTask(task: ComplexTask<Context, Target>) {
-    if (task.isValid(this.context, this.target)) {
-      this.tasksToProcess.push(
-        ...task.getScoredTasks(this.context, this.target)
-      );
+    if (task.isValid()) {
+      this.tasksToProcess.push(...task.getScoredTasks());
     }
   }
 }

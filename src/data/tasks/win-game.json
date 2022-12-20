@@ -1,0 +1,8 @@
+{
+  "type": "task",
+  "name": "win_game",
+  "taskType": "highest-score",
+  "subtasks": ["evaluate_regions_to_conquest"],
+  "isRoot": true,
+  "target": "empire"
+}

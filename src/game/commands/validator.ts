@@ -77,8 +77,10 @@ export const execute = <T extends Empire | Region | Land | Agent>(
       execute(actions[key], scope, scopeContext, payload, sourceId);
     } else if (isScope(key)) {
       const newScope = getScopeFrom(key, scope);
-      scopeContext.prev = scope;
-      execute(actions[key], newScope, scopeContext, payload, sourceId);
+      if (!('length' in newScope)) {
+        scopeContext.prev = scope;
+        execute(actions[key], newScope, scopeContext, payload, sourceId);
+      }
     } else {
       // Here we are in a modifier, but this is not a safe assumption
       const modifierParts = (key as string).split('_');

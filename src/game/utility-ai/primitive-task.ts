@@ -1,3 +1,6 @@
+import { sendAgentToConquestRegion } from '../ai/actions/send-agent-to-conquest-region';
+import { GameBlackboard } from '../core/game-blackboard';
+import { Empire } from '../entities/empire';
 import { Blackboard } from './blackboard';
 import { InputValue } from './input-value';
 import { Scorer } from './scorer';
@@ -12,29 +15,35 @@ export class PrimitiveTask<Context extends Blackboard, Target>
   private score: number = 1.0;
   private validator: TaskValidator<Context, Target>;
   // private momentum = 1.25;
+  protected context: Context;
+  protected target: Target;
 
   constructor(
     name: string,
     weight: number,
     validator: TaskValidator<Context, Target> = () => true,
-    scorers: Scorer[] = []
+    scorers: Scorer[] = [],
+    context: Context,
+    target: Target
   ) {
     this.name = name;
     this.validator = validator;
     this.scorers = scorers;
     this.weight = weight;
+    this.context = context;
+    this.target = target;
   }
 
-  isValid(context: Context, target: Target) {
-    return this.validator(context, target);
+  isValid() {
+    return this.validator(this.context, this.target);
   }
 
   /**
    * We could have different ways to score scorer:
    * allOrNothing, FixedScore, SumOfChildThresold
    */
-  computeScore(context: Context, target: Target) {
-    const inputValue = new InputValue(context, target);
+  computeScore() {
+    const inputValue = new InputValue(this.context, this.target);
     const compensationFactor = 1.0 - 1.0 / this.scorers.length; // TODO: compute momentum and bonus here
     let result = this.weight;
 
@@ -56,6 +65,10 @@ export class PrimitiveTask<Context extends Blackboard, Target>
   }
 
   execute() {
+    sendAgentToConquestRegion(
+      this.context as unknown as GameBlackboard,
+      this.target as unknown as Empire
+    );
     console.log(`TASK ${this.name} EXECUTED`);
   }
 }
