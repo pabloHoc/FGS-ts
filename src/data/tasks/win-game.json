@@ -2,7 +2,7 @@
   "type": "task",
   "name": "win_game",
   "taskType": "highest-score",
-  "subtasks": ["evaluate_regions_to_conquest"],
+  "subtasks": ["evaluate_regions_to_conquest", "send_agent_to_conquest_region"],
   "isRoot": true,
   "target": "empire"
 }

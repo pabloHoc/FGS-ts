@@ -2,7 +2,7 @@ import { DefinitionManager } from '../core/definition-manager';
 import { GameBlackboard } from '../core/game-blackboard';
 import { TaskDefinition } from '../definitions/task';
 import { Empire, EmpireId } from '../entities/empire';
-import { TaskTreeBuilder } from './task-tree-builder';
+import { Domain } from './domain';
 import { Planner } from '../utility-ai/planner';
 import { GlobalGameBlackboard } from '../core/game-context';
 
@@ -15,15 +15,10 @@ export class AI {
   }
 
   playTurn() {
-    const context = GlobalGameBlackboard.instance; // new GameBlackboard();
-    const empire = GlobalGameBlackboard.instance.getEntity<Empire>(
-      'EMPIRE',
-      this.empireId
-    );
-    const taskTree = new TaskTreeBuilder<Empire>(
+    const domain = new Domain<GameBlackboard, Empire>(
       DefinitionManager.instance.getAll<TaskDefinition>('TASK'),
-      context,
-      empire
+      GlobalGameBlackboard.instance, // this.context -> new GameBlackboard();,
+      GlobalGameBlackboard.instance.getEntity<Empire>('EMPIRE', this.empireId)
     );
 
     /**
@@ -32,7 +27,7 @@ export class AI {
      * (e.g.: new agents are created), but we might need to cache things here in
      * order to improve performance since it can grow really big
      */
-    this.planner = new Planner<GameBlackboard, Empire>(taskTree.getRootTask());
+    this.planner = new Planner<GameBlackboard, Empire>(domain);
 
     this.planner.generatePlan();
     this.planner.executePlan();

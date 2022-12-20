@@ -12,7 +12,6 @@ export class PrimitiveTask<Context extends Blackboard, Target>
   readonly name: string;
   private scorers: Scorer[];
   private weight: number = 1.0; // weight is the max possible score
-  private score: number = 1.0;
   private validator: TaskValidator<Context, Target>;
   // private momentum = 1.25;
   protected context: Context;
@@ -42,7 +41,7 @@ export class PrimitiveTask<Context extends Blackboard, Target>
    * We could have different ways to score scorer:
    * allOrNothing, FixedScore, SumOfChildThresold
    */
-  computeScore() {
+  getScore() {
     const inputValue = new InputValue(this.context, this.target);
     const compensationFactor = 1.0 - 1.0 / this.scorers.length; // TODO: compute momentum and bonus here
     let result = this.weight;
@@ -53,15 +52,11 @@ export class PrimitiveTask<Context extends Blackboard, Target>
       finalScore += modification * finalScore;
       result *= finalScore;
     }
-    this.score = result;
+    return result;
 
     // if (this == context.last) {
     //   result *= momentum;
     // }
-  }
-
-  getScore() {
-    return this.score;
   }
 
   execute() {

@@ -7,29 +7,24 @@ export abstract class ComplexTask<
   Context extends Blackboard,
   Target
 > extends PrimitiveTask<Context, Target> {
-  subTasks: Task<Context, Target>[];
+  subTaskNames: string[];
 
   constructor(
     name: string,
     weight: number,
     validator: TaskValidator<Context, Target> = () => true,
     scorers: Scorer[] = [],
-    subTasks: Task<Context, Target>[],
+    subTaskNames: string[],
     context: Context,
     target: Target
   ) {
     super(name, weight, validator, scorers, context, target);
-    this.subTasks = subTasks;
+    this.subTaskNames = subTaskNames;
   }
 
-  computeScore() {
-    for (const task of this.subTasks) {
-      task.computeScore();
-    }
-    super.computeScore();
-  }
-
-  abstract getScoredTasks(): Task<Context, Target>[];
+  abstract getScoredTasks(
+    subTasks: Task<Context, Target>[]
+  ): Task<Context, Target>[];
 }
 
 export const isComplexTask = <Context extends Blackboard, Target>(

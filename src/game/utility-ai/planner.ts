@@ -1,20 +1,20 @@
 import { Blackboard } from './blackboard';
 import { ComplexTask, isComplexTask } from './complex-task';
+import { Domain } from './domain';
 import { isPrimitiveTask, PrimitiveTask } from './primitive-task';
 import { Task } from './task';
 
 export class Planner<Context extends Blackboard, Target> {
   private tasksToProcess: Task<Context, Target>[] = [];
-  private rootTask: Task<Context, Target>;
+  private domain: Domain<Context, Target>;
   finalTasks: PrimitiveTask<Context, Target>[] = [];
 
-  constructor(rootTask: ComplexTask<Context, Target>) {
-    this.rootTask = rootTask;
+  constructor(domain: Domain<Context, Target>) {
+    this.domain = domain;
   }
 
   generatePlan() {
     this.resetPlan();
-    this.scoreTasks();
 
     while (this.tasksToProcess.length) {
       const task = this.tasksToProcess.pop();
@@ -31,7 +31,7 @@ export class Planner<Context extends Blackboard, Target> {
   }
 
   resetPlan() {
-    this.tasksToProcess = [this.rootTask];
+    this.tasksToProcess = [this.domain.getTasks([this.domain.rootTaskName])[0]];
     this.finalTasks = [];
   }
 
@@ -42,10 +42,6 @@ export class Planner<Context extends Blackboard, Target> {
     }
   }
 
-  scoreTasks() {
-    this.rootTask.computeScore();
-  }
-
   processPrimitiveTask(task: PrimitiveTask<Context, Target>) {
     if (task.isValid()) {
       this.finalTasks.push(task);
@@ -54,7 +50,9 @@ export class Planner<Context extends Blackboard, Target> {
 
   processCompoundTask(task: ComplexTask<Context, Target>) {
     if (task.isValid()) {
-      this.tasksToProcess.push(...task.getScoredTasks());
+      const subTasks = this.domain.getTasks(task.subTaskNames);
+      const validSubTasks = subTasks.filter((task) => task.isValid());
+      this.tasksToProcess.push(...task.getScoredTasks(validSubTasks));
     }
   }
 }

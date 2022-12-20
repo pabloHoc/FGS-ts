@@ -3,5 +3,6 @@
   "name": "evaluate_regions_to_conquest",
   "taskType": "highest-score",
   "subtasks": ["evaluate_region_to_conquest"],
-  "target": "empire"
+  "target": "empire",
+  "weight": 0.2
 }

@@ -7,4 +7,5 @@ export default {
   win_game,
   evaluate_regions_to_conquest,
   evaluate_region_to_conquest,
+  send_agent_to_conquest_region,
 };
